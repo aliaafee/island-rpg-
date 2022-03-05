@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "world.h"
+#include "matrix3.h"
 
 int main()
 {

@@ -4,7 +4,7 @@ Actor::Actor()
 {
     std::cout << "Creating Actor"
               << "\n";
-    _circle = new sf::CircleShape(50.0f);
+    _circle = new sf::CircleShape(10.0f);
     _circle->setPointCount(10);
     _circle->setOutlineColor(sf::Color::Green);
     _circle->setOutlineThickness(2);
@@ -19,7 +19,7 @@ Actor::~Actor()
 
 void Actor::update()
 {
-    _position.x += 2;
+    _position.z += 0.5;
 }
 
 void Actor::update(std::vector<Actor *> &other_actors)
@@ -39,9 +39,10 @@ void Actor::update(World &world)
     ;
 }
 
-void Actor::transform()
+void Actor::transform(Camera &camera)
 {
-    _circle->setPosition(sf::Vector2f(_position.x, _position.y));
+    sf::Vector3 scree_pos = camera.transform(_position);
+    _circle->setPosition(sf::Vector2f(scree_pos.x, scree_pos.y));
 }
 
 void Actor::draw(sf::RenderTarget *screen)

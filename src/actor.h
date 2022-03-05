@@ -5,6 +5,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "camera.h"
+
 class World;
 
 class Actor
@@ -17,7 +19,7 @@ public:
     virtual void update(std::vector<Actor *> &other_actors);
     virtual void update(World &world);
 
-    virtual void transform();
+    virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
     const sf::Vector3f &getPosition() const;

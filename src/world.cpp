@@ -4,6 +4,14 @@ World::World(int64_t width, int64_t height)
 {
     std::cout << "Creating World"
               << "\n";
+
+    _camera = new Camera(
+        sf::Vector3f(0, 0, 0),
+        sf::Vector3f(800/2, 600/2, 0),
+        sf::Vector2f(64, 32),
+        10
+    );
+
     addActor(new Actor());
 
     addActor(new Actor());
@@ -16,6 +24,8 @@ World::~World()
 {
     std::cout << "Destroying World"
               << "\n";
+    delete _camera;
+
     for (auto & actor : _actors)
     {
         delete actor;
@@ -35,7 +45,7 @@ void World::transform()
 {
     for (auto & actor : _actors)
     {
-        actor->transform();
+        actor->transform(*_camera);
     }
 }
 
