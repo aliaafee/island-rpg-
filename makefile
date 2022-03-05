@@ -3,7 +3,6 @@ CFLAGS=-g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
 
 SRC=src
 OBJ=obj
-DEP=dep
 SRCS=$(wildcard $(SRC)/*.cpp)
 OBJS=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SRCS))
 DEPS=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.d,$(SRCS))
