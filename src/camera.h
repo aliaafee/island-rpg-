@@ -6,17 +6,18 @@
 
 #include "matrix3.h"
 
-
 class Camera
 {
 public:
-    Camera(sf::Vector3f position, sf::Vector3f origin, sf::Vector2f tileSize, float gridSize);
+    Camera(sf::Vector3f position, sf::Vector3f origin,
+           sf::Vector2f tileSize, float gridSize);
 
     const sf::Vector3f &getPosition() const;
     void setPosition(const sf::Vector3f &position);
 
-    const sf::Vector3f transform(const sf::Vector3f &point);
-    const sf::Vector3f itransform(const sf::Vector3f &point);
+    sf::Vector3f transform(const sf::Vector3f &point) const;
+    sf::Vector3f itransform(const sf::Vector3f &point) const;
+
 private:
     sf::Vector3f _position;
     sf::Vector3f _origin;

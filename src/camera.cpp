@@ -38,12 +38,12 @@ void Camera::setPosition(const sf::Vector3f &position)
     _calculateTranslation();
 }
 
-const sf::Vector3f Camera::transform(const sf::Vector3f &point)
+sf::Vector3f Camera::transform(const sf::Vector3f &point) const
 {
     return (_transformMatrix * point) + _translation;
 }
 
-const sf::Vector3f Camera::itransform(const sf::Vector3f &point)
+sf::Vector3f Camera::itransform(const sf::Vector3f &point) const
 {
     return _inverseMatrix * (point - _translation);
 }

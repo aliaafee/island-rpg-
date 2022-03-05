@@ -19,30 +19,23 @@ Actor::~Actor()
 
 void Actor::update()
 {
-    _position.z += 0.5;
+    incPosition(sf::Vector3f(1, 0, 0));
 }
 
 void Actor::update(std::vector<Actor *> &other_actors)
 {
     update();
-    // for (auto &actor : other_actors)
-    // {
-    //     if (actor != this)
-    //     {
-    //         ;
-    //     }
-    // }
 }
 
 void Actor::update(World &world)
 {
-    ;
+    update();
 }
 
 void Actor::transform(Camera &camera)
 {
-    sf::Vector3 scree_pos = camera.transform(_position);
-    _circle->setPosition(sf::Vector2f(scree_pos.x, scree_pos.y));
+    sf::Vector3 screenPos = camera.transform(_position);
+    _circle->setPosition(sf::Vector2f(screenPos.x, screenPos.y));
 }
 
 void Actor::draw(sf::RenderTarget *screen)
@@ -58,6 +51,11 @@ const sf::Vector3f &Actor::getPosition() const
 void Actor::setPosition(const sf::Vector3f &position)
 {
     _position = position;
+}
+
+void Actor::incPosition(const sf::Vector3f &velocity)
+{
+    _position += velocity; 
 }
 
 bool actorDepthComp(Actor* a, Actor* b)

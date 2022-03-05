@@ -41,7 +41,7 @@ int main()
         world->update();
         world->transform();
 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
         world->draw(&window);
         window.display();
     }

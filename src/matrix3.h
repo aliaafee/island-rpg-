@@ -12,10 +12,10 @@ public:
             float a03, float a04, float a05,
             float a06, float a07, float a08);
 
-    const sf::Vector3f operator*(const sf::Vector3f &vector);
-    Matrix3 getInverse();
+    sf::Vector3f operator*(const sf::Vector3f &vector) const;
+    Matrix3 getInverse() const;
 
-    float &value(int i, int j) { return _value[i][j]; };
+    const float &getValue(int i, int j) const { return _value[i][j]; };
 private:
     float _value[3][3];
 };
@@ -27,9 +27,9 @@ inline std::ostream& operator<<(std::ostream& os, Matrix3& matrix) {
 	for(i = 0; i < 3; i++) {
 		os << "|";
 		for(j = 0; j < 2; j++) {
-			os << matrix.value(i, j) << ",\t";
+			os << matrix.getValue(i, j) << ",\t";
 		}
-		os << matrix.value(i, 2) << "\t|" << std::endl;
+		os << matrix.getValue(i, 2) << "\t|" << std::endl;
 	}
 	os << std::endl;
 	return os;

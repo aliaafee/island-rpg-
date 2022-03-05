@@ -24,7 +24,7 @@ public:
 
     const sf::Vector3f &getPosition() const;
     void setPosition(const sf::Vector3f &position);
-
+    void incPosition(const sf::Vector3f &velocity);
 private:
     sf::Vector3f _position;
     sf::Vector3f _size;

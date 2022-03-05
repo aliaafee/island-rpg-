@@ -25,7 +25,7 @@ Matrix3::Matrix3(float a00, float a01, float a02,
     _value[2][2] = a08;
 }
 
-const sf::Vector3f Matrix3::operator*(const sf::Vector3f &vector)
+sf::Vector3f Matrix3::operator*(const sf::Vector3f &vector) const
 {
     return sf::Vector3f(
         _value[0][0] * vector.x + _value[0][1] * vector.y + _value[0][2] * vector.z,
@@ -33,7 +33,7 @@ const sf::Vector3f Matrix3::operator*(const sf::Vector3f &vector)
         _value[2][0] * vector.x + _value[2][1] * vector.y + _value[2][2] * vector.z);
 }
 
-Matrix3 Matrix3::getInverse()
+Matrix3 Matrix3::getInverse() const
 {
     /* Thanks Alok Aryan on stackoverflow" */
     float det_ = _value[0][0] * ((_value[1][1] * _value[2][2]) - (_value[1][2] * _value[2][1])) -
