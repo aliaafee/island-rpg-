@@ -13,6 +13,8 @@ int main()
 
     World *world = new World(100, 100);
 
+    bool windowFocused = false;
+
     sf::Clock clock;
     while (window.isOpen())
     {
@@ -27,24 +29,29 @@ int main()
             case sf::Event::LostFocus:
                 std::cout << "Lost focus"
                           << "\n";
+                windowFocused = false;
                 break;
             case sf::Event::GainedFocus:
                 std::cout << "Gained focus"
                           << "\n";
+                windowFocused = true;
                 break;
             default:
                 break;
             }
         }
 
-        sf::Time elapsed = clock.restart();
-        world->update(elapsed);
-        
-        world->transform();
+        if (windowFocused)
+        {
+            sf::Time elapsed = clock.restart();
+            world->update(elapsed);
 
-        window.clear(sf::Color::White);
-        world->draw(&window);
-        window.display();
+            world->transform();
+
+            window.clear(sf::Color::White);
+            world->draw(&window);
+            window.display();
+        }
     }
 
     delete world;
