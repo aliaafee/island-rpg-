@@ -2,11 +2,9 @@
 
 Camera::Camera(sf::Vector3f position, sf::Vector3f origin,
                sf::Vector2f tileSize, float gridSize) : position_(position), origin_(origin),
-                                                        tileSize_(tileSize), gridSize_(gridSize)
+                                                        tileSize_(tileSize), gridSize_(gridSize),
+                                                        groundNormal_(0, 0, 1), cameraDirection_(0, 0, 1)
 {
-    groundNormal_ = sf::Vector3f(0, 0, 1);
-    cameraDirection_ = sf::Vector3f(0, 0, 1);
-
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
     float l = w_h / cos((45.0 / 180.0) * M_PI);
@@ -19,11 +17,11 @@ Camera::Camera(sf::Vector3f position, sf::Vector3f origin,
 
     inverseMatrix_ = transformMatrix_.getInverse();
 
-    cameraDirectionInv_ = inverseMatrix_ * cameraDirection_;
+    cameraDirection_ = inverseMatrix_ * cameraDirection_;
 
     calculateTranslation_();
 
-    std::cout << transformMatrix_ ;
+    std::cout << transformMatrix_;
 }
 
 const sf::Vector3f &Camera::getPosition() const
@@ -37,6 +35,19 @@ void Camera::setPosition(const sf::Vector3f &position)
     calculateTranslation_();
 }
 
+void Camera::pan(const sf::Vector2f &direction)
+{
+    pan(direction.x, direction.y);
+}
+
+void Camera::pan(const float &x, const float &y)
+{
+    sf::Vector3f screenPosition = transform(position_);
+    screenPosition.x += x;
+    screenPosition.y += y;
+    setPosition(projectGround(screenPosition));
+}
+
 sf::Vector3f Camera::transform(const sf::Vector3f &point) const
 {
     return (transformMatrix_ * point) + translation_;
@@ -45,6 +56,21 @@ sf::Vector3f Camera::transform(const sf::Vector3f &point) const
 sf::Vector3f Camera::itransform(const sf::Vector3f &point) const
 {
     return inverseMatrix_ * (point - translation_);
+}
+
+sf::Vector3f Camera::projectGround(const sf::Vector3f &point) const
+{
+    float groundElevation = 0;
+
+    sf::Vector3f intPoint;
+    bool intersected = intersetPlane(
+        groundNormal_,
+        sf::Vector3f(0, 0, groundElevation),
+        itransform(point),
+        cameraDirection_,
+        &intPoint);
+
+    return intPoint;
 }
 
 void Camera::calculateTranslation_()

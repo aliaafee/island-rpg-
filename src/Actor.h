@@ -15,20 +15,20 @@ public:
     Actor();
     ~Actor();
 
-    virtual void update();
-    virtual void update(std::vector<Actor *> &other_actors);
-    virtual void update(World &world);
+    virtual void update(sf::Time &elapsed, World &world);
 
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
     const sf::Vector3f &getPosition() const;
-
     void setPosition(const sf::Vector3f &position);
     void setPosition(const float &x, const float &y, const float &z);
-    
     void move(const sf::Vector3f &velocity);
     void move(const float &x, const float &y, const float &z);
+
+    const sf::Vector3f &getSize() const;
+    void setSize(const sf::Vector3f &size);
+    void setSize(const float &x, const float &y, const float &z);
 
     const sf::Vector3f &getScreenPosition() const;
 private:

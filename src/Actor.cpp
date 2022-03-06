@@ -13,8 +13,6 @@ Actor::Actor() : baseRect2_(sf::LinesStrip, 7), position_(0, 0, 0), size_(10.0, 
     baseRect3_.push_back(sf::Vector3f(0, 0, 0));
     baseRect3_.push_back(sf::Vector3f(size_.x / 2.0, -size_.y / 2.0, 0));
 
-    std::cout << baseRect2_.getVertexCount();
-
     for (int i = 0; i < baseRect2_.getVertexCount(); i++)
     {
         baseRect2_[i].color.r = 0;
@@ -29,20 +27,9 @@ Actor::~Actor()
               << "\n";
 }
 
-void Actor::update()
+void Actor::update(sf::Time &elapsed, World &world)
 {
-    move(sf::Vector3f(0.1, 0, 0));
     ;
-}
-
-void Actor::update(std::vector<Actor *> &other_actors)
-{
-    update();
-}
-
-void Actor::update(World &world)
-{
-    update();
 }
 
 void Actor::transform(Camera &camera)
@@ -90,6 +77,23 @@ void Actor::move(const float &x, const float &y, const float &z)
     position_.x += x;
     position_.y += y;
     position_.z += z;
+}
+
+const sf::Vector3f& Actor::getSize() const
+{
+    return size_;
+}
+
+void Actor::setSize(const sf::Vector3f &size)
+{
+    size_ = size;
+}
+
+void Actor::setSize(const float &x, const float &y, const float &z)
+{
+    size_.x = x;
+    size_.y = y;
+    size_.z = z;
 }
 
 const sf::Vector3f &Actor::getScreenPosition() const

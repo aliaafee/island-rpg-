@@ -15,13 +15,13 @@ World::World(int64_t width, int64_t height)
 
     addActor(new Actor());
 
-    //actors_[0]->setPosition(sf::Vector3f(0, 0, 0));
+    actors_[0]->setPosition(sf::Vector3f(0, 20, 0));
     //actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
     
     Actor* a;
-    for (float i; i < 1; i++) {
+    for (float i; i < 1000; i++) {
         a = new SpriteActor();
-        a->setPosition(sf::Vector3f(i*6, 0, 0));
+        a->setPosition(sf::Vector3f(20 + i*6, 0, 0));
         addActor(a);
     }
 }
@@ -40,11 +40,29 @@ World::~World()
     actors_.clear();
 }
 
-void World::update()
+void World::update(sf::Time &elapsed)
 {
     for (auto &actor : actors_)
     {
-        actor->update(*this);
+        actor->update(elapsed, *this);
+    }
+
+    float speed = elapsed.asSeconds() * 4.0 * 60;
+    sf::Vector2f panDir(0, 0);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        panDir.x = speed;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        panDir.x = -speed;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        panDir.y = -speed;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        panDir.y = speed;
+    }
+    if (abs(panDir.x) > 0 || abs(panDir.y) >0) {
+        camera_->pan(panDir);
     }
 }
 

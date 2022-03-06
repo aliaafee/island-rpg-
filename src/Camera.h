@@ -1,10 +1,11 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include <math.h>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 #include "Matrix3.h"
+#include "support.h"
 
 class Camera
 {
@@ -15,8 +16,13 @@ public:
     const sf::Vector3f &getPosition() const;
     void setPosition(const sf::Vector3f &position);
 
+    void pan(const sf::Vector2f &direction);
+    void pan(const float &x, const float &y);
+
     sf::Vector3f transform(const sf::Vector3f &point) const;
     sf::Vector3f itransform(const sf::Vector3f &point) const;
+
+    sf::Vector3f projectGround(const sf::Vector3f &point) const;
 
 private:
     sf::Vector3f position_;

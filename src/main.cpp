@@ -8,16 +8,14 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works alright!");
-    // window.setVerticalSyncEnabled(true);
-    window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
+    //window.setFramerateLimit(120);
 
     World *world = new World(100, 100);
 
     sf::Clock clock;
     while (window.isOpen())
     {
-        clock.restart();
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -39,7 +37,9 @@ int main()
             }
         }
 
-        world->update();
+        sf::Time elapsed = clock.restart();
+        world->update(elapsed);
+        
         world->transform();
 
         window.clear(sf::Color::White);

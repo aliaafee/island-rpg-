@@ -5,6 +5,7 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 #include "Actor.h"
@@ -17,7 +18,7 @@ public:
     World(int64_t width, int64_t height);
     ~World();
 
-    void update();
+    void update(sf::Time &elapsed);
     void transform();
     void draw(sf::RenderTarget *screen);
 
