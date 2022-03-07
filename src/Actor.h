@@ -6,13 +6,14 @@
 #include <SFML/Graphics.hpp>
 
 #include "Camera.h"
+#include "ResourceManager.h"
 
 class World;
 
 class Actor
 {
 public:
-    Actor();
+    Actor(ResourceManager* rm);
     ~Actor();
 
     virtual void update(sf::Time &elapsed, World &world);

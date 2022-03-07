@@ -11,11 +11,12 @@
 #include "Actor.h"
 #include "Camera.h"
 #include "SpriteActor.h"
+#include "ResourceManager.h"
 
 class World
 {
 public:
-    World(int64_t width, int64_t height);
+    World(ResourceManager *rm,int64_t width, int64_t height);
     ~World();
 
     void update(sf::Time &elapsed);
@@ -28,6 +29,7 @@ private:
     std::vector<Actor *> actors_;
 
     Camera *camera_;
+    ResourceManager *rm_;
 };
 
 #endif // __WORLD_H__

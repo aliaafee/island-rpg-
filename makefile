@@ -3,9 +3,12 @@ CFLAGS=-g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
 
 SRC=src
 OBJ=obj
+TEST=tests
 SRCS=$(wildcard $(SRC)/*.cpp)
 OBJS=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.o,$(SRCS))
 DEPS=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.d,$(SRCS))
+TESTS=$(wildcard $(TEST)/*.cpp)
+TESTBINS=$(patsubst $(TEST)/%.cpp,$(TEST)/bin/%,$(TESTS))
 
 BIN = bin/app
 
@@ -13,6 +16,8 @@ SRC_DIR = src
 BUILD_DIR = build
 
 all: $(BIN)
+
+
 
 # Build the release
 release: CFLAGS=-O2 -DNDEBUG -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
@@ -30,6 +35,15 @@ $(BIN): $(OBJS)
 $(OBJ)/%.o: $(SRC)/%.cpp makefile
 	$(CC) $(CFLAGS) -MMD -MP -o $@ -c $<
 
+# Execute all test
+test: $(TESTBINS)
+	for test in $(TESTBINS) ; do ./$$test ; done
+
+# Compile all tests
+$(TEST)/bin/%: $(TEST)/%.cpp $(filter-out $(OBJ)/main.o,$(OBJS))
+	$(CC) $(CFLAGS) -o $@ $^
+
 # Cleanup
 clean:
 	rm -f -r $(BIN) $(OBJ)/*.o
+	rm -f -r $(TEST)/bin/*

@@ -1,15 +1,11 @@
 #include "SpriteActor.h"
 
 
-SpriteActor::SpriteActor() : Actor()
+SpriteActor::SpriteActor(ResourceManager* rm) : Actor(rm)
 {
-    if (!texture_.loadFromFile("graphics/test/player.png"))
-    {
-        std::cout << "failed to load texture" << "\n";
-        return;
-    }
-    std::cout << "Texture Loaded" << "\n";
-    sprite_.setTexture(texture_);
+    sf::Texture* tex = rm->loadTexture("graphics/test/player.png");
+
+    sprite_.setTexture(*tex);
     sprite_.setOrigin(32, 64);
 }
 

@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "World.h"
-
+#include "ResourceManager.h"
 #include "Matrix3.h"
 
 int main()
@@ -11,7 +11,9 @@ int main()
     window.setVerticalSyncEnabled(true);
     //window.setFramerateLimit(120);
 
-    World *world = new World(100, 100);
+    
+    ResourceManager rm;
+    World world(&rm, 100, 100);
 
     bool windowFocused = false;
 
@@ -44,16 +46,14 @@ int main()
         if (windowFocused)
         {
             sf::Time elapsed = clock.restart();
-            world->update(elapsed);
+            world.update(elapsed);
 
-            world->transform();
+            world.transform();
 
             window.clear(sf::Color::White);
-            world->draw(&window);
+            world.draw(&window);
             window.display();
         }
     }
-
-    delete world;
     return 0;
 }

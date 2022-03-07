@@ -10,14 +10,13 @@
 class SpriteActor : public Actor
 {
 public:
-    SpriteActor();
+    SpriteActor(ResourceManager* rm);
     ~SpriteActor();
 
     virtual void update(World &world);
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 private:
-    sf::Texture texture_;
     sf::Sprite sprite_;
 };
 
