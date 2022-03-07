@@ -20,8 +20,6 @@ Camera::Camera(sf::Vector3f position, sf::Vector3f origin,
     cameraDirection_ = inverseMatrix_ * cameraDirection_;
 
     calculateTranslation_();
-
-    std::cout << transformMatrix_;
 }
 
 const sf::Vector3f &Camera::getPosition() const

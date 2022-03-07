@@ -2,7 +2,7 @@
 
 int main()
 {
-    std::cout << "Testing Resource Manager" <<std::endl;
+    std::cout << "# Testing Resource Manager" <<std::endl;
 
     ResourceManager mngr;
 
@@ -11,4 +11,5 @@ int main()
     sf::Texture * tex2 = mngr.loadTexture("graphics/test/player.png");
 
     return 0;
+    
 }
