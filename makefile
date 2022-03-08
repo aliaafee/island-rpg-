@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
+CFLAGS=-Iinclude -g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
 
 SRC=src
 OBJ=obj
@@ -19,7 +19,7 @@ BUILD_DIR = build
 all: $(BIN)
 
 # Build the release
-release: CFLAGS=-O2 -DNDEBUG -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
+release: CFLAGS=-Iinclude -O2 -DNDEBUG -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
 release: clean
 release: $(BIN)
 release: clean_objs

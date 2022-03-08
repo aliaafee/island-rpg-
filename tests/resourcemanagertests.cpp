@@ -1,4 +1,4 @@
-#include "../src/ResourceManager.hpp"
+#include "../include/ResourceManager.hpp"
 
 int main()
 {
