@@ -1,6 +1,9 @@
 #include "Actor.h"
 
-Actor::Actor(ResourceManager *rm) : rm(rm), baseRect2_(sf::LinesStrip, 7), position_(0, 0, 0), size_(10.0, 10.0, 10.0)
+Actor::Actor(ResourceManager *rm) : rm(rm),
+                                    baseRect2_(sf::LinesStrip, 7),
+                                    position_(0, 0, 0),
+                                    size_(10.0, 10.0, 10.0)
 {
     std::cout << "Creating Actor"
               << "\n";

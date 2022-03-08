@@ -13,6 +13,8 @@
 #include "ResourceManager.h"
 #include "Player.h"
 
+class Player;
+
 class World
 {
 public:
@@ -27,6 +29,7 @@ public:
     const std::vector<Actor *> &getActors() const;
 
 private:
+    Player* player_;
     std::vector<Actor *> actors_;
 
     Camera *camera_;

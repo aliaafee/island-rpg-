@@ -1,7 +1,9 @@
 #include "AnimatedActor.h"
 
-AnimatedActor::AnimatedActor(ResourceManager *rm) : SpriteActor(rm), currentFrame(0),
-                                                    currentAnimationName(""), currentSequence(nullptr),
+AnimatedActor::AnimatedActor(ResourceManager *rm) : SpriteActor(rm),
+                                                    currentFrame(0),
+                                                    currentAnimationName(""),
+                                                    currentSequence(nullptr),
                                                     speed(10)
 {
 }

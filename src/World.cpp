@@ -1,6 +1,8 @@
 #include "World.h"
 
-World::World(ResourceManager *rm, int64_t width, int64_t height) : rm_(rm)
+World::World(ResourceManager *rm,
+             int64_t width, int64_t height) : rm_(rm),
+                                              player_(new Player(rm))
 {
     std::cout << "Creating World"
               << "\n";
@@ -11,20 +13,22 @@ World::World(ResourceManager *rm, int64_t width, int64_t height) : rm_(rm)
         sf::Vector2f(64, 32),
         10);
 
-    addActor(new Player(rm_));
+    addActor(player_);
 
-    addActor(new Player(rm_));
+    // addActor(new Player(rm_));
 
-    actors_[0]->setPosition(sf::Vector3f(0, 20, 0));
-    // actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
+    // addActor(new Player(rm_));
 
-    Actor *a;
-    for (float i; i < 10; i++)
-    {
-        a = new Player(rm_);
-        a->setPosition(sf::Vector3f(20 + i * 6, 0, 0));
-        addActor(a);
-    }
+    // actors_[0]->setPosition(sf::Vector3f(0, 20, 0));
+    // // actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
+
+    // Actor *a;
+    // for (float i; i < 10; i++)
+    // {
+    //     a = new Player(rm_);
+    //     a->setPosition(sf::Vector3f(20 + i * 6, 0, 0));
+    //     addActor(a);
+    // }
 }
 
 World::~World()

@@ -1,9 +1,14 @@
 #include "Camera.h"
 
-Camera::Camera(sf::Vector3f position, sf::Vector3f origin,
-               sf::Vector2f tileSize, float gridSize) : position_(position), origin_(origin),
-                                                        tileSize_(tileSize), gridSize_(gridSize),
-                                                        groundNormal_(0, 0, 1), cameraDirection_(0, 0, 1)
+Camera::Camera(sf::Vector3f position,
+               sf::Vector3f origin,
+               sf::Vector2f tileSize,
+               float gridSize) : position_(position),
+                                 origin_(origin),
+                                 tileSize_(tileSize),
+                                 gridSize_(gridSize),
+                                 groundNormal_(0, 0, 1),
+                                 cameraDirection_(0, 0, 1)
 {
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
