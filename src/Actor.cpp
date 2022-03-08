@@ -1,6 +1,6 @@
 #include "Actor.h"
 
-Actor::Actor(ResourceManager* rm) : baseRect2_(sf::LinesStrip, 7), position_(0, 0, 0), size_(10.0, 10.0, 10.0)
+Actor::Actor(ResourceManager *rm) : rm(rm), baseRect2_(sf::LinesStrip, 7), position_(0, 0, 0), size_(10.0, 10.0, 10.0)
 {
     std::cout << "Creating Actor"
               << "\n";
@@ -79,7 +79,7 @@ void Actor::move(const float &x, const float &y, const float &z)
     position_.z += z;
 }
 
-const sf::Vector3f& Actor::getSize() const
+const sf::Vector3f &Actor::getSize() const
 {
     return size_;
 }

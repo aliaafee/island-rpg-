@@ -1,6 +1,6 @@
 #include "World.h"
 
-World::World(ResourceManager *rm,int64_t width, int64_t height) : rm_(rm)
+World::World(ResourceManager *rm, int64_t width, int64_t height) : rm_(rm)
 {
     std::cout << "Creating World"
               << "\n";
@@ -11,17 +11,18 @@ World::World(ResourceManager *rm,int64_t width, int64_t height) : rm_(rm)
         sf::Vector2f(64, 32),
         10);
 
-    addActor(new SpriteActor(rm_));
+    addActor(new Player(rm_));
 
-    addActor(new Actor(rm_));
+    addActor(new Player(rm_));
 
     actors_[0]->setPosition(sf::Vector3f(0, 20, 0));
-    //actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
-    
-    Actor* a;
-    for (float i; i < 10; i++) {
-        a = new SpriteActor(rm_);
-        a->setPosition(sf::Vector3f(20 + i*6, 0, 0));
+    // actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
+
+    Actor *a;
+    for (float i; i < 10; i++)
+    {
+        a = new Player(rm_);
+        a->setPosition(sf::Vector3f(20 + i * 6, 0, 0));
         addActor(a);
     }
 }
@@ -49,19 +50,24 @@ void World::update(sf::Time &elapsed)
 
     float speed = elapsed.asSeconds() * 4.0 * 60;
     sf::Vector2f panDir(0, 0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
         panDir.x = speed;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
         panDir.x = -speed;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    {
         panDir.y = -speed;
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
         panDir.y = speed;
     }
-    if (abs(panDir.x) > 0 || abs(panDir.y) >0) {
+    if (abs(panDir.x) > 0 || abs(panDir.y) > 0)
+    {
         camera_->pan(panDir);
     }
 }
@@ -87,4 +93,9 @@ void World::draw(sf::RenderTarget *screen)
 void World::addActor(Actor *actor)
 {
     actors_.push_back(actor);
+}
+
+const std::vector<Actor *> &World::getActors() const
+{
+    return actors_;
 }

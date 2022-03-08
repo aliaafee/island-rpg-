@@ -2,20 +2,23 @@
 #define __SPRITEACTOR_H__
 
 #include <iostream>
+#include <typeinfo>
 #include <SFML/Graphics.hpp>
 
 #include "Actor.h"
-#include "World.h"
+#include "ResourceManager.h"
 
 class SpriteActor : public Actor
 {
 public:
-    SpriteActor(ResourceManager* rm);
+    SpriteActor(ResourceManager *rm);
     ~SpriteActor();
 
-    virtual void update(World &world);
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
+
+    void setTexture(sf::Texture *texture);
+
 private:
     sf::Sprite sprite_;
 };

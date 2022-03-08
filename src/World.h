@@ -10,13 +10,13 @@
 
 #include "Actor.h"
 #include "Camera.h"
-#include "SpriteActor.h"
 #include "ResourceManager.h"
+#include "Player.h"
 
 class World
 {
 public:
-    World(ResourceManager *rm,int64_t width, int64_t height);
+    World(ResourceManager *rm, int64_t width, int64_t height);
     ~World();
 
     void update(sf::Time &elapsed);
@@ -24,6 +24,7 @@ public:
     void draw(sf::RenderTarget *screen);
 
     void addActor(Actor *actor);
+    const std::vector<Actor *> &getActors() const;
 
 private:
     std::vector<Actor *> actors_;

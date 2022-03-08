@@ -13,7 +13,7 @@ class World;
 class Actor
 {
 public:
-    Actor(ResourceManager* rm);
+    Actor(ResourceManager *rm);
     ~Actor();
 
     virtual void update(sf::Time &elapsed, World &world);
@@ -32,6 +32,10 @@ public:
     void setSize(const float &x, const float &y, const float &z);
 
     const sf::Vector3f &getScreenPosition() const;
+
+protected:
+    ResourceManager *rm;
+
 private:
     sf::Vector3f position_;
     sf::Vector3f size_;
@@ -42,7 +46,6 @@ private:
     sf::VertexArray baseRect2_;
 };
 
-bool actorDepthComp(Actor* a, Actor* b);
-
+bool actorDepthComp(Actor *a, Actor *b);
 
 #endif // __ACTOR_H__
