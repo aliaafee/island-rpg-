@@ -5,8 +5,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "Camera.h"
-#include "ResourceManager.h"
+#include "Camera.hpp"
+#include "ResourceManager.hpp"
 
 class World;
 

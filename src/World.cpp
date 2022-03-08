@@ -1,4 +1,4 @@
-#include "World.h"
+#include "World.hpp"
 
 World::World(ResourceManager *rm,
              int64_t width, int64_t height) : rm_(rm),

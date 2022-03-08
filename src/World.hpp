@@ -8,10 +8,10 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-#include "Actor.h"
-#include "Camera.h"
-#include "ResourceManager.h"
-#include "Player.h"
+#include "Actor.hpp"
+#include "Camera.hpp"
+#include "ResourceManager.hpp"
+#include "Player.hpp"
 
 class Player;
 

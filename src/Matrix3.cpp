@@ -1,4 +1,4 @@
-#include "Matrix3.h"
+#include "Matrix3.hpp"
 
 Matrix3::Matrix3()
 {

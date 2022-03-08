@@ -1,9 +1,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "World.h"
-#include "ResourceManager.h"
-#include "Matrix3.h"
+#include "World.hpp"
+#include "ResourceManager.hpp"
+#include "Matrix3.hpp"
 
 int main()
 {

@@ -4,8 +4,8 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-#include "Matrix3.h"
-#include "support.h"
+#include "Matrix3.hpp"
+#include "support.hpp"
 
 class Camera
 {

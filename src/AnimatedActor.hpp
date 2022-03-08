@@ -7,8 +7,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "SpriteActor.h"
-#include "ResourceManager.h"
+#include "SpriteActor.hpp"
+#include "ResourceManager.hpp"
 
 class AnimatedActor : public SpriteActor
 {

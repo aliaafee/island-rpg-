@@ -1,4 +1,4 @@
-#include "Actor.h"
+#include "Actor.hpp"
 
 Actor::Actor(ResourceManager *rm) : rm(rm),
                                     baseRect2_(sf::LinesStrip, 7),

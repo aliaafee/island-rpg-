@@ -5,8 +5,8 @@
 #include <typeinfo>
 #include <SFML/Graphics.hpp>
 
-#include "Actor.h"
-#include "ResourceManager.h"
+#include "Actor.hpp"
+#include "ResourceManager.hpp"
 
 class SpriteActor : public Actor
 {

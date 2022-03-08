@@ -1,9 +1,9 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include "AnimatedActor.h"
-#include "ResourceManager.h"
-#include "World.h"
+#include "AnimatedActor.hpp"
+#include "ResourceManager.hpp"
+#include "World.hpp"
 
 class Player : public AnimatedActor
 {

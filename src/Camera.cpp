@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "Camera.hpp"
 
 Camera::Camera(sf::Vector3f position,
                sf::Vector3f origin,

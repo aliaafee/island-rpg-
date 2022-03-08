@@ -1,4 +1,4 @@
-#include "support.h"
+#include "support.hpp"
 
 float dotProduct(const sf::Vector3f &a, const sf::Vector3f &b)
 {

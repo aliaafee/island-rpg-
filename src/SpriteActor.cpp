@@ -1,4 +1,4 @@
-#include "SpriteActor.h"
+#include "SpriteActor.hpp"
 
 SpriteActor::SpriteActor(ResourceManager *rm) : Actor(rm)
 {

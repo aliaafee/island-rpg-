@@ -1,4 +1,4 @@
-#include "AnimatedActor.h"
+#include "AnimatedActor.hpp"
 
 AnimatedActor::AnimatedActor(ResourceManager *rm) : SpriteActor(rm),
                                                     currentFrame(0),
