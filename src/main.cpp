@@ -7,7 +7,7 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works alright!");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Island RPG");
     window.setVerticalSyncEnabled(true);
     //window.setFramerateLimit(120);
 
