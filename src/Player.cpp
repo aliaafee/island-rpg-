@@ -25,20 +25,8 @@ Player::Player(ResourceManager *rm) : AnimatedActor(rm),
 void Player::update(sf::Time &elapsed, World &world)
 {
     statemachine_.updateState(world);
-    animate(elapsed);
 
-    // for (auto &actor : world.getActors())
-    // {
-    //     if (actor == this)
-    //     {
-    //         std::cout << "found myself " << typeid(*actor).name() << "\n";
-    //         if (typeid(*actor) == typeid(Player))
-    //         {
-    //             std::cout << "Type matcher Player"
-    //                       << "\n";
-    //         }
-    //     }
-    // }
+    animate(elapsed);
 }
 
 void Player::walkTo(const sf::Vector3f &target)
@@ -61,7 +49,7 @@ StateId Player::idleState(bool firstRun, World &world)
     }
 
     StateEvent event;
-    while (statemachine_.polEvent(event))
+    while (statemachine_.pollEvent(event))
     {
         switch (event)
         {
@@ -86,7 +74,7 @@ StateId Player::walkState(bool firstRun, World &world)
     }
 
     StateEvent event;
-    while (statemachine_.polEvent(event))
+    while (statemachine_.pollEvent(event))
     {
         switch (event)
         {

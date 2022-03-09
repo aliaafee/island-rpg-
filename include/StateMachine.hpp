@@ -1,11 +1,8 @@
 #ifndef __STATEMACHINE_H__
 #define __STATEMACHINE_H__
 
-#include <string>
-#include <cctype>
-#include <iostream>
+#include <queue>
 #include <vector>
-#include <set>
 
 typedef unsigned int StateId;
 
@@ -16,9 +13,7 @@ public:
     StateMachine(T *target) : startState(0),
                               firstRunCurrentState(true),
                               currentState(nullptr),
-                              target_(target),
-                              eventCounter(0)
-                              {};
+                              target_(target){};
     ~StateMachine(){};
 
     StateId addState(StateId (T::*handler)(bool, U &));
@@ -29,7 +24,7 @@ public:
 
     void queueEvent(const V &event);
 
-    bool polEvent(V &event);
+    bool pollEvent(V &event);
 
     void resetEvent();
 
@@ -46,8 +41,7 @@ private:
 
     StateId (T::*currentState)(bool, U &);
 
-    std::vector<V> events_;
-    unsigned int eventCounter;
+    std::queue<V> eventQueue_;
 };
 
 template <class T, class U, class V>
@@ -92,27 +86,28 @@ bool StateMachine<T, U, V>::setState(const StateId &stateid)
 template <class T, class U, class V>
 void StateMachine<T, U, V>::queueEvent(const V &event)
 {
-    events_.push_back(event);
+    eventQueue_.push(event);
 }
 
-template<class T, class U, class V>
-bool StateMachine<T, U, V>::polEvent(V &event)
+template <class T, class U, class V>
+bool StateMachine<T, U, V>::pollEvent(V &event)
 {
-    if (eventCounter >= events_.size()) {
-        resetEvent();
+    if (eventQueue_.empty())
+    {
         return false;
     }
 
-    event = events_[eventCounter];
-    eventCounter += 1;
+    event = eventQueue_.front();
+    eventQueue_.pop();
+
     return true;
 }
 
-template<class T, class U, class V>
+template <class T, class U, class V>
 void StateMachine<T, U, V>::resetEvent()
 {
-    events_.clear();
-    eventCounter = 0;
+    std::queue<V> empty;
+    std::swap(eventQueue_, empty);
 }
 
 template <class T, class U, class V>

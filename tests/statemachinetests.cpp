@@ -1,6 +1,7 @@
 #include "../include/StateMachine.hpp"
 
 #include <iostream>
+#include <set>
 
 class Thing
 {
@@ -8,6 +9,15 @@ public:
 
     StateId idleStateId;
     StateId walkStateId;
+
+    enum StateEvent {
+        WALK_TO_TARGET,
+        STOP
+    };
+
+    bool target;
+    int data;
+    StateMachine<Thing, int, StateEvent> sm;
 
     Thing() : target(false), sm(this)
     {
@@ -37,7 +47,7 @@ public:
         {
             std::cout << "Transition -> ";
         }
-        std::cout << "Walk data is" << data
+        std::cout << "Walk data is " << data
                   << "\n";
         return walkStateId;
     }
@@ -47,10 +57,6 @@ public:
         data = 10;
         sm.updateState(data);
     }
-
-    bool target;
-    int data;
-    StateMachine<Thing, int> sm;
 };
 
 int main()
@@ -68,6 +74,8 @@ int main()
     w.update();
     w.update();
     w.update();
+
+    std::set<int>::iterator i;
 
     return 0;
 }
