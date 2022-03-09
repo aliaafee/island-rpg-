@@ -5,14 +5,18 @@
 class Thing
 {
 public:
-    Thing() : target(false), sm(this, "idle")
+
+    StateId idleStateId;
+    StateId walkStateId;
+
+    Thing() : target(false), sm(this)
     {
-        sm.addState("idle", &Thing::idleHandler);
-        sm.addState("walk", &Thing::walkHandler);
+        idleStateId = sm.addState(&Thing::idleHandler);
+        walkStateId = sm.addState(&Thing::walkHandler);
     };
     ~Thing(){};
 
-    std::string idleHandler(bool firstRun)
+    StateId idleHandler(bool firstRun)
     {
         if (firstRun)
         {
@@ -22,12 +26,12 @@ public:
                   << "\n";
         if (target)
         {
-            return "walk";
+            return walkStateId;
         }
-        return "idle";
+        return idleStateId;
     }
 
-    std::string walkHandler(bool firstRun)
+    StateId walkHandler(bool firstRun)
     {
         if (firstRun)
         {
@@ -35,7 +39,7 @@ public:
         }
         std::cout << "Walk"
                   << "\n";
-        return "walk";
+        return walkStateId;
     }
 
     void update()

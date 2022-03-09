@@ -1,11 +1,10 @@
 #include "Player.hpp"
 
 Player::Player(ResourceManager *rm) : AnimatedActor(rm),
-                                      statemachine_(this, "idle"),
-                                      idleCT(0)
+                                      statemachine_(this)
 {
-    statemachine_.addState("idle", &Player::idleState);
-    statemachine_.addState("walk", &Player::walkState);
+    idleStateId = statemachine_.addState(&Player::idleState);
+    walkStateId = statemachine_.addState(&Player::walkState);
 
     std::string animationNames[12] = {
         "up_walking", "down_walking", "left_walking", "right_walking",
@@ -42,28 +41,37 @@ void Player::update(sf::Time &elapsed, World &world)
     // }
 }
 
-std::string Player::idleState(bool firstRun)
+StateId Player::idleState(bool firstRun)
 {
     if (firstRun)
     {
+        testCounter = 0;
         std::cout << "Player to Idle State" << std::endl;
         setCurrentAnimation("left_idle");
     }
-    idleCT += 1;
-    if (idleCT > 200)
+
+    testCounter += 1;
+    std::cout << "idling " << testCounter << "\n";
+    if (testCounter > 200)
     {
-        idleCT = 0;
-        return "walk";
+        return walkStateId;
     }
-    return "idle";
+    return idleStateId;
 }
 
-std::string Player::walkState(bool firstRun)
+StateId Player::walkState(bool firstRun)
 {
     if (firstRun)
     {
+        testCounter = 0;
         std::cout << "Player to Walk State" << std::endl;
         setCurrentAnimation("left_walking");
     }
-    return "walk";
+    testCounter += 1;
+    std::cout << "walking " << testCounter << "\n";
+    if (testCounter > 200)
+    {
+        return idleStateId;
+    }
+    return walkStateId;
 }

@@ -4,68 +4,74 @@
 #include <string>
 #include <cctype>
 #include <iostream>
-#include <map>
+#include <vector>
+
+typedef unsigned int StateId;
 
 template <class T>
 class StateMachine
 {
 public:
-    StateMachine(T *target, const std::string &start);
-    ~StateMachine();
+    StateMachine(T *target) : startState(0),
+                              firstRunCurrentState(true),
+                              currentState(nullptr),
+                              target_(target){};
+    ~StateMachine(){};
 
-    void addState(const std::string &name, std::string (T::*handler)(bool));
+    StateId addState(StateId (T::*handler)(bool));
 
-    bool setState(const std::string &name);
+    bool setStartState(const StateId &stateid);
+
+    bool setState(const StateId &stateid);
 
     void updateState();
 
 private:
-    std::map<const std::string, std::string (T::*)(bool)> handlers_;
-    std::string startState;
+    std::vector<StateId (T::*)(bool)> handlers_;
+    StateId startState;
 
     T *target_;
 
     bool firstRunCurrentState;
-    // StateHandler currentState;
 
-    std::string (T::*currentState)(bool);
+    StateId (T::*currentState)(bool);
 };
 
 template <class T>
-StateMachine<T>::StateMachine(T *target, const std::string &start) : startState(start),
-                                                                     firstRunCurrentState(true),
-                                                                     currentState(nullptr),
-                                                                     target_(target)
+StateId StateMachine<T>::addState(StateId (T::*handler)(bool))
 {
+    handlers_.push_back(handler);
+
+    return handlers_.size() - 1;
 }
 
 template <class T>
-StateMachine<T>::~StateMachine()
+bool StateMachine<T>::setStartState(const StateId &stateid)
 {
+    if (stateid > handlers_.size() - 1)
+    {
+        return false;
+    }
+    startState = stateid;
+    return true;
 }
 
 template <class T>
-void StateMachine<T>::addState(const std::string &name, std::string (T::*handler)(bool))
+bool StateMachine<T>::setState(const StateId &stateid)
 {
-    handlers_.insert(std::pair(name, handler));
-}
-
-template <class T>
-bool StateMachine<T>::setState(const std::string &name)
-{
-    auto nextState = handlers_.find(name);
-
-    if (nextState == handlers_.end())
+    if (stateid > handlers_.size() - 1)
     {
         return false;
     }
 
-    if (nextState->second != currentState)
+    StateId (T::*nextState)(bool) = handlers_[stateid];
+
+    if (nextState != currentState)
     {
         firstRunCurrentState = true;
     }
 
-    currentState = nextState->second;
+    currentState = nextState;
 
     return true;
 }
@@ -75,21 +81,18 @@ void StateMachine<T>::updateState()
 {
     if (currentState == nullptr)
     {
-        setState(startState);
+        if (!setState(startState))
+        {
+            return;
+        }
     }
 
-    std::string nextState;
+    StateId nextStateId = (target_->*currentState)(firstRunCurrentState);
+
     if (firstRunCurrentState)
-    {
         firstRunCurrentState = false;
-        nextState = (target_->*currentState)(true);
-    }
-    else
-    {
-        nextState = (target_->*currentState)(false);
-    }
 
-    setState(nextState);
+    setState(nextStateId);
 }
 
 #endif // __STATEMACHINE_H__

@@ -16,13 +16,16 @@ public:
 
     virtual void update(sf::Time &elapsed, World &world);
 
-    std::string idleState(bool firstRun);
-    std::string walkState(bool firstRun);
-
 private:
     StateMachine<Player> statemachine_;
 
-    int idleCT;
+    StateId idleStateId;
+    StateId walkStateId;
+
+    StateId idleState(bool firstRun);
+    StateId walkState(bool firstRun);
+
+    int testCounter;
 };
 
 #endif // __PLAYER_H__
