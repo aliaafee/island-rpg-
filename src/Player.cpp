@@ -41,6 +41,16 @@ void Player::update(sf::Time &elapsed, World &world)
     // }
 }
 
+void Player::walkTo(const sf::Vector3f &target)
+{
+    statemachine_.queueEvent(WALK_TO_TARGET);
+}
+
+void Player::stop()
+{
+    statemachine_.queueEvent(STOP);
+}
+
 StateId Player::idleState(bool firstRun, World &world)
 {
     if (firstRun)
@@ -50,12 +60,19 @@ StateId Player::idleState(bool firstRun, World &world)
         setCurrentAnimation("left_idle");
     }
 
-    testCounter += 1;
-    std::cout << "idling " << testCounter << "\n";
-    if (testCounter > 200)
+    StateEvent event;
+    while (statemachine_.polEvent(event))
     {
-        return walkStateId;
+        switch (event)
+        {
+        case WALK_TO_TARGET:
+            return walkStateId;
+            break;
+        default:
+            break;
+        }
     }
+
     return idleStateId;
 }
 
@@ -67,9 +84,22 @@ StateId Player::walkState(bool firstRun, World &world)
         std::cout << "Player to Walk State" << std::endl;
         setCurrentAnimation("left_walking");
     }
+
+    StateEvent event;
+    while (statemachine_.polEvent(event))
+    {
+        switch (event)
+        {
+        case STOP:
+            return idleStateId;
+            break;
+        default:
+            break;
+        }
+    }
+
     testCounter += 1;
-    std::cout << "walking " << testCounter << "\n";
-    if (testCounter > 200)
+    if (testCounter > 100)
     {
         return idleStateId;
     }

@@ -23,7 +23,7 @@ public:
     sf::Vector3f itransform(const sf::Vector3f &point) const;
 
     sf::Vector3f projectGround(const sf::Vector3f &point) const;
-
+    sf::Vector3f projectGround(const sf::Vector2i &point) const;
 private:
     sf::Vector3f position_;
     sf::Vector3f origin_;

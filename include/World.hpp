@@ -18,7 +18,7 @@ class Player;
 class World
 {
 public:
-    World(ResourceManager *rm, int64_t width, int64_t height);
+    World(sf::RenderWindow *window, ResourceManager *rm, int64_t width, int64_t height);
     ~World();
 
     void update(sf::Time &elapsed);
@@ -28,12 +28,18 @@ public:
     void addActor(Actor *actor);
     const std::vector<Actor *> &getActors() const;
 
+    void onMouseButtonReleased(const sf::Event &event);
+
 private:
     Player* player_;
+    Actor* cursor_;
     std::vector<Actor *> actors_;
 
     Camera *camera_;
     ResourceManager *rm_;
+    sf::RenderWindow *window_;
+
+    void input_(sf::Time &elapsed);
 };
 
 #endif // __WORLD_H__

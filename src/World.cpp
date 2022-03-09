@@ -1,8 +1,10 @@
 #include "World.hpp"
 
-World::World(ResourceManager *rm,
-             int64_t width, int64_t height) : rm_(rm),
-                                              player_(new Player(rm))
+World::World(sf::RenderWindow *window, ResourceManager *rm,
+             int64_t width, int64_t height) : window_(window),
+                                              rm_(rm),
+                                              player_(new Player(rm)),
+                                              cursor_(new Actor(rm))
 {
     std::cout << "Creating World"
               << "\n";
@@ -14,6 +16,7 @@ World::World(ResourceManager *rm,
         10);
 
     addActor(player_);
+    addActor(cursor_);
 
     // addActor(new Player(rm_));
 
@@ -45,13 +48,14 @@ World::~World()
     actors_.clear();
 }
 
-void World::update(sf::Time &elapsed)
+void World::input_(sf::Time &elapsed)
 {
-    for (auto &actor : actors_)
-    {
-        actor->update(elapsed, *this);
-    }
+    // Cursor
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(*window_);
+    cursor_->setPosition(
+        camera_->projectGround(mousePosition));
 
+    // Camera Pan
     float speed = elapsed.asSeconds() * 4.0 * 60;
     sf::Vector2f panDir(0, 0);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -76,6 +80,16 @@ void World::update(sf::Time &elapsed)
     }
 }
 
+void World::update(sf::Time &elapsed)
+{
+    input_(elapsed);
+
+    for (auto &actor : actors_)
+    {
+        actor->update(elapsed, *this);
+    }
+}
+
 void World::transform()
 {
     for (auto &actor : actors_)
@@ -97,6 +111,23 @@ void World::draw(sf::RenderTarget *screen)
 void World::addActor(Actor *actor)
 {
     actors_.push_back(actor);
+}
+
+void World::onMouseButtonReleased(const sf::Event &event)
+{
+    std::cout << "Mouse Release ";
+    if (event.mouseButton.button == sf::Mouse::Left)
+    {
+        std::cout << "Left"
+                  << "\n";
+        player_->walkTo(cursor_->getPosition());
+    }
+    else if (event.mouseButton.button == sf::Mouse::Right)
+    {
+        std::cout << "Right"
+                  << "\n";
+        player_->stop();
+    }
 }
 
 const std::vector<Actor *> &World::getActors() const

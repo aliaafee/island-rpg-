@@ -16,8 +16,15 @@ public:
 
     virtual void update(sf::Time &elapsed, World &world);
 
+    void walkTo(const sf::Vector3f &target);
+    void stop();
 private:
-    StateMachine<Player, World> statemachine_;
+    enum StateEvent {
+        WALK_TO_TARGET,
+        STOP
+    };
+
+    StateMachine<Player, World, StateEvent> statemachine_;
 
     StateId idleStateId;
     StateId walkStateId;

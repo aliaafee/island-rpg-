@@ -76,6 +76,12 @@ sf::Vector3f Camera::projectGround(const sf::Vector3f &point) const
     return intPoint;
 }
 
+sf::Vector3f Camera::projectGround(const sf::Vector2i &point) const
+{
+    return projectGround(
+        sf::Vector3f((float)point.x, (float)point.y, 0));
+}
+
 void Camera::calculateTranslation_()
 {
     translation_ = origin_ - (transformMatrix_ * position_);
