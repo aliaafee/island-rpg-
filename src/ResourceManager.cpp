@@ -38,9 +38,8 @@ sf::Texture *ResourceManager::loadTexture(const std::string &filename)
     }
 
     std::cout << "ResourceManager: Loaded '" << filename << "'\n";
-    textures_.insert(std::pair(filename, newTexture));
 
-    return newTexture;
+    return insertTexture_(filename, newTexture);
 }
 
 bool ResourceManager::loadTextureDirectory(const std::string &directory,
@@ -57,4 +56,22 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
         output->push_back(newTexture);
     }
     return true;
+}
+
+sf::Texture *ResourceManager::insertTexture_(const std::string &filename, sf::Texture *addTexture)
+{
+    // Insert texture to cache in a thread safe manner
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    auto search = textures_.find(filename);
+
+    if (search != textures_.end())
+    {
+        std::cout << "ResourceManager: Already Loaded '" << filename << "'\n";
+        return search->second;
+    }
+
+    textures_.insert(std::pair(filename, addTexture));
+
+    return addTexture;
 }
