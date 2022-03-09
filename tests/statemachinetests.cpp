@@ -16,13 +16,13 @@ public:
     };
     ~Thing(){};
 
-    StateId idleHandler(bool firstRun)
+    StateId idleHandler(bool firstRun, int& data)
     {
         if (firstRun)
         {
             std::cout << "Transition -> ";
         }
-        std::cout << "Idle"
+        std::cout << "Idle" << data
                   << "\n";
         if (target)
         {
@@ -31,24 +31,26 @@ public:
         return idleStateId;
     }
 
-    StateId walkHandler(bool firstRun)
+    StateId walkHandler(bool firstRun, int& data)
     {
         if (firstRun)
         {
             std::cout << "Transition -> ";
         }
-        std::cout << "Walk"
+        std::cout << "Walk data is" << data
                   << "\n";
         return walkStateId;
     }
 
     void update()
     {
-        sm.updateState();
+        data = 10;
+        sm.updateState(data);
     }
 
     bool target;
-    StateMachine<Thing> sm;
+    int data;
+    StateMachine<Thing, int> sm;
 };
 
 int main()

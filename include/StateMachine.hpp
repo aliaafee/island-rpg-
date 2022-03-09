@@ -8,7 +8,7 @@
 
 typedef unsigned int StateId;
 
-template <class T>
+template <class T, class U>
 class StateMachine
 {
 public:
@@ -18,35 +18,35 @@ public:
                               target_(target){};
     ~StateMachine(){};
 
-    StateId addState(StateId (T::*handler)(bool));
+    StateId addState(StateId (T::*handler)(bool, U&));
 
     bool setStartState(const StateId &stateid);
 
     bool setState(const StateId &stateid);
 
-    void updateState();
+    void updateState(U& dataInput);
 
 private:
-    std::vector<StateId (T::*)(bool)> handlers_;
+    std::vector<StateId (T::*)(bool, U&)> handlers_;
     StateId startState;
 
     T *target_;
 
     bool firstRunCurrentState;
 
-    StateId (T::*currentState)(bool);
+    StateId (T::*currentState)(bool, U&);
 };
 
-template <class T>
-StateId StateMachine<T>::addState(StateId (T::*handler)(bool))
+template <class T, class U>
+StateId StateMachine<T, U>::addState(StateId (T::*handler)(bool, U&))
 {
     handlers_.push_back(handler);
 
     return handlers_.size() - 1;
 }
 
-template <class T>
-bool StateMachine<T>::setStartState(const StateId &stateid)
+template <class T, class U>
+bool StateMachine<T, U>::setStartState(const StateId &stateid)
 {
     if (stateid > handlers_.size() - 1)
     {
@@ -56,15 +56,15 @@ bool StateMachine<T>::setStartState(const StateId &stateid)
     return true;
 }
 
-template <class T>
-bool StateMachine<T>::setState(const StateId &stateid)
+template <class T, class U>
+bool StateMachine<T, U>::setState(const StateId &stateid)
 {
     if (stateid > handlers_.size() - 1)
     {
         return false;
     }
 
-    StateId (T::*nextState)(bool) = handlers_[stateid];
+    StateId (T::*nextState)(bool, U&) = handlers_[stateid];
 
     if (nextState != currentState)
     {
@@ -76,8 +76,8 @@ bool StateMachine<T>::setState(const StateId &stateid)
     return true;
 }
 
-template <class T>
-void StateMachine<T>::updateState()
+template <class T, class U>
+void StateMachine<T, U>::updateState(U& dataInput)
 {
     if (currentState == nullptr)
     {
@@ -87,7 +87,7 @@ void StateMachine<T>::updateState()
         }
     }
 
-    StateId nextStateId = (target_->*currentState)(firstRunCurrentState);
+    StateId nextStateId = (target_->*currentState)(firstRunCurrentState, dataInput);
 
     if (firstRunCurrentState)
         firstRunCurrentState = false;

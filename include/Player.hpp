@@ -17,13 +17,13 @@ public:
     virtual void update(sf::Time &elapsed, World &world);
 
 private:
-    StateMachine<Player> statemachine_;
+    StateMachine<Player, World> statemachine_;
 
     StateId idleStateId;
     StateId walkStateId;
 
-    StateId idleState(bool firstRun);
-    StateId walkState(bool firstRun);
+    StateId idleState(bool firstRun, World &world);
+    StateId walkState(bool firstRun, World &world);
 
     int testCounter;
 };

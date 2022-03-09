@@ -24,7 +24,7 @@ Player::Player(ResourceManager *rm) : AnimatedActor(rm),
 
 void Player::update(sf::Time &elapsed, World &world)
 {
-    statemachine_.updateState();
+    statemachine_.updateState(world);
     animate(elapsed);
 
     // for (auto &actor : world.getActors())
@@ -41,7 +41,7 @@ void Player::update(sf::Time &elapsed, World &world)
     // }
 }
 
-StateId Player::idleState(bool firstRun)
+StateId Player::idleState(bool firstRun, World &world)
 {
     if (firstRun)
     {
@@ -59,7 +59,7 @@ StateId Player::idleState(bool firstRun)
     return idleStateId;
 }
 
-StateId Player::walkState(bool firstRun)
+StateId Player::walkState(bool firstRun, World &world)
 {
     if (firstRun)
     {
