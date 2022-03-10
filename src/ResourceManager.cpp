@@ -45,10 +45,17 @@ sf::Texture *ResourceManager::loadTexture(const std::string &filename)
 bool ResourceManager::loadTextureDirectory(const std::string &directory,
                                            std::vector<sf::Texture *> *output)
 {
-    sf::Texture *newTexture;
+    std::vector<std::string> filenames;
     for (const auto &entry : std::filesystem::directory_iterator(directory))
     {
-        newTexture = loadTexture(entry.path());
+        filenames.push_back(entry.path());
+    }
+    std::sort(filenames.begin(), filenames.end());
+
+    sf::Texture *newTexture;
+    for (const auto &filename : filenames)
+    {
+        newTexture = loadTexture(filename);
         if (newTexture == nullptr)
         {
             return false;

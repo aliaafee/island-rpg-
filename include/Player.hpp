@@ -7,6 +7,7 @@
 #include "ResourceManager.hpp"
 #include "StateMachine.hpp"
 #include "World.hpp"
+#include "support.hpp"
 
 class Player : public AnimatedActor
 {
@@ -29,10 +30,17 @@ private:
     StateId idleStateId;
     StateId walkStateId;
 
-    StateId idleState(bool firstRun, World &world);
-    StateId walkState(bool firstRun, World &world);
+    StateId idleState(bool firstRun, sf::Time &elapsed, World &world);
 
-    int testCounter;
+    sf::Vector3f walkTarget_;
+    StateId walkState(bool firstRun, sf::Time &elapsed, World &world);
+
+    std::string animationDirection_;
+    std::string animationAction_;
+
+    void setAnimationDirection(const std::string &direction);
+    void setAnimationDirection(const sf::Vector3f &direction);
+    void setAnimationAction(const std::string &action);
 };
 
 #endif // __PLAYER_H__

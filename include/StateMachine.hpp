@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <vector>
+#include <SFML/System.hpp>
 
 typedef unsigned int StateId;
 
@@ -16,7 +17,7 @@ public:
                               target_(target){};
     ~StateMachine(){};
 
-    StateId addState(StateId (T::*handler)(bool, U &));
+    StateId addState(StateId (T::*handler)(bool, sf::Time &, U &));
 
     bool setStartState(const StateId &stateid);
 
@@ -28,10 +29,10 @@ public:
 
     void resetEvent();
 
-    void updateState(U &dataInput);
+    void updateState(sf::Time &elapsed, U &dataInput);
 
 private:
-    std::vector<StateId (T::*)(bool, U &)> handlers_;
+    std::vector<StateId (T::*)(bool, sf::Time &, U &)> handlers_;
 
     StateId startState;
 
@@ -39,13 +40,13 @@ private:
 
     bool firstRunCurrentState;
 
-    StateId (T::*currentState)(bool, U &);
+    StateId (T::*currentState)(bool, sf::Time &, U &);
 
     std::queue<V> eventQueue_;
 };
 
 template <class T, class U, class V>
-StateId StateMachine<T, U, V>::addState(StateId (T::*handler)(bool, U &))
+StateId StateMachine<T, U, V>::addState(StateId (T::*handler)(bool, sf::Time &, U &))
 {
     handlers_.push_back(handler);
 
@@ -71,7 +72,7 @@ bool StateMachine<T, U, V>::setState(const StateId &stateid)
         return false;
     }
 
-    StateId (T::*nextState)(bool, U &) = handlers_[stateid];
+    StateId (T::*nextState)(bool, sf::Time &, U &) = handlers_[stateid];
 
     if (nextState != currentState)
     {
@@ -111,7 +112,7 @@ void StateMachine<T, U, V>::resetEvent()
 }
 
 template <class T, class U, class V>
-void StateMachine<T, U, V>::updateState(U &dataInput)
+void StateMachine<T, U, V>::updateState(sf::Time &elapsed, U &dataInput)
 {
     if (currentState == nullptr)
     {
@@ -122,7 +123,7 @@ void StateMachine<T, U, V>::updateState(U &dataInput)
         }
     }
 
-    StateId nextStateId = (target_->*currentState)(firstRunCurrentState, dataInput);
+    StateId nextStateId = (target_->*currentState)(firstRunCurrentState, elapsed, dataInput);
 
     if (firstRunCurrentState)
         firstRunCurrentState = false;

@@ -100,7 +100,7 @@ void World::transform()
 
 void World::draw(sf::RenderTarget *screen)
 {
-    std::stable_sort(actors_.begin(), actors_.end(), actorDepthComp);
+    std::sort(actors_.begin(), actors_.end(), actorDepthComp);
 
     for (auto &actor : actors_)
     {

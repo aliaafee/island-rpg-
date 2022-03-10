@@ -2,6 +2,7 @@
 #define __RESOURCEMANAGER_H__
 
 #include <filesystem>
+#include <algorithm>
 #include <map>
 #include <vector>
 #include <string>

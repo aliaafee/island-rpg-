@@ -26,7 +26,7 @@ public:
     };
     ~Thing(){};
 
-    StateId idleHandler(bool firstRun, int& data)
+    StateId idleHandler(bool firstRun, sf::Time &elapsed, int& data)
     {
         if (firstRun)
         {
@@ -41,7 +41,7 @@ public:
         return idleStateId;
     }
 
-    StateId walkHandler(bool firstRun, int& data)
+    StateId walkHandler(bool firstRun, sf::Time &elapsed, int& data)
     {
         if (firstRun)
         {
@@ -52,10 +52,10 @@ public:
         return walkStateId;
     }
 
-    void update()
+    void update(sf::Time &elapsed)
     {
         data = 10;
-        sm.updateState(data);
+        sm.updateState(elapsed, data);
     }
 };
 
@@ -65,15 +65,17 @@ int main()
 
     Thing w;
 
+    sf::Time time;
+
     w.target = false;
-    w.update();
-    w.update();
-    w.update();
+    w.update(time);
+    w.update(time);
+    w.update(time);
     w.target = true;
-    w.update();
-    w.update();
-    w.update();
-    w.update();
+    w.update(time);
+    w.update(time);
+    w.update(time);
+    w.update(time);
 
     std::set<int>::iterator i;
 
