@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include <string>
+#include <deque>
 
 #include "AnimatedActor.hpp"
 #include "ResourceManager.hpp"
@@ -18,9 +19,12 @@ public:
     virtual void update(sf::Time &elapsed, World &world);
 
     void walkTo(const sf::Vector3f &target);
+    void walkPath(const std::deque<sf::Vector3f> &path);
     void stop();
+
 private:
-    enum StateEvent {
+    enum StateEvent
+    {
         WALK_TO_TARGET,
         STOP
     };
@@ -32,7 +36,7 @@ private:
 
     StateId idleState(bool firstRun, sf::Time &elapsed, World &world);
 
-    sf::Vector3f walkTarget_;
+    std::deque<sf::Vector3f> walkPath_;
     StateId walkState(bool firstRun, sf::Time &elapsed, World &world);
 
     std::string animationDirection_;

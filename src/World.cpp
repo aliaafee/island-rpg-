@@ -120,6 +120,13 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Left"
                   << "\n";
+        // std::deque<sf::Vector3f> path = {
+        //     sf::Vector3f(0, 0, 0),
+        //     sf::Vector3f(0, 50, 0),
+        //     sf::Vector3f(50, 50, 0),
+        //     sf::Vector3f(50, 0, 0)
+        // };
+        // player_->walkPath(path);
         player_->walkTo(cursor_->getPosition());
     }
     else if (event.mouseButton.button == sf::Mouse::Right)

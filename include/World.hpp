@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <deque>
 #include <list>
 #include <algorithm>
 #include <cmath>
@@ -31,8 +32,8 @@ public:
     void onMouseButtonReleased(const sf::Event &event);
 
 private:
-    Player* player_;
-    Actor* cursor_;
+    Player *player_;
+    Actor *cursor_;
     std::vector<Actor *> actors_;
 
     Camera *camera_;

@@ -32,7 +32,13 @@ void Player::update(sf::Time &elapsed, World &world)
 
 void Player::walkTo(const sf::Vector3f &target)
 {
-    walkTarget_ = target;
+    walkPath_.push_back(target);
+    statemachine_.queueEvent(WALK_TO_TARGET);
+}
+
+void Player::walkPath(const std::deque<sf::Vector3f> &path)
+{
+    walkPath_ = path;
     statemachine_.queueEvent(WALK_TO_TARGET);
 }
 
@@ -86,16 +92,23 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
         }
     }
 
-    float stepSize = 1.5f * 60.f * elapsed.asSeconds();
-
-    float distance = vecMagnitude(walkTarget_ - getPosition());
-    if (distance < stepSize)
+    if (walkPath_.empty())
     {
-        setPosition(walkTarget_);
         return idleStateId;
     }
 
-    sf::Vector3f direction = (walkTarget_ - getPosition()) / distance;
+    float stepSize = 1.f * 60.f * elapsed.asSeconds();
+
+    float distance2 = vecMagnitude2(walkPath_.front() - getPosition());
+    if (distance2 < stepSize * stepSize)
+    {
+        setPosition(walkPath_.front());
+        walkPath_.pop_front();
+        return walkStateId;
+    }
+
+    float distance = sqrt(distance2);
+    sf::Vector3f direction = (walkPath_.front() - getPosition()) / distance;
 
     setAnimationDirection(direction);
     move(direction * stepSize);
