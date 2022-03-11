@@ -5,6 +5,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "Vector.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
 
@@ -21,28 +22,28 @@ public:
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
-    const sf::Vector3f &getPosition() const;
-    void setPosition(const sf::Vector3f &position);
+    const Vector3f &getPosition() const;
+    void setPosition(const Vector3f &position);
     void setPosition(const float &x, const float &y, const float &z);
-    void move(const sf::Vector3f &velocity);
+    void move(const Vector3f &velocity);
     void move(const float &x, const float &y, const float &z);
 
-    const sf::Vector3f &getSize() const;
-    void setSize(const sf::Vector3f &size);
+    const Vector3f &getSize() const;
+    void setSize(const Vector3f &size);
     void setSize(const float &x, const float &y, const float &z);
 
-    const sf::Vector3f &getScreenPosition() const;
+    const Vector3f &getScreenPosition() const;
 
 protected:
     ResourceManager *rm;
 
 private:
-    sf::Vector3f position_;
-    sf::Vector3f size_;
+    Vector3f position_;
+    Vector3f size_;
 
-    sf::Vector3f screenPosition_;
+    Vector3f screenPosition_;
 
-    std::vector<sf::Vector3f> baseRect3_;
+    std::vector<Vector3f> baseRect3_;
     sf::VertexArray baseRect2_;
 };
 

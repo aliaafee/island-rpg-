@@ -10,9 +10,9 @@ World::World(sf::RenderWindow *window, ResourceManager *rm,
               << "\n";
 
     camera_ = new Camera(
-        sf::Vector3f(0, 0, 0),
-        sf::Vector3f(800 / 2, 600 / 2, 0),
-        sf::Vector2f(64, 32),
+        Vector3f(0, 0, 0),
+        Vector3f(800 / 2, 600 / 2, 0),
+        Vector2f(64, 32),
         10);
 
     addActor(player_);
@@ -22,14 +22,14 @@ World::World(sf::RenderWindow *window, ResourceManager *rm,
 
     // addActor(new Player(rm_));
 
-    // actors_[0]->setPosition(sf::Vector3f(0, 20, 0));
-    // // actors_[1]->setPosition(sf::Vector3f(0, 30, 10));
+    // actors_[0]->setPosition(Vector3f(0, 20, 0));
+    // // actors_[1]->setPosition(Vector3f(0, 30, 10));
 
     // Actor *a;
     // for (float i; i < 10; i++)
     // {
     //     a = new Player(rm_);
-    //     a->setPosition(sf::Vector3f(20 + i * 6, 0, 0));
+    //     a->setPosition(Vector3f(20 + i * 6, 0, 0));
     //     addActor(a);
     // }
 }
@@ -51,13 +51,13 @@ World::~World()
 void World::input_(sf::Time &elapsed)
 {
     // Cursor
-    sf::Vector2i mousePosition = sf::Mouse::getPosition(*window_);
+    Vector2i mousePosition = sf::Mouse::getPosition(*window_);
     cursor_->setPosition(
         camera_->projectGround(mousePosition));
 
     // Camera Pan
     float speed = elapsed.asSeconds() * 4.0 * 60;
-    sf::Vector2f panDir(0, 0);
+    Vector2f panDir(0, 0);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         panDir.x = speed;
@@ -120,11 +120,11 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Left"
                   << "\n";
-        // std::deque<sf::Vector3f> path = {
-        //     sf::Vector3f(0, 0, 0),
-        //     sf::Vector3f(0, 50, 0),
-        //     sf::Vector3f(50, 50, 0),
-        //     sf::Vector3f(50, 0, 0)
+        // std::deque<Vector3f> path = {
+        //     Vector3f(0, 0, 0),
+        //     Vector3f(0, 50, 0),
+        //     Vector3f(50, 50, 0),
+        //     Vector3f(50, 0, 0)
         // };
         // player_->walkPath(path);
         player_->walkTo(cursor_->getPosition());

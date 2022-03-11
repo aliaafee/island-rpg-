@@ -15,7 +15,7 @@ int Matrix3Test(const Vector3f &test)
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
     float l = w_h / cos((45.0 / 180.0) * M_PI);
-    sf::Vector3f s = sf::Vector3f(gridSize_, gridSize_, gridSize_);
+    Vector3f s = Vector3f(gridSize_, gridSize_, gridSize_);
 
     Matrix3 displaceMatrix_(
         w_h / s.x, -1 * w_h / s.y, 0,
@@ -52,7 +52,7 @@ int Matrix4Test(const Vector3f &test)
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
     float l = w_h / cos((45.0 / 180.0) * M_PI);
-    sf::Vector3f s = sf::Vector3f(gridSize_, gridSize_, gridSize_);
+    Vector3f s = Vector3f(gridSize_, gridSize_, gridSize_);
 
     Matrix4 displaceMatrix_(
         w_h / s.x, -1 * w_h / s.y, 0, 0,

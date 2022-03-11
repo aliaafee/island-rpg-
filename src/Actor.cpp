@@ -8,13 +8,13 @@ Actor::Actor(ResourceManager *rm) : rm(rm),
     std::cout << "Creating Actor"
               << "\n";
 
-    baseRect3_.push_back(sf::Vector3f(size_.x / 2.0, size_.y / 2.0, 0));
-    baseRect3_.push_back(sf::Vector3f(size_.x / 2.0, -size_.y / 2.0, 0));
-    baseRect3_.push_back(sf::Vector3f(-size_.x / 2.0, -size_.y / 2.0, 0));
-    baseRect3_.push_back(sf::Vector3f(-size_.x / 2.0, size_.y / 2.0, 0));
-    baseRect3_.push_back(sf::Vector3f(size_.x / 2.0, size_.y / 2.0, 0));
-    baseRect3_.push_back(sf::Vector3f(0, 0, 0));
-    baseRect3_.push_back(sf::Vector3f(size_.x / 2.0, -size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(size_.x / 2.0, size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(size_.x / 2.0, -size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(-size_.x / 2.0, -size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(-size_.x / 2.0, size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(size_.x / 2.0, size_.y / 2.0, 0));
+    baseRect3_.push_back(Vector3f(0, 0, 0));
+    baseRect3_.push_back(Vector3f(size_.x / 2.0, -size_.y / 2.0, 0));
 
     for (int i = 0; i < baseRect2_.getVertexCount(); i++)
     {
@@ -39,7 +39,7 @@ void Actor::transform(Camera &camera)
 {
     screenPosition_ = camera.transform(position_);
 
-    sf::Vector3f t;
+    Vector3f t;
     for (int i = 0; i < baseRect3_.size(); ++i)
     {
         t = camera.transform(baseRect3_[i] + position_);
@@ -53,12 +53,12 @@ void Actor::draw(sf::RenderTarget *screen)
     screen->draw(baseRect2_);
 }
 
-const sf::Vector3f &Actor::getPosition() const
+const Vector3f &Actor::getPosition() const
 {
     return position_;
 }
 
-void Actor::setPosition(const sf::Vector3f &position)
+void Actor::setPosition(const Vector3f &position)
 {
     position_ = position;
 }
@@ -70,7 +70,7 @@ void Actor::setPosition(const float &x, const float &y, const float &z)
     position_.z = z;
 }
 
-void Actor::move(const sf::Vector3f &velocity)
+void Actor::move(const Vector3f &velocity)
 {
     position_ += velocity;
 }
@@ -82,12 +82,12 @@ void Actor::move(const float &x, const float &y, const float &z)
     position_.z += z;
 }
 
-const sf::Vector3f &Actor::getSize() const
+const Vector3f &Actor::getSize() const
 {
     return size_;
 }
 
-void Actor::setSize(const sf::Vector3f &size)
+void Actor::setSize(const Vector3f &size)
 {
     size_ = size;
 }
@@ -99,7 +99,7 @@ void Actor::setSize(const float &x, const float &y, const float &z)
     size_.z = z;
 }
 
-const sf::Vector3f &Actor::getScreenPosition() const
+const Vector3f &Actor::getScreenPosition() const
 {
     return screenPosition_;
 }

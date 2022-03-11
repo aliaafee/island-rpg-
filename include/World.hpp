@@ -9,6 +9,7 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
+#include "Vector.hpp"
 #include "Actor.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"

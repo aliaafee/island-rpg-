@@ -4,11 +4,11 @@
 #include <string>
 #include <deque>
 
+#include "Vector.hpp"
 #include "AnimatedActor.hpp"
 #include "ResourceManager.hpp"
 #include "StateMachine.hpp"
 #include "World.hpp"
-#include "support.hpp"
 
 class Player : public AnimatedActor
 {
@@ -18,8 +18,8 @@ public:
 
     virtual void update(sf::Time &elapsed, World &world);
 
-    void walkTo(const sf::Vector3f &target);
-    void walkPath(const std::deque<sf::Vector3f> &path);
+    void walkTo(const Vector3f &target);
+    void walkPath(const std::deque<Vector3f> &path);
     void stop();
 
 private:
@@ -36,14 +36,14 @@ private:
 
     StateId idleState(bool firstRun, sf::Time &elapsed, World &world);
 
-    std::deque<sf::Vector3f> walkPath_;
+    std::deque<Vector3f> walkPath_;
     StateId walkState(bool firstRun, sf::Time &elapsed, World &world);
 
     std::string animationDirection_;
     std::string animationAction_;
 
     void setAnimationDirection(const std::string &direction);
-    void setAnimationDirection(const sf::Vector3f &direction);
+    void setAnimationDirection(const Vector3f &direction);
     void setAnimationAction(const std::string &action);
 };
 

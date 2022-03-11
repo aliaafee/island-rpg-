@@ -2,7 +2,8 @@
 #define __MATRIX3_H__
 
 #include <iostream>
-#include <SFML/System.hpp>
+
+#include "Vector.hpp"
 
 class Matrix3
 {
@@ -12,7 +13,7 @@ public:
             float a03, float a04, float a05,
             float a06, float a07, float a08);
 
-    sf::Vector3f operator*(const sf::Vector3f &vector) const;
+    Vector3f operator*(const Vector3f &vector) const;
     Matrix3 getInverse() const;
 
     const float &getValue(int i, int j) const { return value_[i][j]; };

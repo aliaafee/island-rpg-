@@ -25,9 +25,9 @@ Matrix3::Matrix3(float a00, float a01, float a02,
     value_[2][2] = a08;
 }
 
-sf::Vector3f Matrix3::operator*(const sf::Vector3f &vector) const
+Vector3f Matrix3::operator*(const Vector3f &vector) const
 {
-    return sf::Vector3f(
+    return Vector3f(
         value_[0][0] * vector.x + value_[0][1] * vector.y + value_[0][2] * vector.z,
         value_[1][0] * vector.x + value_[1][1] * vector.y + value_[1][2] * vector.z,
         value_[2][0] * vector.x + value_[2][1] * vector.y + value_[2][2] * vector.z);

@@ -1,8 +1,8 @@
 #include "Camera.hpp"
 
-Camera::Camera(sf::Vector3f position,
-               sf::Vector3f origin,
-               sf::Vector2f tileSize,
+Camera::Camera(Vector3f position,
+               Vector3f origin,
+               Vector2f tileSize,
                float gridSize) : position_(position),
                                  origin_(origin),
                                  tileSize_(tileSize),
@@ -13,7 +13,7 @@ Camera::Camera(sf::Vector3f position,
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
     float l = w_h / cos((45.0 / 180.0) * M_PI);
-    sf::Vector3f s = sf::Vector3f(gridSize_, gridSize_, gridSize_);
+    Vector3f s = Vector3f(gridSize_, gridSize_, gridSize_);
 
     displaceMatrix_ = Matrix4(
         w_h / s.x, -1 * w_h / s.y, 0, 0,
@@ -30,48 +30,48 @@ Camera::Camera(sf::Vector3f position,
     std::cout << displaceMatrix_ << transformMatrix_;
 }
 
-const sf::Vector3f &Camera::getPosition() const
+const Vector3f &Camera::getPosition() const
 {
     return position_;
 }
 
-void Camera::setPosition(const sf::Vector3f &position)
+void Camera::setPosition(const Vector3f &position)
 {
     position_ = position;
     updateTransforms_();
 }
 
-void Camera::pan(const sf::Vector2f &direction)
+void Camera::pan(const Vector2f &direction)
 {
     pan(direction.x, direction.y);
 }
 
 void Camera::pan(const float &x, const float &y)
 {
-    sf::Vector3f screenPosition = transform(position_);
+    Vector3f screenPosition = transform(position_);
     screenPosition.x += x;
     screenPosition.y += y;
     setPosition(projectGround(screenPosition));
 }
 
-sf::Vector3f Camera::transform(const sf::Vector3f &point) const
+Vector3f Camera::transform(const Vector3f &point) const
 {
     return transformMatrix_ * point;
 }
 
-sf::Vector3f Camera::itransform(const sf::Vector3f &point) const
+Vector3f Camera::itransform(const Vector3f &point) const
 {
     return inverseDisplace_ * (point - translation_);
 }
 
-sf::Vector3f Camera::projectGround(const sf::Vector3f &point) const
+Vector3f Camera::projectGround(const Vector3f &point) const
 {
     float groundElevation = 0;
 
-    sf::Vector3f intPoint;
+    Vector3f intPoint;
     bool intersected = intersetPlane(
         groundNormal_,
-        sf::Vector3f(0, 0, groundElevation),
+        Vector3f(0, 0, groundElevation),
         itransform(point),
         cameraDirection_,
         &intPoint);
@@ -79,10 +79,10 @@ sf::Vector3f Camera::projectGround(const sf::Vector3f &point) const
     return intPoint;
 }
 
-sf::Vector3f Camera::projectGround(const sf::Vector2i &point) const
+Vector3f Camera::projectGround(const Vector2i &point) const
 {
     return projectGround(
-        sf::Vector3f((float)point.x, (float)point.y, 0));
+        Vector3f((float)point.x, (float)point.y, 0));
 }
 
 void Camera::updateTransforms_()
