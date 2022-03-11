@@ -15,16 +15,19 @@ Camera::Camera(sf::Vector3f position,
     float l = w_h / cos((45.0 / 180.0) * M_PI);
     sf::Vector3f s = sf::Vector3f(gridSize_, gridSize_, gridSize_);
 
-    transformMatrix_ = Matrix3(
-        w_h / s.x, -1 * w_h / s.y, 0,
-        h_h / s.x, h_h / s.y, -1 * l / s.z,
-        w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0);
+    displaceMatrix_ = Matrix4(
+        w_h / s.x, -1 * w_h / s.y, 0, 0,
+        h_h / s.x, h_h / s.y, -1 * l / s.z, 0,
+        w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0, 0,
+        0, 0, 0, 1);
+    displaceMatrix_.getInverse(inverseDisplace_);
 
-    inverseMatrix_ = transformMatrix_.getInverse();
+    transformMatrix_ = displaceMatrix_;
+    updateTransforms_();
 
-    cameraDirection_ = inverseMatrix_ * cameraDirection_;
+    cameraDirection_ = inverseDisplace_ * cameraDirection_;
 
-    calculateTranslation_();
+    std::cout << displaceMatrix_ << transformMatrix_;
 }
 
 const sf::Vector3f &Camera::getPosition() const
@@ -35,7 +38,7 @@ const sf::Vector3f &Camera::getPosition() const
 void Camera::setPosition(const sf::Vector3f &position)
 {
     position_ = position;
-    calculateTranslation_();
+    updateTransforms_();
 }
 
 void Camera::pan(const sf::Vector2f &direction)
@@ -53,12 +56,12 @@ void Camera::pan(const float &x, const float &y)
 
 sf::Vector3f Camera::transform(const sf::Vector3f &point) const
 {
-    return (transformMatrix_ * point) + translation_;
+    return transformMatrix_ * point;
 }
 
 sf::Vector3f Camera::itransform(const sf::Vector3f &point) const
 {
-    return inverseMatrix_ * (point - translation_);
+    return inverseDisplace_ * (point - translation_);
 }
 
 sf::Vector3f Camera::projectGround(const sf::Vector3f &point) const
@@ -82,7 +85,13 @@ sf::Vector3f Camera::projectGround(const sf::Vector2i &point) const
         sf::Vector3f((float)point.x, (float)point.y, 0));
 }
 
-void Camera::calculateTranslation_()
+void Camera::updateTransforms_()
 {
-    translation_ = origin_ - (transformMatrix_ * position_);
+    translation_ = origin_ - (displaceMatrix_ * position_);
+
+    transformMatrix_[0][3] = translation_.x;
+    transformMatrix_[1][3] = translation_.y;
+    transformMatrix_[2][3] = translation_.z;
+
+    transformMatrix_.getInverse(inverseTransform_);
 }

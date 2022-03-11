@@ -4,7 +4,7 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-#include "Matrix3.hpp"
+#include "Matrix4.hpp"
 #include "support.hpp"
 
 class Camera
@@ -31,14 +31,16 @@ private:
     sf::Vector3f groundNormal_;
     float gridSize_;
 
-    Matrix3 transformMatrix_;
-    Matrix3 inverseMatrix_;
+    Matrix4 displaceMatrix_;
+    Matrix4 transformMatrix_;
+    Matrix4 inverseDisplace_;
+    Matrix4 inverseTransform_;
     sf::Vector3f translation_;
 
     sf::Vector3f cameraDirection_;
     sf::Vector3f cameraDirectionInv_;
 
-    void calculateTranslation_();
+    void updateTransforms_();
 };
 
 #endif // __CAMERA_H__
