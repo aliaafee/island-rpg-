@@ -1,6 +1,6 @@
 #include "Vector.hpp"
 
-float dotProduct(const Vector3f &a, const Vector3f &b)
+float vecDotProd(const Vector3f &a, const Vector3f &b)
 {
     return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 }
@@ -29,13 +29,13 @@ bool intersetPlane(const Vector3f &n, const Vector3f &p0,
                    const Vector3f &l0, const Vector3f &l,
                    Vector3f *i)
 {
-    float denom = dotProduct(n, l);
+    float denom = vecDotProd(n, l);
 
     if (denom <= 0.0f)
         return false;
 
     Vector3f p0l0 = p0 - l0;
-    float t = dotProduct(p0l0, n) / denom;
+    float t = vecDotProd(p0l0, n) / denom;
     *i = l0 + (l * t);
     return true;
 }

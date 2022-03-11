@@ -16,8 +16,7 @@ inline std::ostream &operator<<(std::ostream &os, const Vector3f &v)
     return os;
 }
 
-float dotProduct(const Vector3f &a, const Vector3f &b);
-
+float vecDotProd(const Vector3f &a, const Vector3f &b);
 void vecNormalize(Vector3f &v);
 float vecMagnitude(const Vector3f &v);
 float vecMagnitude2(const Vector3f &v);
