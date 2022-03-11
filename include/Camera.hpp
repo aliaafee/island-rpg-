@@ -31,9 +31,7 @@ private:
     Vector3f groundNormal_;
     float gridSize_;
 
-    Matrix4 displaceMatrix_;
     Matrix4 transformMatrix_;
-    Matrix4 inverseDisplace_;
     Matrix4 inverseTransform_;
     Vector3f translation_;
 

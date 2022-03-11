@@ -9,7 +9,7 @@ int Matrix3Test(const Vector3f &test)
 
     Vector2f tileSize_(64, 32);
     float gridSize_(10.f);
-    Vector3f position_(0,0,0);
+    Vector3f position_(10,20,30);
     Vector3f origin_(400, 300, 0);
 
     float w_h = tileSize_.x / 2.0;
@@ -32,10 +32,15 @@ int Matrix3Test(const Vector3f &test)
 
     std::cout << "              Using Vector: " << test << std::endl;
 
-    Vector3f transformed = (displaceMatrix_ * test);
+    Vector3f transformed = (displaceMatrix_ * test) + translation_;
     std::cout << "                Transfomed: " << transformed << std::endl;
 
-    std::cout << "    Inverse of Transformed: " << inverseDisplace * transformed << std::endl;
+    std::cout << "    Inverse of Transformed: " << inverseDisplace * (transformed - translation_) << std::endl;
+
+    transformed = (displaceMatrix_ * test) ;
+    std::cout << "                Transfomed: " << transformed << std::endl;
+
+    std::cout << "    Inverse of Transformed: " << inverseDisplace * (transformed ) << std::endl;
 
     return 0;
 }
@@ -46,7 +51,7 @@ int Matrix4Test(const Vector3f &test)
 
     Vector2f tileSize_(64, 32);
     float gridSize_(10.f);
-    Vector3f position_(0,0,0);
+    Vector3f position_(10,20,300);
     Vector3f origin_(400, 300, 0);
 
     float w_h = tileSize_.x / 2.0;
@@ -61,7 +66,7 @@ int Matrix4Test(const Vector3f &test)
         0,0,0,1
     );
 
-    Vector3f translation_ = origin_ - (displaceMatrix_ * position_);
+    Vector3f translation_ = origin_ - matMultipy(displaceMatrix_, position_);
 
     Matrix4 transformMatrix_ = displaceMatrix_;
 
@@ -75,19 +80,24 @@ int Matrix4Test(const Vector3f &test)
 
     std::cout << "              Using Vector: " << test << std::endl;
 
-    Vector3f transformed = (displaceMatrix_ * test);
+    Vector3f transformed = matMultipy(transformMatrix_, test);
     std::cout << "                Transfomed: " << transformed << std::endl;
 
-    std::cout << "    Inverse of Transformed: " << inverseDisplace * transformed << std::endl;
+    std::cout << "    Inverse of Transformed: " << matMultipy(inverseTransform, transformed) << std::endl;
+
+    transformed = matMultipy(transformMatrix_, test, 0);
+    std::cout << "                Transfomed: " << transformed << std::endl;
+
+    std::cout << "    Inverse of Transformed: " << matMultipy(inverseTransform, transformed, 0) << std::endl;
 
     return 0;
 }
 
 int main()
 {
-    Matrix4Test(Vector3f(10, 100, 20));
-
     Matrix3Test(Vector3f(10, 100, 20));
+
+    Matrix4Test(Vector3f(10, 100, 20));
 
     return 0;
 }

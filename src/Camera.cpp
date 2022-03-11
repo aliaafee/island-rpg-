@@ -15,19 +15,14 @@ Camera::Camera(Vector3f position,
     float l = w_h / cos((45.0 / 180.0) * M_PI);
     Vector3f s = Vector3f(gridSize_, gridSize_, gridSize_);
 
-    displaceMatrix_ = Matrix4(
+    transformMatrix_ = Matrix4(
         w_h / s.x, -1 * w_h / s.y, 0, 0,
         h_h / s.x, h_h / s.y, -1 * l / s.z, 0,
         w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0, 0,
         0, 0, 0, 1);
-    displaceMatrix_.getInverse(inverseDisplace_);
-
-    transformMatrix_ = displaceMatrix_;
     updateTransforms_();
 
-    cameraDirection_ = inverseDisplace_ * cameraDirection_;
-
-    std::cout << displaceMatrix_ << transformMatrix_;
+    cameraDirection_ = matMultipy(inverseTransform_, cameraDirection_, 0);
 }
 
 const Vector3f &Camera::getPosition() const
@@ -56,12 +51,12 @@ void Camera::pan(const float &x, const float &y)
 
 Vector3f Camera::transform(const Vector3f &point) const
 {
-    return transformMatrix_ * point;
+    return matMultipy(transformMatrix_, point);
 }
 
 Vector3f Camera::itransform(const Vector3f &point) const
 {
-    return inverseDisplace_ * (point - translation_);
+    return matMultipy(inverseTransform_, point);
 }
 
 Vector3f Camera::projectGround(const Vector3f &point) const
@@ -87,7 +82,7 @@ Vector3f Camera::projectGround(const Vector2i &point) const
 
 void Camera::updateTransforms_()
 {
-    translation_ = origin_ - (displaceMatrix_ * position_);
+    translation_ = origin_ - matMultipy(transformMatrix_, position_, 0);
 
     transformMatrix_[0][3] = translation_.x;
     transformMatrix_[1][3] = translation_.y;

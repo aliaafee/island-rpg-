@@ -35,7 +35,26 @@ private:
     void invertRowMajor(float *m, float *invOut);
 };
 
-inline Vector3f operator*(const Matrix4 &matrix, const Vector3f &v)
+inline Vector3f matMultipy(const Matrix4 &matrix, const Vector3f &v, const float &w)
+{
+    return Vector3f(
+        v.x * matrix.value[0][0] +
+            v.y * matrix.value[0][1] +
+            v.z * matrix.value[0][2] +
+            w * matrix.value[0][3],
+
+        v.x * matrix.value[1][0] +
+            v.y * matrix.value[1][1] +
+            v.z * matrix.value[1][2] +
+            w * matrix.value[1][3],
+
+        v.x * matrix.value[2][0] +
+            v.y * matrix.value[2][1] +
+            v.z * matrix.value[2][2] +
+            w * matrix.value[2][3]);
+}
+
+inline Vector3f matMultipy(const Matrix4 &matrix, const Vector3f &v)
 {
     return Vector3f(
         v.x * matrix.value[0][0] +
