@@ -7,8 +7,8 @@ int main()
 {
     std::cout << "# Testing Pathfinder" << std::endl;
 
-    long g_width = 10000;
-    long g_height = 10000;
+    long g_width = 10;
+    long g_height = 10;
 
     std::cout << "Creating Pathfinder Instance.." << std::flush;
     Pathfinder pf(g_width, g_height);
@@ -17,6 +17,7 @@ int main()
     
     std::cout << "Creating Grid.." << std::flush;
     std::vector<int> grid;
+    std::cout << grid.max_size() << " " << g_width * g_height << " ";
     grid.resize(g_width * g_height);
     std::fill(grid.begin(), grid.end(), 1);
     grid[pf.gridIndex(0, 1)] = 0;
