@@ -69,7 +69,8 @@ private:
 
     std::map<int,Node*> openList_;
 
-    std::vector<bool> closedList_;
+    //std::vector<bool> closedList_;
+    std::map<int,bool> closedList_;
 
     std::priority_queue<Node *, std::vector<Node *>, MoreThanByF> openQueue_;
 

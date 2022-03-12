@@ -7,8 +7,8 @@ int main()
 {
     std::cout << "# Testing Pathfinder" << std::endl;
 
-    long g_width = 20000;
-    long g_height = 20000;
+    long g_width = 10000;
+    long g_height = 10000;
 
     std::cout << "Creating Pathfinder Instance.." << std::flush;
     Pathfinder pf(g_width, g_height);
@@ -37,13 +37,14 @@ int main()
     int end_i = 9;
     int end_j = 5;
 
-    std::cout << "Copying Grid..";
+    std::cout << "Copying Grid.." << std::flush;
     pf.setGrid(grid);
     std::cout << "Done" << "\n";
 
-    int reps = 10;
+    int reps = 100;
     bool found = false;
 
+    std::cout << "Starting tests.." << std::flush;
     std::vector<std::pair<int, int>> result;
     auto t1 = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < reps; i++)
@@ -51,6 +52,7 @@ int main()
         found = pf.searchAStar(start_i, start_j, end_i, end_j, true, result);
     }
     auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout << "Done" << "\n";
 
     // for (auto &node : result)
     // {

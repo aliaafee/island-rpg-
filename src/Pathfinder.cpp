@@ -6,8 +6,7 @@ Pathfinder::Pathfinder(const int &width, const int &height) : g_width_(width),
     grid_.resize(g_width_ * g_height_);
     std::fill(grid_.begin(), grid_.end(), 1);
 
-    closedList_.resize(g_width_ * g_height_);
-    std::fill(closedList_.begin(), closedList_.end(), false);
+
 }
 
 Pathfinder::~Pathfinder()
@@ -33,7 +32,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     // Clear the data structures
     openQueue_ = std::priority_queue<Node *, std::vector<Node *>, MoreThanByF>();
     openList_.clear();
-    std::fill(closedList_.begin(), closedList_.end(), false);
+    closedList_.clear();
 
     // Add start node to open list
     Node *start = newNode(start_i, start_j, 0, 0, 0, nullptr);
@@ -42,6 +41,8 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
         start));
     openQueue_.push(start);
 
+    
+
     Node *currentNode;
     float child_g, child_h, child_f;
     int currentNodeIndex, child_i, child_j, childIndex;
@@ -49,6 +50,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     runs_ = 0;
     reusedNodes_ = 0;
     Node *newChild;
+    std::map<int, bool>::iterator closedSearch;
     while (!openQueue_.empty())
     {
         runs_ += 1;
@@ -59,10 +61,12 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
         currentNodeIndex = index_(currentNode->i, currentNode->j);
 
         // Make sure current node has not been closed yet
-        if (!closedList_[currentNodeIndex])
+        closedSearch = closedList_.find(currentNodeIndex);
+        if (closedSearch == closedList_.end())
         {
-            // Close the current Node
-            closedList_[currentNodeIndex] = true;
+            closedList_.insert(std::pair(
+                currentNodeIndex, true
+            ));
 
             if (currentNodeIndex == endIndex)
             {
@@ -88,7 +92,8 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                         child_j = currentNode->j + cj;
                         childIndex = index_(child_i, child_j);
                         // Check to see if child node is closed
-                        if (!closedList_[childIndex])
+                        closedSearch = closedList_.find(childIndex);
+                        if (closedSearch == closedList_.end())
                         {
                             child_g = currentNode->g + 1;
                             child_h = (end_i - child_i) * (end_i - child_i) + (end_j - child_j) * (end_j - child_j);
@@ -230,10 +235,10 @@ void Pathfinder::printGrid(const int &start_i, const int &start_j,
 
     std::cout << "Grid (" << g_width_ << "x" << g_height_ << ")\n";
 
-    for (int j = 0; j < g_width_; j++)
+    for (int j = 0; j < g_height_; j++)
     {
         std::cout << " ";
-        for (int i = 0; i < g_height_; i++)
+        for (int i = 0; i < g_width_; i++)
         {
             switch (grid[index_(i, j)])
             {
@@ -253,6 +258,7 @@ void Pathfinder::printGrid(const int &start_i, const int &start_j,
                 std::cout << "X";
                 break;
             default:
+                std::cout << "?";
                 break;
             }
             std::cout << " ";
