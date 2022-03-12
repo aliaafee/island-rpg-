@@ -8,9 +8,6 @@ Pathfinder::Pathfinder(const int &width, const int &height) : g_width_(width),
 
     closedList_.resize(g_width_ * g_height_);
     std::fill(closedList_.begin(), closedList_.end(), false);
-
-    openList_.resize(g_width_ * g_height_);
-    std::fill(openList_.begin(), openList_.end(), nullptr);
 }
 
 Pathfinder::~Pathfinder()
@@ -35,12 +32,15 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
 
     // Clear the data structures
     openQueue_ = std::priority_queue<Node *, std::vector<Node *>, MoreThanByF>();
-    std::fill(openList_.begin(), openList_.end(), nullptr);
+    openList_.clear();
     std::fill(closedList_.begin(), closedList_.end(), false);
 
     // Add start node to open list
     Node *start = newNode(start_i, start_j, 0, 0, 0, nullptr);
-    openList_[index_(start_i, start_j)] = start;
+    openList_.insert(
+        std::pair(
+            GridCell(start_i, start_j),
+            start));
     openQueue_.push(start);
 
     Node *currentNode;
@@ -49,6 +49,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     int endIndex = index_(end_i, end_j);
     runs_ = 0;
     reusedNodes_ = 0;
+    Node *newChild;
     while (!openQueue_.empty())
     {
         runs_ += 1;
@@ -90,30 +91,33 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                         // Check to see if child node is closed
                         if (!closedList_[childIndex])
                         {
-                            // std::cout << child_i << ", " << child_j << "\n";
                             child_g = currentNode->g + 1;
                             child_h = (end_i - child_i) * (end_i - child_i) + (end_j - child_j) * (end_j - child_j);
                             child_f = child_g + child_h;
-                            if (openList_[childIndex] == nullptr)
+                            auto foundNode = openList_.find(GridCell(child_i, child_j));
+                            if (foundNode == openList_.end())
                             {
                                 // Add child node to open list
-                                openList_[childIndex] = newNode(
+                                newChild = newNode(
                                     child_i,
                                     child_j,
                                     child_g,
                                     child_h,
                                     child_f,
                                     currentNode);
-                                openQueue_.push(openList_[childIndex]);
+                                openList_.insert(
+                                    std::pair(
+                                        GridCell(child_i, child_j), newChild));
+                                openQueue_.push(newChild);
                             }
                             else
                             {
                                 // Update the existing node
-                                openList_[childIndex]->g = child_g;
-                                openList_[childIndex]->h = child_h;
-                                openList_[childIndex]->f = child_f;
-                                openList_[childIndex]->parent = currentNode;
-                                openQueue_.push(openList_[childIndex]);
+                                foundNode->second->g = child_g;
+                                foundNode->second->h = child_h;
+                                foundNode->second->f = child_f;
+                                foundNode->second->parent = currentNode;
+                                openQueue_.push(foundNode->second);
                                 reusedNodes_ += 1;
                             }
                         }

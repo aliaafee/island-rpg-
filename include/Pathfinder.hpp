@@ -2,9 +2,12 @@
 #define __PATHFINDER_H__
 
 #include <iostream>
+#include <map>
 #include <vector>
 #include <queue>
 #include <cstring>
+
+typedef std::pair<int, int> GridCell;
 
 class Node
 {
@@ -64,7 +67,7 @@ private:
 
     std::vector<Node *> nodeList_;
 
-    std::vector<Node *> openList_;
+    std::map<GridCell,Node*> openList_;
 
     std::vector<bool> closedList_;
 
