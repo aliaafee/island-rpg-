@@ -14,7 +14,7 @@ int main()
 
     bool result = mngr.loadTextureDirectory("graphics/player/down_attack", &sequence);
 
-    std::cout << sequence.size() << "\n";
+    std::cout << "Animation Sequence Size: " << sequence.size() << "\n";
 
     return 0;
 }

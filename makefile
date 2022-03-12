@@ -37,7 +37,7 @@ $(OBJ)/%.o: $(SRC)/%.cpp makefile
 
 # Execute all tests
 test: $(TEST)/bin $(TESTBINS)
-	for test in $(TESTBINS) ; do ./$$test ; done
+	for test in $(TESTBINS) ; do ./$$test || echo -e "\033[0;31m# Failed Test\033[0m" ; done
 
 # Compile all tests
 $(TEST)/bin/%: $(TEST)/%.cpp $(OBJ) $(filter-out $(OBJ)/main.o,$(OBJS))
