@@ -48,6 +48,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     int currentNodeIndex, child_i, child_j, childIndex;
     int endIndex = index_(end_i, end_j);
     runs_ = 0;
+    reusedNodes_ = 0;
     while (!openQueue_.empty())
     {
         runs_ += 1;
@@ -113,6 +114,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                                 openList_[childIndex]->f = child_f;
                                 openList_[childIndex]->parent = currentNode;
                                 openQueue_.push(openList_[childIndex]);
+                                reusedNodes_ += 1;
                             }
                         }
                     }
@@ -164,7 +166,32 @@ bool Pathfinder::validAdjacent_(const int &i, const int &j,
         return true;
     }
 
-    return diagonal;
+    if (!diagonal)
+    {
+        return false;
+    }
+
+    int adj_i = i + (0 - i) + center_i;
+    int adj_j = j + center_j;
+    if (validIndex_(adj_i, adj_j))
+    {
+        if (grid_[index_(adj_i, adj_j)] == 0)
+        {
+            return false;
+        }
+    }
+
+    adj_i = i + center_i;
+    adj_j = j + (0 - j) + center_j;
+    if (validIndex_(adj_i, adj_j))
+    {
+        if (grid_[index_(adj_i, adj_j)] == 0)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 Node *Pathfinder::newNode(const int &I, const int &J,
@@ -178,6 +205,7 @@ Node *Pathfinder::newNode(const int &I, const int &J,
 
 void Pathfinder::cleanUp()
 {
+    nodesUsed_ = nodeList_.size();
     for (auto &node : nodeList_)
         delete node;
     nodeList_.clear();

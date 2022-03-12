@@ -47,6 +47,8 @@ public:
                    const std::vector<std::pair<int, int>> &resultPath) const;
 
     const int &getRuns() const { return runs_; }
+    const int &getNodesUsed() const { return nodesUsed_; }
+    const int &getNodesReused() const { return reusedNodes_; }
 
     int gridIndex(const int &i, const int &j) const { return index_(i, j); }
 
@@ -55,6 +57,8 @@ private:
     int g_height_;
 
     int runs_;
+    int nodesUsed_;
+    int reusedNodes_;
 
     std::vector<int> grid_;
 
