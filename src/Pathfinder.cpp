@@ -37,10 +37,9 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
 
     // Add start node to open list
     Node *start = newNode(start_i, start_j, 0, 0, 0, nullptr);
-    openList_.insert(
-        std::pair(
-            GridCell(start_i, start_j),
-            start));
+    openList_.insert(std::pair(
+        index_(start_i, start_j),
+        start));
     openQueue_.push(start);
 
     Node *currentNode;
@@ -94,7 +93,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                             child_g = currentNode->g + 1;
                             child_h = (end_i - child_i) * (end_i - child_i) + (end_j - child_j) * (end_j - child_j);
                             child_f = child_g + child_h;
-                            auto foundNode = openList_.find(GridCell(child_i, child_j));
+                            auto foundNode = openList_.find(childIndex);
                             if (foundNode == openList_.end())
                             {
                                 // Add child node to open list
@@ -105,9 +104,9 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                                     child_h,
                                     child_f,
                                     currentNode);
-                                openList_.insert(
-                                    std::pair(
-                                        GridCell(child_i, child_j), newChild));
+                                openList_.insert(std::pair(
+                                        index_(child_i, child_j), 
+                                        newChild));
                                 openQueue_.push(newChild);
                             }
                             else

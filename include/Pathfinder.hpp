@@ -67,7 +67,7 @@ private:
 
     std::vector<Node *> nodeList_;
 
-    std::map<GridCell,Node*> openList_;
+    std::map<int,Node*> openList_;
 
     std::vector<bool> closedList_;
 
