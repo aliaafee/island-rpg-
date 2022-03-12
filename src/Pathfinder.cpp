@@ -36,12 +36,8 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
 
     // Add start node to open list
     Node *start = newNode(start_i, start_j, 0, 0, 0, nullptr);
-    openList_.insert(std::pair(
-        index_(start_i, start_j),
-        start));
+    openList_[index_(start_i, start_j)] = start;
     openQueue_.push(start);
-
-    
 
     Node *currentNode;
     float child_g, child_h, child_f;
@@ -51,6 +47,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     reusedNodes_ = 0;
     Node *newChild;
     std::map<int, bool>::iterator closedSearch;
+    std::map<int, Node*>::iterator foundNode;
     while (!openQueue_.empty())
     {
         runs_ += 1;
@@ -64,9 +61,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
         closedSearch = closedList_.find(currentNodeIndex);
         if (closedSearch == closedList_.end())
         {
-            closedList_.insert(std::pair(
-                currentNodeIndex, true
-            ));
+            closedList_[currentNodeIndex] = true;
 
             if (currentNodeIndex == endIndex)
             {
@@ -98,7 +93,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                             child_g = currentNode->g + 1;
                             child_h = (end_i - child_i) * (end_i - child_i) + (end_j - child_j) * (end_j - child_j);
                             child_f = child_g + child_h;
-                            auto foundNode = openList_.find(childIndex);
+                            foundNode = openList_.find(childIndex);
                             if (foundNode == openList_.end())
                             {
                                 // Add child node to open list
@@ -109,9 +104,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                                     child_h,
                                     child_f,
                                     currentNode);
-                                openList_.insert(std::pair(
-                                        index_(child_i, child_j), 
-                                        newChild));
+                                openList_[index_(child_i, child_j)] = newChild;
                                 openQueue_.push(newChild);
                             }
                             else

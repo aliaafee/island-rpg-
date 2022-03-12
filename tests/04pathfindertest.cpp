@@ -59,7 +59,10 @@ int main()
     //     std::cout << node.first << ", " << node.second << "\n";
     // }
 
-    //pf.printGrid(start_i, start_j, end_i, end_j, result);
+    if (g_width * g_height <= 100) {
+        pf.printGrid(start_i, start_j, end_i, end_j, result);
+    }
+    std::cout << "Grid (" << g_width << "x" << g_height << ")\n";
     std::cout << "Path " << (found ? "" : "not ") << "found after " << pf.getRuns() << " runs."
               << "\n";
     std::cout << "Time for " << reps
