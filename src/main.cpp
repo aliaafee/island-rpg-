@@ -40,6 +40,9 @@ int main()
             case sf::Event::MouseButtonReleased:
                 world.onMouseButtonReleased(event);
                 break;
+            case sf::Event::MouseWheelScrolled:
+                world.onMouseWheelScrolled(event);
+                break;
             default:
                 break;
             }

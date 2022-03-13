@@ -32,6 +32,7 @@ public:
     const std::vector<Actor *> &getActors() const;
 
     void onMouseButtonReleased(const sf::Event &event);
+    void onMouseWheelScrolled(const sf::Event &event);
 
     bool findPath(const Vector3f &start, const Vector3f &end,
                   const bool &diagonal,

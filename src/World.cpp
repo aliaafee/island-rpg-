@@ -139,6 +139,16 @@ void World::onMouseButtonReleased(const sf::Event &event)
     }
 }
 
+void World::onMouseWheelScrolled(const sf::Event &event)
+{
+    if (event.mouseWheelScroll.delta < 0) {
+        camera_.zoom(1.1);
+    } else {
+        camera_.zoom(0.9);
+    }
+}
+
+
 const std::vector<Actor *> &World::getActors() const
 {
     return actors_;

@@ -18,6 +18,7 @@ public:
     virtual void draw(sf::RenderTarget *screen);
 
     void setTexture(sf::Texture *texture);
+    void setSpriteOrigin(const float &x, const float &y) { sprite_.setOrigin(x, y); }
 
 private:
     sf::Sprite sprite_;

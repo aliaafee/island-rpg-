@@ -20,6 +20,8 @@ Player::Player(ResourceManager &rm) : AnimatedActor(rm),
         loadAnimation(name, animationDirectory + name);
     }
 
+    setSpriteOrigin(32, 64);
+
     setAnimationSpeed(10);
 }
 
