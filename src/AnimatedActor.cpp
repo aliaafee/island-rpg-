@@ -1,6 +1,6 @@
 #include "AnimatedActor.hpp"
 
-AnimatedActor::AnimatedActor(ResourceManager *rm) : SpriteActor(rm),
+AnimatedActor::AnimatedActor(ResourceManager &rm) : SpriteActor(rm),
                                                     currentFrame(0),
                                                     currentAnimationName(""),
                                                     currentSequence(nullptr),

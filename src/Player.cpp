@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(ResourceManager *rm) : AnimatedActor(rm),
+Player::Player(ResourceManager &rm) : AnimatedActor(rm),
                                       statemachine_(this),
                                       animationDirection_("down"),
                                       animationAction_("idle")

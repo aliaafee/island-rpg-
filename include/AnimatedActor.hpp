@@ -13,7 +13,7 @@
 class AnimatedActor : public SpriteActor
 {
 public:
-    AnimatedActor(ResourceManager *rm);
+    AnimatedActor(ResourceManager &rm);
     ~AnimatedActor();
 
     virtual void animate(sf::Time &elapsed);

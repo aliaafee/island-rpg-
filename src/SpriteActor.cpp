@@ -1,6 +1,6 @@
 #include "SpriteActor.hpp"
 
-SpriteActor::SpriteActor(ResourceManager *rm) : Actor(rm)
+SpriteActor::SpriteActor(ResourceManager &rm) : Actor(rm)
 {
     // sf::Texture* tex = rm->loadTexture("graphics/test/player.png");
 

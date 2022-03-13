@@ -11,7 +11,7 @@
 class SpriteActor : public Actor
 {
 public:
-    SpriteActor(ResourceManager *rm);
+    SpriteActor(ResourceManager &rm);
     ~SpriteActor();
 
     virtual void transform(Camera &camera);

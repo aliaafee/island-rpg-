@@ -21,7 +21,7 @@ class Player;
 class World
 {
 public:
-    World(sf::RenderWindow *window, ResourceManager *rm, int64_t width, int64_t height);
+    World(sf::RenderWindow &window, ResourceManager &rm, int64_t width, int64_t height);
     ~World();
 
     void update(sf::Time &elapsed);

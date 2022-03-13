@@ -14,7 +14,7 @@ class World;
 class Actor
 {
 public:
-    Actor(ResourceManager *rm);
+    Actor(ResourceManager &rm);
     ~Actor();
 
     virtual void update(sf::Time &elapsed, World &world);

@@ -1,6 +1,6 @@
 #include "Actor.hpp"
 
-Actor::Actor(ResourceManager *rm) : rm(rm),
+Actor::Actor(ResourceManager &rm) : rm(&rm),
                                     baseRect2_(sf::LinesStrip, 7),
                                     position_(0, 0, 0),
                                     size_(10.0, 10.0, 10.0)

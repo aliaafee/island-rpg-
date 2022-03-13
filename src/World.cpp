@@ -1,8 +1,8 @@
 #include "World.hpp"
 
-World::World(sf::RenderWindow *window, ResourceManager *rm,
-             int64_t width, int64_t height) : window_(window),
-                                              rm_(rm),
+World::World(sf::RenderWindow &window, ResourceManager &rm,
+             int64_t width, int64_t height) : window_(&window),
+                                              rm_(&rm),
                                               player_(new Player(rm)),
                                               cursor_(new Actor(rm)),
                                               pathfinder_(

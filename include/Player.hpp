@@ -13,7 +13,7 @@
 class Player : public AnimatedActor
 {
 public:
-    Player(ResourceManager *rm);
+    Player(ResourceManager &rm);
     ~Player();
 
     virtual void update(sf::Time &elapsed, World &world);
