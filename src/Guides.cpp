@@ -9,7 +9,7 @@ Grid::Grid(ResourceManager &rm,
                                   height_(height),
                                   gridCols_(gridCols),
                                   gridRows_(gridRows),
-                                  gridPoints2_(sf::Lines, gridCols_ * 2 + gridRows_ * 2),
+                                  gridPoints2_(sf::Lines),
                                   gridTransform2_(),
                                   transformed_(false)
 {
@@ -63,7 +63,7 @@ void Grid::transform(Camera &camera)
     }
 
     gridTransform2_ = sf::Transform();
-    gridTransform2_.translate(getScreenPosition2());
+    gridTransform2_.translate(getScreenPosition().x, getScreenPosition().y);
 }
 
 void Grid::draw(sf::RenderTarget *screen)
