@@ -2,7 +2,7 @@
 #define __PATHFINDER_H__
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <queue>
 #include <cstring>
@@ -67,10 +67,9 @@ private:
 
     std::vector<Node *> nodeList_;
 
-    std::map<int,Node*> openList_;
+    std::unordered_map<int,Node*> openList_;
 
-    //std::vector<bool> closedList_;
-    std::map<int,bool> closedList_;
+    std::unordered_map<int,bool> closedList_;
 
     std::priority_queue<Node *, std::vector<Node *>, MoreThanByF> openQueue_;
 

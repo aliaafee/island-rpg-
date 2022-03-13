@@ -7,8 +7,8 @@ int main()
 {
     std::cout << "# Testing Pathfinder" << std::endl;
 
-    long g_width = 10;
-    long g_height = 10;
+    long g_width = 1000;
+    long g_height = 1000;
 
     std::cout << "Creating Pathfinder Instance.." << std::flush;
     Pathfinder pf(g_width, g_height);
@@ -35,14 +35,14 @@ int main()
 
     int start_i = 1;
     int start_j = 2;
-    int end_i = 9;
-    int end_j = 5;
+    int end_i = 900;
+    int end_j = 500;
 
     std::cout << "Copying Grid.." << std::flush;
     pf.setGrid(grid);
     std::cout << "Done" << "\n";
 
-    int reps = 100;
+    int reps = 10;
     bool found = false;
 
     std::cout << "Starting tests.." << std::flush;

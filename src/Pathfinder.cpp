@@ -46,8 +46,8 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     runs_ = 0;
     reusedNodes_ = 0;
     Node *newChild;
-    std::map<int, bool>::iterator closedSearch;
-    std::map<int, Node*>::iterator foundNode;
+    std::unordered_map<int, bool>::iterator closedSearch;
+    std::unordered_map<int, Node*>::iterator foundNode;
     while (!openQueue_.empty())
     {
         runs_ += 1;
