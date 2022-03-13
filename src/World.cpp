@@ -1,26 +1,24 @@
 #include "World.hpp"
 
-World::World(sf::RenderWindow &window, ResourceManager &rm,
+World::World(sf::RenderWindow &window,
+             ResourceManager &rm,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
                                               cursor_(new Actor(rm)),
+                                              camera_(Vector3f(0, 0, 0),
+                                                      Vector3f(800 / 2, 600 / 2, 0),
+                                                      Vector2f(64, 32),
+                                                      10),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
-                                                  60, 60
-                                              )
+                                                  60, 60)
 {
     std::cout << "Creating World"
               << "\n";
 
     pathfinder_.clearGrid();
-
-    camera_ = new Camera(
-        Vector3f(0, 0, 0),
-        Vector3f(800 / 2, 600 / 2, 0),
-        Vector2f(64, 32),
-        10);
 
     addActor(player_);
     addActor(cursor_);
@@ -48,8 +46,6 @@ World::~World()
     std::cout << "Destroying World"
               << "\n";
 
-    delete camera_;
-
     for (auto &actor : actors_)
     {
         delete actor;
@@ -62,7 +58,7 @@ void World::input_(sf::Time &elapsed)
     // Cursor
     Vector2i mousePosition = sf::Mouse::getPosition(*window_);
     cursor_->setPosition(
-        camera_->projectGround(mousePosition));
+        camera_.projectGround(mousePosition));
 
     // Camera Pan
     float speed = elapsed.asSeconds() * 4.0 * 60;
@@ -85,7 +81,7 @@ void World::input_(sf::Time &elapsed)
     }
     if (abs(panDir.x) > 0 || abs(panDir.y) > 0)
     {
-        camera_->pan(panDir);
+        camera_.pan(panDir);
     }
 }
 
@@ -103,7 +99,7 @@ void World::transform()
 {
     for (auto &actor : actors_)
     {
-        actor->transform(*camera_);
+        actor->transform(camera_);
     }
 }
 
@@ -129,13 +125,6 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Left"
                   << "\n";
-        // std::deque<Vector3f> path = {
-        //     Vector3f(0, 0, 0),
-        //     Vector3f(0, 50, 0),
-        //     Vector3f(50, 50, 0),
-        //     Vector3f(50, 0, 0)
-        // };
-        // player_->walkPath(path);
         player_->walkTo(cursor_->getPosition());
     }
     else if (event.mouseButton.button == sf::Mouse::Right)
