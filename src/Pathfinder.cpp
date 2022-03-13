@@ -1,16 +1,26 @@
 #include "Pathfinder.hpp"
 
-Pathfinder::Pathfinder(const int &width, const int &height) : g_width_(width),
-                                                              g_height_(height)
+Pathfinder::Pathfinder(const Vector3f &position,
+                       const float &width, const float &height,
+                       const int &gridCols, const int &gridRows) : position_(position),
+                                                                   width_(width),
+                                                                   height_(height),
+                                                                   g_cols_(gridCols),
+                                                                   g_rows_(gridRows)
 {
-    grid_.resize(g_width_ * g_height_);
-    std::fill(grid_.begin(), grid_.end(), 1);
+    cellWidth_ = width_ / ((float)g_cols_);
+    cellHeight_ = height_ / ((float)g_rows_);
 
-
+    grid_.resize(g_cols_ * g_rows_);
 }
 
 Pathfinder::~Pathfinder()
 {
+}
+
+void Pathfinder::clearGrid()
+{
+    std::fill(grid_.begin(), grid_.end(), 1);
 }
 
 void Pathfinder::setGrid(const std::vector<int> &grid)
@@ -18,11 +28,42 @@ void Pathfinder::setGrid(const std::vector<int> &grid)
     grid_ = grid;
 }
 
+bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
+                          const bool &diagonal,
+                          std::deque<Vector3f> &resultPath)
+{
+    int start_i, start_j, end_i, end_j;
+    toGridCell(start, start_i, start_j);
+    toGridCell(end, end_i, end_j);
+
+    std::cout << start << start_i << ":" << start_j << "->";
+    std::cout << end << end_i << ":" << end_j << " ";
+    
+    resultPathCells_.clear();
+    bool found = searchAStar(start_i, start_j, end_i, end_j, diagonal, resultPathCells_);
+
+    std::cout << runs_ << "runs ";
+
+    if (!found)
+        return false;
+
+    for (auto &cell: resultPathCells_) {
+        resultPath.push_back(toPoint(cell.first, cell.second));
+    }
+
+    resultPath.pop_front();
+    resultPath.back() = end;
+
+    return true;
+}
+
 bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                              const int &end_i, const int &end_j,
                              const bool &diagonal,
                              std::vector<std::pair<int, int>> &resultPath)
 {
+    runs_ = 0;
+
     if (!(validIndex_(start_i, start_j) && validIndex_(end_i, end_j)))
         return false;
 
@@ -43,11 +84,10 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
     float child_g, child_h, child_f;
     int currentNodeIndex, child_i, child_j, childIndex;
     int endIndex = index_(end_i, end_j);
-    runs_ = 0;
     reusedNodes_ = 0;
     Node *newChild;
     std::unordered_map<int, bool>::iterator closedSearch;
-    std::unordered_map<int, Node*>::iterator foundNode;
+    std::unordered_map<int, Node *>::iterator foundNode;
     while (!openQueue_.empty())
     {
         runs_ += 1;
@@ -132,11 +172,11 @@ bool Pathfinder::validIndex_(const int &i, const int &j) const
 {
     if (i < 0)
         return false;
-    if (i > g_width_ - 1)
+    if (i > g_cols_ - 1)
         return false;
     if (j < 0)
         return false;
-    if (j > g_height_ - 1)
+    if (j > g_rows_ - 1)
         return false;
     return true;
 }
@@ -226,12 +266,12 @@ void Pathfinder::printGrid(const int &start_i, const int &start_j,
     grid[index_(start_i, start_j)] = 90;
     grid[index_(end_i, end_j)] = 99;
 
-    std::cout << "Grid (" << g_width_ << "x" << g_height_ << ")\n";
+    std::cout << "Grid (" << g_cols_ << "x" << g_rows_ << ")\n";
 
-    for (int j = 0; j < g_height_; j++)
+    for (int j = 0; j < g_rows_; j++)
     {
         std::cout << " ";
-        for (int i = 0; i < g_width_; i++)
+        for (int i = 0; i < g_cols_; i++)
         {
             switch (grid[index_(i, j)])
             {
@@ -258,4 +298,24 @@ void Pathfinder::printGrid(const int &start_i, const int &start_j,
         }
         std::cout << "\n";
     }
+}
+
+void Pathfinder::printGrid(const int &start_i, const int &start_j,
+                           const int &end_i, const int &end_j) const
+{
+    printGrid(start_i, start_j, end_i, end_j, resultPathCells_);
+}
+
+void Pathfinder::toGridCell(const Vector3f &point, int &out_i, int &out_j) const
+{
+    out_i = (int)floor((point.x - position_.x) / cellWidth_);
+    out_j = (int)floor((point.y - position_.y) / cellHeight_);
+}
+
+Vector3f Pathfinder::toPoint(const int &i, const int &j) const
+{
+    return Vector3f(
+        (float)i * cellWidth_ + cellWidth_ / 2.f + position_.x,
+        (float)j * cellHeight_ + cellHeight_ / 2.f + position_.y,
+        position_.z);
 }

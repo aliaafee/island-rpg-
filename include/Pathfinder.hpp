@@ -5,7 +5,10 @@
 #include <unordered_map>
 #include <vector>
 #include <queue>
+#include <deque>
 #include <cstring>
+
+#include "Vector.hpp"
 
 typedef std::pair<int, int> GridCell;
 
@@ -35,10 +38,17 @@ struct MoreThanByF
 class Pathfinder
 {
 public:
-    Pathfinder(const int &width, const int &height);
+    Pathfinder(const Vector3f &position,
+               const float &width, const float &height,
+               const int &gridCols, const int &gridRows);
     ~Pathfinder();
 
+    void clearGrid();
     void setGrid(const std::vector<int> &grid);
+
+    bool findPath(const Vector3f &start, const Vector3f &end,
+                  const bool &diagonal,
+                  std::deque<Vector3f> &resultPath);
 
     bool searchAStar(const int &start_i, const int &start_j,
                      const int &end_i, const int &end_j,
@@ -49,27 +59,40 @@ public:
                    const int &end_i, const int &end_j,
                    const std::vector<std::pair<int, int>> &resultPath) const;
 
+    void printGrid(const int &start_i, const int &start_j,
+                   const int &end_i, const int &end_j) const;
+
     const int &getRuns() const { return runs_; }
     const int &getNodesUsed() const { return nodesUsed_; }
     const int &getNodesReused() const { return reusedNodes_; }
 
     int gridIndex(const int &i, const int &j) const { return index_(i, j); }
+    void toGridCell(const Vector3f &point, int &out_i, int &out_j) const;
+    Vector3f toPoint(const int &i, const int &j) const;
 
 private:
-    int g_width_;
-    int g_height_;
+    Vector3f position_;
+    float width_;
+    float height_;
+    int g_cols_;
+    int g_rows_;
+
+    float cellWidth_;
+    float cellHeight_;
 
     int runs_;
     int nodesUsed_;
     int reusedNodes_;
 
+    std::vector<std::pair<int, int>> resultPathCells_;
+
     std::vector<int> grid_;
 
     std::vector<Node *> nodeList_;
 
-    std::unordered_map<int,Node*> openList_;
+    std::unordered_map<int, Node *> openList_;
 
-    std::unordered_map<int,bool> closedList_;
+    std::unordered_map<int, bool> closedList_;
 
     std::priority_queue<Node *, std::vector<Node *>, MoreThanByF> openQueue_;
 
@@ -78,7 +101,7 @@ private:
                   Node *Parent);
     void cleanUp();
 
-    int index_(const int &i, const int &j) const { return i + g_width_ * j; }
+    int index_(const int &i, const int &j) const { return i + g_cols_ * j; }
     bool validIndex_(const int &i, const int &j) const;
     bool validCell_(const int &i, const int &j) const;
 

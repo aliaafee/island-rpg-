@@ -4,10 +4,17 @@ World::World(sf::RenderWindow *window, ResourceManager *rm,
              int64_t width, int64_t height) : window_(window),
                                               rm_(rm),
                                               player_(new Player(rm)),
-                                              cursor_(new Actor(rm))
+                                              cursor_(new Actor(rm)),
+                                              pathfinder_(
+                                                  Vector3f(0, 0, 0),
+                                                  600, 600,
+                                                  60, 60
+                                              )
 {
     std::cout << "Creating World"
               << "\n";
+
+    pathfinder_.clearGrid();
 
     camera_ = new Camera(
         Vector3f(0, 0, 0),
@@ -17,6 +24,8 @@ World::World(sf::RenderWindow *window, ResourceManager *rm,
 
     addActor(player_);
     addActor(cursor_);
+
+    player_->move(20, 20, 0);
 
     // addActor(new Player(rm_));
 

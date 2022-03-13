@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector.hpp"
+#include "Pathfinder.hpp"
 #include "Actor.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
@@ -32,6 +33,13 @@ public:
 
     void onMouseButtonReleased(const sf::Event &event);
 
+    bool findPath(const Vector3f &start, const Vector3f &end,
+                  const bool &diagonal,
+                  std::deque<Vector3f> &resultPath)
+    {
+        return pathfinder_.findPath(start, end, diagonal, resultPath);
+    }
+
 private:
     Player *player_;
     Actor *cursor_;
@@ -40,6 +48,8 @@ private:
     Camera *camera_;
     ResourceManager *rm_;
     sf::RenderWindow *window_;
+
+    Pathfinder pathfinder_;
 
     void input_(sf::Time &elapsed);
 };

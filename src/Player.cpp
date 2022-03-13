@@ -32,7 +32,7 @@ void Player::update(sf::Time &elapsed, World &world)
 
 void Player::walkTo(const Vector3f &target)
 {
-    walkPath_.push_back(target);
+    walkTarget_ = target;
     statemachine_.queueEvent(WALK_TO_TARGET);
 }
 
@@ -77,6 +77,19 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
     {
         std::cout << "Player to Walk State" << std::endl;
         setAnimationAction("walking");
+        std::cout << "Finding Path.." << std::flush;
+        bool found = world.findPath(
+            getPosition(),
+            walkTarget_,
+            true,
+            walkPath_
+        );
+        if (!found)
+        {
+            std::cout << "Not found\n";
+            return idleStateId;
+        }
+        std::cout << "Found\n";
     }
 
     StateEvent event;

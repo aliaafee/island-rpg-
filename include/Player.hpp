@@ -36,6 +36,7 @@ private:
 
     StateId idleState(bool firstRun, sf::Time &elapsed, World &world);
 
+    Vector3f walkTarget_;
     std::deque<Vector3f> walkPath_;
     StateId walkState(bool firstRun, sf::Time &elapsed, World &world);
 

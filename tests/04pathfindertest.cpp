@@ -7,18 +7,30 @@ int main()
 {
     std::cout << "# Testing Pathfinder" << std::endl;
 
-    long g_width = 1000;
-    long g_height = 1000;
+    int reps = 1;
+    float width = 100.f;
+    float height = 100.f;
+    int g_cols = 10;
+    int g_rows = 10;
+    int start_i = 1;
+    int start_j = 2;
+    int end_i = 9;
+    int end_j = 5;
 
     std::cout << "Creating Pathfinder Instance.." << std::flush;
-    Pathfinder pf(g_width, g_height);
+    Pathfinder pf(
+        Vector3f(20.f, 10.f, 0.f),
+        100.f, 100.f,
+        g_cols, g_rows
+    );
+    pf.clearGrid();
     std::cout << "Done" << "\n";
 
     
     std::cout << "Creating Grid.." << std::flush;
     std::vector<int> grid;
-    std::cout << grid.max_size() << " " << g_width * g_height << " ";
-    grid.resize(g_width * g_height);
+    std::cout << grid.max_size() << " " << g_cols * g_rows << " ";
+    grid.resize(g_cols * g_rows);
     std::fill(grid.begin(), grid.end(), 1);
     grid[pf.gridIndex(0, 1)] = 0;
     grid[pf.gridIndex(5, 0)] = 0;
@@ -33,24 +45,26 @@ int main()
     grid[pf.gridIndex(5, 9)] = 0;
     std::cout << "Done" << "\n";
 
-    int start_i = 1;
-    int start_j = 2;
-    int end_i = 900;
-    int end_j = 500;
-
     std::cout << "Copying Grid.." << std::flush;
     pf.setGrid(grid);
     std::cout << "Done" << "\n";
 
-    int reps = 10;
+    
     bool found = false;
 
     std::cout << "Starting tests.." << std::flush;
-    std::vector<std::pair<int, int>> result;
+    //std::vector<std::pair<int, int>> result;
+    std::deque<Vector3f> result;
     auto t1 = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < reps; i++)
     {
-        found = pf.searchAStar(start_i, start_j, end_i, end_j, true, result);
+        //found = pf.searchAStar(start_i, start_j, end_i, end_j, true, result);
+        found = pf.findPath(
+            pf.toPoint(start_i, start_j),
+            pf.toPoint(end_i, end_j),
+            true,
+            result
+        );
     }
     auto t2 = std::chrono::high_resolution_clock::now();
     std::cout << "Done" << "\n";
@@ -60,10 +74,10 @@ int main()
     //     std::cout << node.first << ", " << node.second << "\n";
     // }
 
-    if (g_width * g_height <= 100) {
-        pf.printGrid(start_i, start_j, end_i, end_j, result);
+    if (g_cols * g_rows <= 100) {
+        pf.printGrid(start_i, start_j, end_i, end_j);
     }
-    std::cout << "Grid (" << g_width << "x" << g_height << ")\n";
+    std::cout << "Grid (" << g_cols << "x" << g_rows << ")\n";
     std::cout << "Path " << (found ? "" : "not ") << "found after " << pf.getRuns() << " runs."
               << "\n";
     std::cout << "Time for " << reps
