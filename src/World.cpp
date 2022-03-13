@@ -9,7 +9,8 @@ World::World(sf::RenderWindow &window,
                                               camera_(Vector3f(0, 0, 0),
                                                       Vector3f(800 / 2, 600 / 2, 0),
                                                       Vector2f(64, 32),
-                                                      10),
+                                                      10,
+                                                      window.getSize().x, window.getSize().y),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -56,7 +57,8 @@ World::~World()
 void World::input_(sf::Time &elapsed)
 {
     // Cursor
-    Vector2i mousePosition = sf::Mouse::getPosition(*window_);
+    //Vector2i mousePosition = sf::Mouse::getPosition(*window_);
+    Vector2f mousePosition = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
     cursor_->setPosition(
         camera_.projectGround(mousePosition));
 
@@ -87,6 +89,8 @@ void World::input_(sf::Time &elapsed)
 
 void World::update(sf::Time &elapsed)
 {
+    camera_.updateWindow(*window_);
+
     input_(elapsed);
 
     for (auto &actor : actors_)

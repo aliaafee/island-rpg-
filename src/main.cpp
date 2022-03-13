@@ -14,11 +14,6 @@ int main()
     ResourceManager rm;
     World world(window, rm, 100, 100);
 
-    sf::View view(sf::FloatRect(0.f, 0.f, 800.f, 600.f));
-    //view.setViewport(sf::FloatRect(0.5f, 0.5f, 0.5f, 0.5f));
-    view.zoom(1.f);
-    window.setView(view);
-
     bool windowFocused = false;
 
     sf::Clock clock;

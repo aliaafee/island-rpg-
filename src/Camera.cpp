@@ -3,12 +3,19 @@
 Camera::Camera(Vector3f position,
                Vector3f origin,
                Vector2f tileSize,
-               float gridSize) : position_(position),
-                                 origin_(origin),
-                                 tileSize_(tileSize),
-                                 gridSize_(gridSize),
-                                 groundNormal_(0, 0, 1),
-                                 cameraDirection_(0, 0, 1)
+               float gridSize,
+               float windowWidth,
+               float windowHeight) : position_(position),
+                                     origin_(origin),
+                                     tileSize_(tileSize),
+                                     gridSize_(gridSize),
+                                     groundNormal_(0, 0, 1),
+                                     cameraDirection_(0, 0, 1),
+                                     windowView_(),
+                                     windowWidth_(windowWidth),
+                                     windowHeight_(windowHeight),
+                                     zoomFactor_(1),
+                                     rotation_(0)
 {
     float w_h = tileSize_.x / 2.0;
     float h_h = tileSize_.y / 2.0;
@@ -49,6 +56,15 @@ void Camera::pan(const float &x, const float &y)
     setPosition(projectGround(screenPosition));
 }
 
+void Camera::updateWindow(sf::RenderWindow &window)
+{
+    windowView_.setCenter(windowWidth_/2.f, windowHeight_/2.f);
+    windowView_.setSize(windowWidth_, windowHeight_);
+    windowView_.zoom(zoomFactor_);
+    windowView_.setRotation(rotation_);
+    window.setView(windowView_);
+}
+
 Vector3f Camera::transform(const Vector3f &point) const
 {
     return matMultipy(transformMatrix_, point);
@@ -72,6 +88,12 @@ Vector3f Camera::projectGround(const Vector3f &point) const
         &intPoint);
 
     return intPoint;
+}
+
+Vector3f Camera::projectGround(const Vector2f &point) const
+{
+    return projectGround(
+        Vector3f(point.x, point.y, 0));
 }
 
 Vector3f Camera::projectGround(const Vector2i &point) const

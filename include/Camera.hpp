@@ -11,19 +11,30 @@ class Camera
 {
 public:
     Camera(Vector3f position, Vector3f origin,
-           Vector2f tileSize, float gridSize);
+           Vector2f tileSize, float gridSize,
+           float windowWidth, float windowHeight);
 
     const Vector3f &getPosition() const;
     void setPosition(const Vector3f &position);
 
     void pan(const Vector2f &direction);
     void pan(const float &x, const float &y);
+    
+    void zoom(const float &z) { zoomFactor_ *= z; }
+    void setZoom(const float &z) { zoomFactor_ = z; }
+
+    void rotate(const float &r) { rotation_ += r; }
+    void setRotation(const float &r) { rotation_ = r;}
+
+    void updateWindow(sf::RenderWindow &window);
 
     Vector3f transform(const Vector3f &point) const;
     Vector3f itransform(const Vector3f &point) const;
 
     Vector3f projectGround(const Vector3f &point) const;
+    Vector3f projectGround(const Vector2f &point) const;
     Vector3f projectGround(const Vector2i &point) const;
+
 private:
     Vector3f position_;
     Vector3f origin_;
@@ -37,6 +48,12 @@ private:
 
     Vector3f cameraDirection_;
     Vector3f cameraDirectionInv_;
+
+    sf::View windowView_;
+    float windowWidth_;
+    float windowHeight_;
+    float zoomFactor_;
+    float rotation_;
 
     void updateTransforms_();
 };
