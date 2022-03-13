@@ -24,6 +24,9 @@ World::World(sf::RenderWindow &window,
     addActor(player_);
     addActor(cursor_);
 
+    Actor* grid = new Grid(rm, 600, 600, 60, 60);
+    addActor(grid);
+
     player_->move(20, 20, 0);
 
     // addActor(new Player(rm_));
@@ -57,7 +60,6 @@ World::~World()
 void World::input_(sf::Time &elapsed)
 {
     // Cursor
-    //Vector2i mousePosition = sf::Mouse::getPosition(*window_);
     Vector2f mousePosition = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
     cursor_->setPosition(
         camera_.projectGround(mousePosition));

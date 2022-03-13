@@ -51,8 +51,8 @@ void Camera::pan(const Vector2f &direction)
 void Camera::pan(const float &x, const float &y)
 {
     Vector3f screenPosition = transform(position_);
-    screenPosition.x += x;
-    screenPosition.y += y;
+    screenPosition.x += x * zoomFactor_;
+    screenPosition.y += y * zoomFactor_;
     setPosition(projectGround(screenPosition));
 }
 
@@ -73,6 +73,16 @@ Vector3f Camera::transform(const Vector3f &point) const
 Vector3f Camera::itransform(const Vector3f &point) const
 {
     return matMultipy(inverseTransform_, point);
+}
+
+Vector3f Camera::transform(const Vector3f &point, const float &w) const
+{
+    return matMultipy(transformMatrix_, point, w);
+}
+
+Vector3f Camera::itransform(const Vector3f &point, const float &w) const
+{
+    return matMultipy(inverseTransform_, point, w);
 }
 
 Vector3f Camera::projectGround(const Vector3f &point) const

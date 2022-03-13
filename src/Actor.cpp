@@ -104,6 +104,14 @@ const Vector3f &Actor::getScreenPosition() const
     return screenPosition_;
 }
 
+Vector2f Actor::getScreenPosition2() const
+{
+    return Vector2f(
+        screenPosition_.x,
+        screenPosition_.y
+    );
+}
+
 bool actorDepthComp(Actor *a, Actor *b)
 {
     return a->getScreenPosition().z < b->getScreenPosition().z;

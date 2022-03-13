@@ -33,6 +33,7 @@ public:
     void setSize(const float &x, const float &y, const float &z);
 
     const Vector3f &getScreenPosition() const;
+    Vector2f getScreenPosition2() const;
 
 protected:
     ResourceManager *rm;

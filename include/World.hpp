@@ -15,6 +15,7 @@
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "Player.hpp"
+#include "Guides.hpp"
 
 class Player;
 

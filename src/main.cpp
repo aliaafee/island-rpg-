@@ -7,10 +7,13 @@
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Island RPG");
-    //window.setVerticalSyncEnabled(true);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Island RPG", sf::Style::Default, settings);
+    // window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
-    
+
     ResourceManager rm;
     World world(window, rm, 100, 100);
 

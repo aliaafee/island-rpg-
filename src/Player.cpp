@@ -78,7 +78,6 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
     if (firstRun)
     {
         std::cout << "Player to Walk State" << std::endl;
-        setAnimationAction("walking");
         std::cout << "Finding Path.." << std::flush;
         bool found = world.findPath(
             getPosition(),
@@ -92,6 +91,7 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
             return idleStateId;
         }
         std::cout << "Found\n";
+        setAnimationAction("walking");
     }
 
     StateEvent event;

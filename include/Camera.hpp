@@ -31,6 +31,9 @@ public:
     Vector3f transform(const Vector3f &point) const;
     Vector3f itransform(const Vector3f &point) const;
 
+    Vector3f transform(const Vector3f &point, const float &w) const;
+    Vector3f itransform(const Vector3f &point, const float &w) const;
+
     Vector3f projectGround(const Vector3f &point) const;
     Vector3f projectGround(const Vector2f &point) const;
     Vector3f projectGround(const Vector2i &point) const;
