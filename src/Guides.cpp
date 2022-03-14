@@ -36,8 +36,6 @@ Grid::Grid(const float &width,
     }
 
     gridPoints2_.resize(gridPoints_.size());
-
-    std::cout << "done " << std::endl;
 }
 
 void Grid::transform(Camera &camera)
@@ -60,8 +58,10 @@ void Grid::transform(Camera &camera)
         transformed_ = true;
     }
 
-    gridTransform2_ = sf::Transform();
-    gridTransform2_.translate(getScreenPosition().x, getScreenPosition().y);
+    gridTransform2_ = sf::Transform(1, 0, getScreenPosition().x,
+                                    0, 1, getScreenPosition().y,
+                                    0, 0, 1);
+    // gridTransform2_.translate(getScreenPosition().x, getScreenPosition().y);
 }
 
 void Grid::draw(sf::RenderTarget *screen)
@@ -121,9 +121,9 @@ void PathfinderGrid::draw(sf::RenderTarget *screen)
             if (pathfinder_->cellValue(i, j) == 0)
             {
                 cellPos = pos + i_hat * (float)i + j_hat * (float)j;
-                sf::Transform trans;
-                trans.translate(cellPos.x, cellPos.y);
-                screen->draw(cell_, trans);
+                screen->draw(cell_, sf::Transform(1, 0, cellPos.x,
+                                                  0, 1, cellPos.y,
+                                                  0, 0, 1));
             }
         }
     }
