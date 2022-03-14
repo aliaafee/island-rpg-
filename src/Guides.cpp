@@ -1,11 +1,9 @@
 #include "Guides.hpp"
 
-Grid::Grid(ResourceManager &rm,
-           const float &width,
+Grid::Grid(const float &width,
            const float &height,
            const int &gridCols,
-           const int &gridRows) : Actor(rm),
-                                  width_(width),
+           const int &gridRows) : width_(width),
                                   height_(height),
                                   gridCols_(gridCols),
                                   gridRows_(gridRows),
@@ -69,4 +67,64 @@ void Grid::transform(Camera &camera)
 void Grid::draw(sf::RenderTarget *screen)
 {
     screen->draw(gridPoints2_, gridTransform2_);
+}
+
+PathfinderGrid::PathfinderGrid(Pathfinder &pathfinder) : Grid(
+                                                             pathfinder.getWidth(),
+                                                             pathfinder.getHeight(),
+                                                             pathfinder.getCols(),
+                                                             pathfinder.getRows()),
+                                                         pathfinder_(&pathfinder),
+                                                         cell_(sf::Quads, 4)
+{
+    cellPoints_.resize(4);
+    cellPoints_[0] = Vector3f(0, 0, 0);
+    cellPoints_[1] = Vector3f(cellWidth_, 0, 0);
+    cellPoints_[2] = Vector3f(cellWidth_, cellHeight_, 0);
+    cellPoints_[3] = Vector3f(0, cellHeight_, 0);
+
+    sf::Color col;
+    col = sf::Color::Black;
+    col.a = 100;
+
+    cell_[0].color = col;
+    cell_[1].color = col;
+    cell_[2].color = col;
+    cell_[3].color = col;
+}
+
+void PathfinderGrid::transform(Camera &camera)
+{
+    Grid::transform(camera);
+    i_hat = camera.transform(Vector3f(cellWidth_, 0, 0), 0);
+    j_hat = camera.transform(Vector3f(0, cellHeight_, 0), 0);
+
+    Vector3f t;
+    for (int i = 0; i < cellPoints_.size(); ++i)
+    {
+        t = camera.transform(cellPoints_[i], 0);
+        cell_[i].position.x = t.x;
+        cell_[i].position.y = t.y;
+    }
+}
+
+void PathfinderGrid::draw(sf::RenderTarget *screen)
+{
+    Grid::draw(screen);
+
+    Vector3f pos = getScreenPosition();
+    Vector3f cellPos;
+    for (int i = 0; i < gridCols_; i++)
+    {
+        for (int j = 0; j < gridRows_; j++)
+        {
+            if (pathfinder_->cellValue(i, j) == 0)
+            {
+                cellPos = pos + i_hat * (float)i + j_hat * (float)j;
+                sf::Transform trans;
+                trans.translate(cellPos.x, cellPos.y);
+                screen->draw(cell_, trans);
+            }
+        }
+    }
 }

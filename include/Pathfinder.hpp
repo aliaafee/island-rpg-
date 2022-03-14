@@ -67,8 +67,17 @@ public:
     const int &getNodesReused() const { return reusedNodes_; }
 
     int gridIndex(const int &i, const int &j) const { return index_(i, j); }
-    void toGridCell(const Vector3f &point, int &out_i, int &out_j) const;
+    void toGridCoord(const Vector3f &point, int &out_i, int &out_j) const;
     Vector3f toPoint(const int &i, const int &j) const;
+
+    const int &cellValue(const int &i, const int &j) const;
+    const int &cellValue(const Vector3f &point) const;
+    void setCellValue(const int &i, const int &j, const int &value);
+
+    const float &getWidth() const { return width_; }
+    const float &getHeight() const { return height_; }
+    const int &getCols() const { return g_cols_; }
+    const int &getRows() const { return g_rows_; }
 
 private:
     Vector3f position_;
@@ -83,6 +92,8 @@ private:
     int runs_;
     int nodesUsed_;
     int reusedNodes_;
+
+    int zero_;
 
     std::vector<std::pair<int, int>> resultPathCells_;
 

@@ -14,6 +14,7 @@ class World;
 class Actor
 {
 public:
+    Actor();
     Actor(ResourceManager &rm);
     ~Actor();
 

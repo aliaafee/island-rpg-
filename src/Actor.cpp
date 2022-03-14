@@ -1,9 +1,8 @@
 #include "Actor.hpp"
 
-Actor::Actor(ResourceManager &rm) : rm(&rm),
-                                    baseRect2_(sf::LinesStrip, 7),
-                                    position_(0, 0, 0),
-                                    size_(10.0, 10.0, 10.0)
+Actor::Actor() : baseRect2_(sf::LinesStrip, 7),
+                 position_(0, 0, 0),
+                 size_(10.0, 10.0, 10.0)
 {
     std::cout << "Creating Actor"
               << "\n";
@@ -22,6 +21,12 @@ Actor::Actor(ResourceManager &rm) : rm(&rm),
         baseRect2_[i].color.g = 0;
         baseRect2_[i].color.b = 0;
     }
+}
+
+Actor::Actor(ResourceManager &rm) : Actor()
+
+{
+    this->rm = &rm;
 }
 
 Actor::~Actor()
@@ -108,8 +113,7 @@ Vector2f Actor::getScreenPosition2() const
 {
     return Vector2f(
         screenPosition_.x,
-        screenPosition_.y
-    );
+        screenPosition_.y);
 }
 
 bool actorDepthComp(Actor *a, Actor *b)

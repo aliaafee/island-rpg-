@@ -24,8 +24,10 @@ World::World(sf::RenderWindow &window,
     addActor(player_);
     addActor(cursor_);
 
-    Actor* grid = new Grid(rm, 600, 600, 60, 60);
+    Actor* grid = new PathfinderGrid(pathfinder_);
     addActor(grid);
+
+    pathfinder_.setCellValue(10, 10, 0);
 
     player_->move(20, 20, 0);
 
@@ -137,7 +139,9 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Right"
                   << "\n";
-        player_->stop();
+        int i, j;
+        pathfinder_.toGridCoord(cursor_->getPosition(), i, j);
+        pathfinder_.setCellValue(i, j, 0);
     }
 }
 

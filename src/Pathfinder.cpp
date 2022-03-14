@@ -6,7 +6,8 @@ Pathfinder::Pathfinder(const Vector3f &position,
                                                                    width_(width),
                                                                    height_(height),
                                                                    g_cols_(gridCols),
-                                                                   g_rows_(gridRows)
+                                                                   g_rows_(gridRows),
+                                                                   zero_(0)
 {
     cellWidth_ = width_ / ((float)g_cols_);
     cellHeight_ = height_ / ((float)g_rows_);
@@ -33,12 +34,12 @@ bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
                           std::deque<Vector3f> &resultPath)
 {
     int start_i, start_j, end_i, end_j;
-    toGridCell(start, start_i, start_j);
-    toGridCell(end, end_i, end_j);
+    toGridCoord(start, start_i, start_j);
+    toGridCoord(end, end_i, end_j);
 
     std::cout << start << start_i << ":" << start_j << "->";
     std::cout << end << end_i << ":" << end_j << " ";
-    
+
     resultPathCells_.clear();
     bool found = searchAStar(start_i, start_j, end_i, end_j, diagonal, resultPathCells_);
 
@@ -47,7 +48,8 @@ bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
     if (!found)
         return false;
 
-    for (auto &cell: resultPathCells_) {
+    for (auto &cell : resultPathCells_)
+    {
         resultPath.push_back(toPoint(cell.first, cell.second));
     }
 
@@ -306,7 +308,7 @@ void Pathfinder::printGrid(const int &start_i, const int &start_j,
     printGrid(start_i, start_j, end_i, end_j, resultPathCells_);
 }
 
-void Pathfinder::toGridCell(const Vector3f &point, int &out_i, int &out_j) const
+void Pathfinder::toGridCoord(const Vector3f &point, int &out_i, int &out_j) const
 {
     out_i = (int)floor((point.x - position_.x) / cellWidth_);
     out_j = (int)floor((point.y - position_.y) / cellHeight_);
@@ -318,4 +320,27 @@ Vector3f Pathfinder::toPoint(const int &i, const int &j) const
         (float)i * cellWidth_ + cellWidth_ / 2.f + position_.x,
         (float)j * cellHeight_ + cellHeight_ / 2.f + position_.y,
         position_.z);
+}
+
+const int &Pathfinder::cellValue(const int &i, const int &j) const
+{
+    if (!validIndex_(i, j))
+        return zero_;
+
+    return grid_[index_(i, j)];
+}
+
+const int &Pathfinder::cellValue(const Vector3f &point) const
+{
+    int i, j;
+    toGridCoord(point, i, j);
+    return cellValue(i, j);
+}
+
+void Pathfinder::setCellValue(const int &i, const int &j, const int &value)
+{
+    if (!validIndex_(i, j))
+        return;
+
+    grid_[index_(i, j)] = value;
 }
