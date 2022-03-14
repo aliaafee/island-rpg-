@@ -1,7 +1,7 @@
 #ifndef __TRACKINGCAMERA_H__
 #define __TRACKINGCAMERA_H__
 
-#include "Actor.hpp"
+#include "Entity.hpp"
 #include "Camera.hpp"
 #include "StateMachine.hpp"
 
@@ -14,9 +14,9 @@ public:
 
     virtual void update(sf::Time &elapsed);
 
-    void setTrackTarget(Actor &actor, const float &trackSpeed, const float &minDistance, const float &maxDistance)
+    void setTrackTarget(Entity &entity, const float &trackSpeed, const float &minDistance, const float &maxDistance)
     {
-        trackTarget_ = &actor;
+        trackTarget_ = &entity;
         trackSpeed_ = trackSpeed;
         minDistance2_ = minDistance * minDistance;
         maxDistance2_ = maxDistance * maxDistance;
@@ -37,7 +37,7 @@ private:
 
     StateId idleState(bool firstRun, sf::Time &elapsed, int &data);
 
-    Actor *trackTarget_;
+    Entity *trackTarget_;
     float minDistance2_;
     float maxDistance2_;
     float trackSpeed_;

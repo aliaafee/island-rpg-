@@ -1,9 +1,9 @@
-#include "Actor.hpp"
+#include "Entity.hpp"
 
-Actor::Actor() : baseRect2_(sf::LinesStrip, 7),
+Entity::Entity() : baseRect2_(sf::LinesStrip, 7),
                  position_(0, 0, 0)
 {
-    std::cout << "Creating Actor"
+    std::cout << "Creating Entity"
               << "\n";
 
     baseRect3_.resize(7);
@@ -18,24 +18,24 @@ Actor::Actor() : baseRect2_(sf::LinesStrip, 7),
     }
 }
 
-Actor::Actor(ResourceManager &rm) : Actor()
+Entity::Entity(ResourceManager &rm) : Entity()
 
 {
     this->rm = &rm;
 }
 
-Actor::~Actor()
+Entity::~Entity()
 {
-    std::cout << "Destroying Actor"
+    std::cout << "Destroying Entity"
               << "\n";
 }
 
-void Actor::update(sf::Time &elapsed, World &world)
+void Entity::update(sf::Time &elapsed, World &world)
 {
     ;
 }
 
-void Actor::transform(Camera &camera)
+void Entity::transform(Camera &camera)
 {
     screenPosition_ = camera.transform(position_);
 
@@ -48,46 +48,46 @@ void Actor::transform(Camera &camera)
     }
 }
 
-void Actor::draw(sf::RenderTarget *screen)
+void Entity::draw(sf::RenderTarget *screen)
 {
     screen->draw(baseRect2_);
 }
 
-const Vector3f &Actor::getPosition() const
+const Vector3f &Entity::getPosition() const
 {
     return position_;
 }
 
-void Actor::setPosition(const Vector3f &position)
+void Entity::setPosition(const Vector3f &position)
 {
     position_ = position;
 }
 
-void Actor::setPosition(const float &x, const float &y, const float &z)
+void Entity::setPosition(const float &x, const float &y, const float &z)
 {
     position_.x = x;
     position_.y = y;
     position_.z = z;
 }
 
-void Actor::move(const Vector3f &velocity)
+void Entity::move(const Vector3f &velocity)
 {
     position_ += velocity;
 }
 
-void Actor::move(const float &x, const float &y, const float &z)
+void Entity::move(const float &x, const float &y, const float &z)
 {
     position_.x += x;
     position_.y += y;
     position_.z += z;
 }
 
-const Vector3f &Actor::getSize() const
+const Vector3f &Entity::getSize() const
 {
     return size_;
 }
 
-void Actor::setSize(const Vector3f &size)
+void Entity::setSize(const Vector3f &size)
 {
     size_ = size;
     baseRect3_[0] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
@@ -99,26 +99,26 @@ void Actor::setSize(const Vector3f &size)
     baseRect3_[6] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
 }
 
-void Actor::setSize(const float &x, const float &y, const float &z)
+void Entity::setSize(const float &x, const float &y, const float &z)
 {
     size_.x = x;
     size_.y = y;
     size_.z = z;
 }
 
-const Vector3f &Actor::getScreenPosition() const
+const Vector3f &Entity::getScreenPosition() const
 {
     return screenPosition_;
 }
 
-Vector2f Actor::getScreenPosition2() const
+Vector2f Entity::getScreenPosition2() const
 {
     return Vector2f(
         screenPosition_.x,
         screenPosition_.y);
 }
 
-bool actorDepthComp(Actor *a, Actor *b)
+bool entityDepthComp(Entity *a, Entity *b)
 {
     return a->getScreenPosition().z < b->getScreenPosition().z;
 }

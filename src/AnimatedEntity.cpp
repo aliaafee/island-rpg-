@@ -1,6 +1,6 @@
-#include "AnimatedActor.hpp"
+#include "AnimatedEntity.hpp"
 
-AnimatedActor::AnimatedActor(ResourceManager &rm) : SpriteActor(rm),
+AnimatedEntity::AnimatedEntity(ResourceManager &rm) : SpriteEntity(rm),
                                                     currentFrame(0),
                                                     currentAnimationName(""),
                                                     currentSequence(nullptr),
@@ -8,11 +8,11 @@ AnimatedActor::AnimatedActor(ResourceManager &rm) : SpriteActor(rm),
 {
 }
 
-AnimatedActor::~AnimatedActor()
+AnimatedEntity::~AnimatedEntity()
 {
 }
 
-void AnimatedActor::animate(sf::Time &elapsed)
+void AnimatedEntity::animate(sf::Time &elapsed)
 {
     if (currentSequence == nullptr)
     {
@@ -28,12 +28,12 @@ void AnimatedActor::animate(sf::Time &elapsed)
     setTexture((*currentSequence)[floor(currentFrame)]);
 }
 
-void AnimatedActor::setAnimationSpeed(const float &newSpeed)
+void AnimatedEntity::setAnimationSpeed(const float &newSpeed)
 {
     speed = newSpeed;
 }
 
-bool AnimatedActor::setCurrentAnimation(const std::string &name)
+bool AnimatedEntity::setCurrentAnimation(const std::string &name)
 {
     auto search = animations_.find(name);
 
@@ -49,7 +49,7 @@ bool AnimatedActor::setCurrentAnimation(const std::string &name)
     return true;
 }
 
-bool AnimatedActor::loadAnimation(const std::string &name, const std::string &directory)
+bool AnimatedEntity::loadAnimation(const std::string &name, const std::string &directory)
 {
     std::vector<sf::Texture *> sequence;
 
@@ -63,7 +63,7 @@ bool AnimatedActor::loadAnimation(const std::string &name, const std::string &di
     return true;
 }
 
-void AnimatedActor::addAnimation(const std::string &name, const std::vector<sf::Texture *> &sequence)
+void AnimatedEntity::addAnimation(const std::string &name, const std::vector<sf::Texture *> &sequence)
 {
     animations_.insert(std::pair(name, sequence));
 }

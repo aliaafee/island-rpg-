@@ -11,7 +11,7 @@
 
 #include "Vector.hpp"
 #include "Pathfinder.hpp"
-#include "Actor.hpp"
+#include "Entity.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "Player.hpp"
@@ -30,8 +30,8 @@ public:
     void transform();
     void draw(sf::RenderTarget *screen);
 
-    void addActor(Actor *actor);
-    const std::vector<Actor *> &getActors() const;
+    void addEntity(Entity *entity);
+    const std::vector<Entity *> &getEntitys() const;
 
     void onMouseButtonReleased(const sf::Event &event);
     void onMouseWheelScrolled(const sf::Event &event);
@@ -45,8 +45,8 @@ public:
 
 private:
     Player *player_;
-    Actor *cursor_;
-    std::vector<Actor *> actors_;
+    Entity *cursor_;
+    std::vector<Entity *> entities_;
 
     Camera *camera_;
     ResourceManager *rm_;

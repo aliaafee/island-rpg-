@@ -5,14 +5,14 @@
 #include <typeinfo>
 #include <SFML/Graphics.hpp>
 
-#include "Actor.hpp"
+#include "Entity.hpp"
 #include "ResourceManager.hpp"
 
-class SpriteActor : public Actor
+class SpriteEntity : public Entity
 {
 public:
-    SpriteActor(ResourceManager &rm);
-    ~SpriteActor();
+    SpriteEntity(ResourceManager &rm);
+    ~SpriteEntity();
 
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);

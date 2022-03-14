@@ -40,7 +40,7 @@ Grid::Grid(const float &width,
 
 void Grid::transform(Camera &camera)
 {
-    Actor::transform(camera);
+    Entity::transform(camera);
 
     if (!transformed_)
     {

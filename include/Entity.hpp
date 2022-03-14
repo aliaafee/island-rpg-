@@ -11,12 +11,12 @@
 
 class World;
 
-class Actor
+class Entity
 {
 public:
-    Actor();
-    Actor(ResourceManager &rm);
-    ~Actor();
+    Entity();
+    Entity(ResourceManager &rm);
+    ~Entity();
 
     virtual void update(sf::Time &elapsed, World &world);
 
@@ -49,6 +49,6 @@ private:
     sf::VertexArray baseRect2_;
 };
 
-bool actorDepthComp(Actor *a, Actor *b);
+bool entityDepthComp(Entity *a, Entity *b);
 
 #endif // __ACTOR_H__

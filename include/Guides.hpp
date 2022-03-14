@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "Actor.hpp"
+#include "Entity.hpp"
 #include "Pathfinder.hpp"
 
-class Grid : public Actor
+class Grid : public Entity
 {
 public:
     Grid(const float &width, const float &height,

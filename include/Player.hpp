@@ -5,12 +5,12 @@
 #include <deque>
 
 #include "Vector.hpp"
-#include "AnimatedActor.hpp"
+#include "AnimatedEntity.hpp"
 #include "ResourceManager.hpp"
 #include "StateMachine.hpp"
 #include "World.hpp"
 
-class Player : public AnimatedActor
+class Player : public AnimatedEntity
 {
 public:
     Player(ResourceManager &rm);

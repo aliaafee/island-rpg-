@@ -9,7 +9,7 @@
 #include <cstring>
 
 #include "Vector.hpp"
-#include "Actor.hpp"
+#include "Entity.hpp"
 
 typedef std::pair<int, int> GridCell;
 
@@ -47,7 +47,7 @@ public:
     void clearGrid();
     void setGrid(const std::vector<int> &grid);
 
-    void addObstacle(const Actor &actor);
+    void addObstacle(const Entity &entity);
 
     bool findPath(const Vector3f &start, const Vector3f &end,
                   const bool &diagonal,

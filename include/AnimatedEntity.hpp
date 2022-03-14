@@ -7,14 +7,14 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "SpriteActor.hpp"
+#include "SpriteEntity.hpp"
 #include "ResourceManager.hpp"
 
-class AnimatedActor : public SpriteActor
+class AnimatedEntity : public SpriteEntity
 {
 public:
-    AnimatedActor(ResourceManager &rm);
-    ~AnimatedActor();
+    AnimatedEntity(ResourceManager &rm);
+    ~AnimatedEntity();
 
     virtual void animate(sf::Time &elapsed);
 

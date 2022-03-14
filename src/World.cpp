@@ -5,7 +5,7 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
-                                              cursor_(new Actor(rm)),
+                                              cursor_(new Entity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -16,11 +16,11 @@ World::World(sf::RenderWindow &window,
 
     pathfinder_.clearGrid();
 
-    addActor(player_);
-    addActor(cursor_);
+    addEntity(player_);
+    addEntity(cursor_);
 
-    Actor *grid = new PathfinderGrid(pathfinder_);
-    addActor(grid);
+    Entity *grid = new PathfinderGrid(pathfinder_);
+    addEntity(grid);
 
     player_->move(20, 20, 0);
     cursor_->setSize(Vector3f(5, 5, 5));
@@ -35,19 +35,19 @@ World::World(sf::RenderWindow &window,
 
     camera_ = camera;
 
-    // addActor(new Player(rm_));
+    // addEntity(new Player(rm_));
 
-    // addActor(new Player(rm_));
+    // addEntity(new Player(rm_));
 
-    // actors_[0]->setPosition(Vector3f(0, 20, 0));
-    // // actors_[1]->setPosition(Vector3f(0, 30, 10));
+    // entities_[0]->setPosition(Vector3f(0, 20, 0));
+    // // entities_[1]->setPosition(Vector3f(0, 30, 10));
 
-    // Actor *a;
+    // Entity *a;
     // for (float i; i < 10; i++)
     // {
     //     a = new Player(rm_);
     //     a->setPosition(Vector3f(20 + i * 6, 0, 0));
-    //     addActor(a);
+    //     addEntity(a);
     // }
 }
 
@@ -56,11 +56,11 @@ World::~World()
     std::cout << "Destroying World"
               << "\n";
 
-    for (auto &actor : actors_)
+    for (auto &entity : entities_)
     {
-        delete actor;
+        delete entity;
     }
-    actors_.clear();
+    entities_.clear();
 }
 
 void World::input_(sf::Time &elapsed)
@@ -101,9 +101,9 @@ void World::update(sf::Time &elapsed)
 
     input_(elapsed);
 
-    for (auto &actor : actors_)
+    for (auto &entity : entities_)
     {
-        actor->update(elapsed, *this);
+        entity->update(elapsed, *this);
     }
 
     camera_->update(elapsed);
@@ -111,25 +111,25 @@ void World::update(sf::Time &elapsed)
 
 void World::transform()
 {
-    for (auto &actor : actors_)
+    for (auto &entity : entities_)
     {
-        actor->transform(*camera_);
+        entity->transform(*camera_);
     }
 }
 
 void World::draw(sf::RenderTarget *screen)
 {
-    std::sort(actors_.begin(), actors_.end(), actorDepthComp);
+    std::sort(entities_.begin(), entities_.end(), entityDepthComp);
 
-    for (auto &actor : actors_)
+    for (auto &entity : entities_)
     {
-        actor->draw(screen);
+        entity->draw(screen);
     }
 }
 
-void World::addActor(Actor *actor)
+void World::addEntity(Entity *entity)
 {
-    actors_.push_back(actor);
+    entities_.push_back(entity);
 }
 
 void World::onMouseButtonReleased(const sf::Event &event)
@@ -161,7 +161,7 @@ void World::onMouseWheelScrolled(const sf::Event &event)
     }
 }
 
-const std::vector<Actor *> &World::getActors() const
+const std::vector<Entity *> &World::getEntitys() const
 {
-    return actors_;
+    return entities_;
 }

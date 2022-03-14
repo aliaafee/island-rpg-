@@ -1,26 +1,26 @@
-#include "SpriteActor.hpp"
+#include "SpriteEntity.hpp"
 
-SpriteActor::SpriteActor(ResourceManager &rm) : Actor(rm)
+SpriteEntity::SpriteEntity(ResourceManager &rm) : Entity(rm)
 {
 }
 
-SpriteActor::~SpriteActor()
+SpriteEntity::~SpriteEntity()
 {
 }
 
-void SpriteActor::transform(Camera &camera)
+void SpriteEntity::transform(Camera &camera)
 {
-    Actor::transform(camera);
+    Entity::transform(camera);
     sprite_.setPosition(getScreenPosition().x, getScreenPosition().y);
 }
 
-void SpriteActor::draw(sf::RenderTarget *screen)
+void SpriteEntity::draw(sf::RenderTarget *screen)
 {
-    Actor::draw(screen);
+    Entity::draw(screen);
     screen->draw(sprite_);
 }
 
-void SpriteActor::setTexture(sf::Texture *texture)
+void SpriteEntity::setTexture(sf::Texture *texture)
 {
     sprite_.setTexture(*texture);
 }
