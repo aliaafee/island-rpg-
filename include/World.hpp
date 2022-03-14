@@ -17,6 +17,7 @@
 #include "Player.hpp"
 #include "Guides.hpp"
 #include "TrackingCamera.hpp"
+#include "ShaderEntity.hpp"
 
 class Player;
 

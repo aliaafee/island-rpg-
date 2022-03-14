@@ -17,13 +17,19 @@ World::World(sf::RenderWindow &window,
     pathfinder_.clearGrid();
 
     addEntity(player_);
+    player_->move(20, 20, 0);
+
     addEntity(cursor_);
+    cursor_->setSize(Vector3f(5, 5, 5));
 
     Entity *grid = new PathfinderGrid(pathfinder_);
     addEntity(grid);
 
-    player_->move(20, 20, 0);
-    cursor_->setSize(Vector3f(5, 5, 5));
+    Entity *sh = new ShaderEntity(*rm_);
+    addEntity(sh);
+    sh->move(40, 40,0);
+    pathfinder_.addObstacle(*sh);
+    
 
     TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
                                                 Vector3f(800 / 2, 600 / 2, 0),
