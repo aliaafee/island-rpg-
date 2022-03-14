@@ -23,6 +23,7 @@ World::World(sf::RenderWindow &window,
     addActor(grid);
 
     player_->move(20, 20, 0);
+    cursor_->setSize(Vector3f(5, 5, 5));
 
     TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
                                                 Vector3f(800 / 2, 600 / 2, 0),
@@ -144,9 +145,7 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Right"
                   << "\n";
-        int i, j;
-        pathfinder_.toGridCoord(cursor_->getPosition(), i, j);
-        pathfinder_.setCellValue(i, j, 0);
+        pathfinder_.addObstacle(*cursor_);
     }
 }
 

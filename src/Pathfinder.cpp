@@ -29,6 +29,26 @@ void Pathfinder::setGrid(const std::vector<int> &grid)
     grid_ = grid;
 }
 
+void Pathfinder::addObstacle(const Actor &actor)
+{
+    Vector3f topLeft = actor.getPosition() - position_ - (actor.getSize() / 2.f);
+
+    int start_i = (int)floor(topLeft.x / cellWidth_);
+    int start_j = (int)floor(topLeft.y / cellHeight_);
+
+    int end_i = (int)ceil((topLeft.x + actor.getSize().x) / cellWidth_);
+    int end_j = (int)ceil((topLeft.y + actor.getSize().y) / cellHeight_);
+
+    for (int i = start_i; i < end_i; i++)
+    {
+        for (int j = start_j; j < end_j; j++)
+        {
+            setCellValue(i, j, 0);
+        }
+    }
+
+}
+
 bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
                           const bool &diagonal,
                           std::deque<Vector3f> &resultPath)
