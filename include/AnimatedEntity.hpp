@@ -1,5 +1,5 @@
-#ifndef __ANIMATEDACTOR_H__
-#define __ANIMATEDACTOR_H__
+#ifndef __ANIMATEDENTITY_H__
+#define __ANIMATEDENTITY_H__
 
 #include <string>
 #include <map>
@@ -32,4 +32,4 @@ private:
     float currentFrame;
 };
 
-#endif // __ANIMATEDACTOR_H__
+#endif // __ANIMATEDENTITY_H__

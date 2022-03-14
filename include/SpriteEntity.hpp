@@ -1,5 +1,5 @@
-#ifndef __SPRITEACTOR_H__
-#define __SPRITEACTOR_H__
+#ifndef __SPRITEENTITY_H__
+#define __SPRITEENTITY_H__
 
 #include <iostream>
 #include <typeinfo>
@@ -24,4 +24,4 @@ private:
     sf::Sprite sprite_;
 };
 
-#endif // __SPRITEACTOR_H__
+#endif // __SPRITEENTITY_H__

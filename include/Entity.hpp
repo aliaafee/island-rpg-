@@ -1,5 +1,5 @@
-#ifndef __ACTOR_H__
-#define __ACTOR_H__
+#ifndef __ENTITY_H__
+#define __ENTITY_H__
 
 #include <iostream>
 #include <vector>
@@ -51,4 +51,4 @@ private:
 
 bool entityDepthComp(Entity *a, Entity *b);
 
-#endif // __ACTOR_H__
+#endif // __ENTITY_H__
