@@ -61,7 +61,6 @@ void Grid::transform(Camera &camera)
     gridTransform2_ = sf::Transform(1, 0, getScreenPosition().x,
                                     0, 1, getScreenPosition().y,
                                     0, 0, 1);
-    // gridTransform2_.translate(getScreenPosition().x, getScreenPosition().y);
 }
 
 void Grid::draw(sf::RenderTarget *screen)
