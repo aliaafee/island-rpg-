@@ -25,6 +25,16 @@ float vecMagnitude2(const Vector3f &v)
     return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
+float vecDistance(const Vector3f &a, const Vector3f &b)
+{
+    return vecMagnitude(b - a);
+}
+
+float vecDistance2(const Vector3f &a, const Vector3f &b)
+{
+    return vecMagnitude2(b - a);
+}
+
 bool intersetPlane(const Vector3f &n, const Vector3f &p0,
                    const Vector3f &l0, const Vector3f &l,
                    Vector3f *i)

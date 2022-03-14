@@ -16,17 +16,21 @@ public:
 
     const Vector3f &getPosition() const;
     void setPosition(const Vector3f &position);
+    void move(const Vector3f &velocity);
+    void move(const float &x, const float &y, const float &z);
 
     void pan(const Vector2f &direction);
     void pan(const float &x, const float &y);
-    
+
     void zoom(const float &z) { zoomFactor_ *= z; }
     void setZoom(const float &z) { zoomFactor_ = z; }
 
     void rotate(const float &r) { rotation_ += r; }
-    void setRotation(const float &r) { rotation_ = r;}
+    void setRotation(const float &r) { rotation_ = r; }
 
     void updateWindow(sf::RenderWindow &window);
+
+    virtual void update(sf::Time &elapsed){};
 
     Vector3f transform(const Vector3f &point) const;
     Vector3f itransform(const Vector3f &point) const;

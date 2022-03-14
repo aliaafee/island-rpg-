@@ -16,6 +16,7 @@
 #include "ResourceManager.hpp"
 #include "Player.hpp"
 #include "Guides.hpp"
+#include "TrackingCamera.hpp"
 
 class Player;
 
@@ -47,7 +48,7 @@ private:
     Actor *cursor_;
     std::vector<Actor *> actors_;
 
-    Camera camera_;
+    Camera *camera_;
     ResourceManager *rm_;
     sf::RenderWindow *window_;
 

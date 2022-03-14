@@ -8,6 +8,8 @@ Player::Player(ResourceManager &rm) : AnimatedActor(rm),
     idleStateId = statemachine_.addState(&Player::idleState);
     walkStateId = statemachine_.addState(&Player::walkState);
 
+    statemachine_.setStartState(idleStateId);
+
     std::string animationNames[12] = {
         "up_walking", "down_walking", "left_walking", "right_walking",
         "up_idle", "down_idle", "left_idle", "right_idle",
@@ -83,8 +85,7 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
             getPosition(),
             walkTarget_,
             true,
-            walkPath_
-        );
+            walkPath_);
         if (!found)
         {
             std::cout << "Not found\n";

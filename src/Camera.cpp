@@ -43,6 +43,20 @@ void Camera::setPosition(const Vector3f &position)
     updateTransforms_();
 }
 
+void Camera::move(const Vector3f &velocity)
+{
+    position_ += velocity;
+    updateTransforms_();
+}
+
+void Camera::move(const float &x, const float &y, const float &z)
+{
+    position_.x += x;
+    position_.y += y;
+    position_.z += z;
+    updateTransforms_();
+}
+
 void Camera::pan(const Vector2f &direction)
 {
     pan(direction.x, direction.y);
@@ -58,7 +72,7 @@ void Camera::pan(const float &x, const float &y)
 
 void Camera::updateWindow(sf::RenderWindow &window)
 {
-    windowView_.setCenter(windowWidth_/2.f, windowHeight_/2.f);
+    windowView_.setCenter(windowWidth_ / 2.f, windowHeight_ / 2.f);
     windowView_.setSize(windowWidth_, windowHeight_);
     windowView_.zoom(zoomFactor_);
     windowView_.setRotation(rotation_);

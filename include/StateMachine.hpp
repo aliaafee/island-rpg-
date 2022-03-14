@@ -7,54 +7,54 @@
 
 typedef unsigned int StateId;
 
-template <class T, class U, class V>
+template <class TargetType, class DataType, class StateEventType>
 class StateMachine
 {
 public:
-    StateMachine(T *target) : startState(0),
-                              firstRunCurrentState(true),
-                              currentState(nullptr),
-                              target_(target){};
+    StateMachine(TargetType *target) : startState(0),
+                                       firstRunCurrentState(true),
+                                       currentState(nullptr),
+                                       target_(target){};
     ~StateMachine(){};
 
-    StateId addState(StateId (T::*handler)(bool, sf::Time &, U &));
+    StateId addState(StateId (TargetType::*handler)(bool, sf::Time &, DataType &));
 
     bool setStartState(const StateId &stateid);
 
     bool setState(const StateId &stateid);
 
-    void queueEvent(const V &event);
+    void queueEvent(const StateEventType &event);
 
-    bool pollEvent(V &event);
+    bool pollEvent(StateEventType &event);
 
     void resetEvent();
 
-    void updateState(sf::Time &elapsed, U &dataInput);
+    void updateState(sf::Time &elapsed, DataType &dataInput);
 
 private:
-    std::vector<StateId (T::*)(bool, sf::Time &, U &)> handlers_;
+    std::vector<StateId (TargetType::*)(bool, sf::Time &, DataType &)> handlers_;
 
     StateId startState;
 
-    T *target_;
+    TargetType *target_;
 
     bool firstRunCurrentState;
 
-    StateId (T::*currentState)(bool, sf::Time &, U &);
+    StateId (TargetType::*currentState)(bool, sf::Time &, DataType &);
 
-    std::queue<V> eventQueue_;
+    std::queue<StateEventType> eventQueue_;
 };
 
-template <class T, class U, class V>
-StateId StateMachine<T, U, V>::addState(StateId (T::*handler)(bool, sf::Time &, U &))
+template <class TargetType, class DataType, class StateEventType>
+StateId StateMachine<TargetType, DataType, StateEventType>::addState(StateId (TargetType::*handler)(bool, sf::Time &, DataType &))
 {
     handlers_.push_back(handler);
 
     return handlers_.size() - 1;
 }
 
-template <class T, class U, class V>
-bool StateMachine<T, U, V>::setStartState(const StateId &stateid)
+template <class TargetType, class DataType, class StateEventType>
+bool StateMachine<TargetType, DataType, StateEventType>::setStartState(const StateId &stateid)
 {
     if (stateid > handlers_.size() - 1)
     {
@@ -64,15 +64,15 @@ bool StateMachine<T, U, V>::setStartState(const StateId &stateid)
     return true;
 }
 
-template <class T, class U, class V>
-bool StateMachine<T, U, V>::setState(const StateId &stateid)
+template <class TargetType, class DataType, class StateEventType>
+bool StateMachine<TargetType, DataType, StateEventType>::setState(const StateId &stateid)
 {
     if (stateid > handlers_.size() - 1)
     {
         return false;
     }
 
-    StateId (T::*nextState)(bool, sf::Time &, U &) = handlers_[stateid];
+    StateId (TargetType::*nextState)(bool, sf::Time &, DataType &) = handlers_[stateid];
 
     if (nextState != currentState)
     {
@@ -84,14 +84,14 @@ bool StateMachine<T, U, V>::setState(const StateId &stateid)
     return true;
 }
 
-template <class T, class U, class V>
-void StateMachine<T, U, V>::queueEvent(const V &event)
+template <class TargetType, class DataType, class StateEventType>
+void StateMachine<TargetType, DataType, StateEventType>::queueEvent(const StateEventType &event)
 {
     eventQueue_.push(event);
 }
 
-template <class T, class U, class V>
-bool StateMachine<T, U, V>::pollEvent(V &event)
+template <class TargetType, class DataType, class StateEventType>
+bool StateMachine<TargetType, DataType, StateEventType>::pollEvent(StateEventType &event)
 {
     if (eventQueue_.empty())
     {
@@ -104,15 +104,15 @@ bool StateMachine<T, U, V>::pollEvent(V &event)
     return true;
 }
 
-template <class T, class U, class V>
-void StateMachine<T, U, V>::resetEvent()
+template <class TargetType, class DataType, class StateEventType>
+void StateMachine<TargetType, DataType, StateEventType>::resetEvent()
 {
-    std::queue<V> empty;
+    std::queue<StateEventType> empty;
     std::swap(eventQueue_, empty);
 }
 
-template <class T, class U, class V>
-void StateMachine<T, U, V>::updateState(sf::Time &elapsed, U &dataInput)
+template <class TargetType, class DataType, class StateEventType>
+void StateMachine<TargetType, DataType, StateEventType>::updateState(sf::Time &elapsed, DataType &dataInput)
 {
     if (currentState == nullptr)
     {

@@ -6,11 +6,6 @@ World::World(sf::RenderWindow &window,
                                               rm_(&rm),
                                               player_(new Player(rm)),
                                               cursor_(new Actor(rm)),
-                                              camera_(Vector3f(0, 0, 0),
-                                                      Vector3f(800 / 2, 600 / 2, 0),
-                                                      Vector2f(64, 32),
-                                                      10,
-                                                      window.getSize().x, window.getSize().y),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -24,12 +19,20 @@ World::World(sf::RenderWindow &window,
     addActor(player_);
     addActor(cursor_);
 
-    Actor* grid = new PathfinderGrid(pathfinder_);
+    Actor *grid = new PathfinderGrid(pathfinder_);
     addActor(grid);
 
-    pathfinder_.setCellValue(10, 10, 0);
-
     player_->move(20, 20, 0);
+
+    TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
+                                                Vector3f(800 / 2, 600 / 2, 0),
+                                                Vector2f(64, 32),
+                                                10,
+                                                window.getSize().x, window.getSize().y);
+
+    camera->setTrackTarget(*player_, 1, 5, 60);
+
+    camera_ = camera;
 
     // addActor(new Player(rm_));
 
@@ -64,7 +67,7 @@ void World::input_(sf::Time &elapsed)
     // Cursor
     Vector2f mousePosition = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
     cursor_->setPosition(
-        camera_.projectGround(mousePosition));
+        camera_->projectGround(mousePosition));
 
     // Camera Pan
     float speed = elapsed.asSeconds() * 4.0 * 60;
@@ -87,13 +90,13 @@ void World::input_(sf::Time &elapsed)
     }
     if (abs(panDir.x) > 0 || abs(panDir.y) > 0)
     {
-        camera_.pan(panDir);
+        camera_->pan(panDir);
     }
 }
 
 void World::update(sf::Time &elapsed)
 {
-    camera_.updateWindow(*window_);
+    camera_->updateWindow(*window_);
 
     input_(elapsed);
 
@@ -101,13 +104,15 @@ void World::update(sf::Time &elapsed)
     {
         actor->update(elapsed, *this);
     }
+
+    camera_->update(elapsed);
 }
 
 void World::transform()
 {
     for (auto &actor : actors_)
     {
-        actor->transform(camera_);
+        actor->transform(*camera_);
     }
 }
 
@@ -147,13 +152,15 @@ void World::onMouseButtonReleased(const sf::Event &event)
 
 void World::onMouseWheelScrolled(const sf::Event &event)
 {
-    if (event.mouseWheelScroll.delta < 0) {
-        camera_.zoom(1.1);
-    } else {
-        camera_.zoom(0.9);
+    if (event.mouseWheelScroll.delta < 0)
+    {
+        camera_->zoom(1.1);
+    }
+    else
+    {
+        camera_->zoom(0.9);
     }
 }
-
 
 const std::vector<Actor *> &World::getActors() const
 {
