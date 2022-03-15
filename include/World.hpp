@@ -37,12 +37,11 @@ public:
     void onMouseButtonReleased(const sf::Event &event);
     void onMouseWheelScrolled(const sf::Event &event);
 
-    bool findPath(const Vector3f &start, const Vector3f &end,
+    bool findPath(const Entity &entity, const Vector3f &end,
                   const bool &diagonal,
-                  std::deque<Vector3f> &resultPath)
-    {
-        return pathfinder_.findPath(start, end, diagonal, resultPath);
-    }
+                  std::deque<Vector3f> &resultPath);
+
+    bool canMoveTo(const Entity &entity, const Vector3f &point) const;
 
 private:
     Player *player_;

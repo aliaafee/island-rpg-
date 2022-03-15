@@ -49,6 +49,8 @@ public:
 
     void addObstacle(const Entity &entity);
 
+    bool isAreaFree(const Vector3f &position, const Vector3f &size) const;
+
     bool findPath(const Vector3f &start, const Vector3f &end,
                   const bool &diagonal,
                   std::deque<Vector3f> &resultPath);

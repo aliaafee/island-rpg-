@@ -81,8 +81,9 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
     {
         std::cout << "Player to Walk State" << std::endl;
         std::cout << "Finding Path.." << std::flush;
+        walkPath_.clear();
         bool found = world.findPath(
-            getPosition(),
+            *this,
             walkTarget_,
             true,
             walkPath_);
@@ -114,20 +115,40 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
     }
 
     float stepSize = 1.f * 60.f * elapsed.asSeconds();
+    Vector3f position;
 
     float distance2 = vecMagnitude2(walkPath_.front() - getPosition());
-    if (distance2 < stepSize * stepSize)
+    if (distance2 > stepSize * stepSize)
     {
-        setPosition(walkPath_.front());
+        float distance = sqrt(distance2);
+        Vector3f direction = (walkPath_.front() - getPosition()) / distance;
+
+        setAnimationDirection(direction);
+        position = getPosition() + direction * stepSize;
+    }
+    else
+    {
+        position = walkPath_.front();
         walkPath_.pop_front();
+    }
+
+    if (!world.canMoveTo(*this, position))
+    {
+        walkPath_.clear();
+        bool found = world.findPath(
+            *this,
+            walkTarget_,
+            true,
+            walkPath_);
+        if (!found)
+        {
+            std::cout << "Not found\n";
+            return idleStateId;
+        }
         return walkStateId;
     }
 
-    float distance = sqrt(distance2);
-    Vector3f direction = (walkPath_.front() - getPosition()) / distance;
-
-    setAnimationDirection(direction);
-    move(direction * stepSize);
+    setPosition(position);
 
     return walkStateId;
 }

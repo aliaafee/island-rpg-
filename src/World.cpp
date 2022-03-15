@@ -5,7 +5,7 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
-                                              cursor_(new ShaderEntity(rm)),
+                                              cursor_(new Entity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -20,16 +20,15 @@ World::World(sf::RenderWindow &window,
     player_->move(20, 20, 0);
 
     addEntity(cursor_);
-    //cursor_->setSize(Vector3f(5, 5, 5));
+    cursor_->setSize(Vector3f(5, 5, 5));
 
     Entity *grid = new PathfinderGrid(pathfinder_);
     addEntity(grid);
 
     Entity *sh = new ShaderEntity(*rm_);
     addEntity(sh);
-    sh->move(40, 40,0);
+    sh->move(40, 40, 0);
     pathfinder_.addObstacle(*sh);
-    
 
     TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
                                                 Vector3f(800 / 2, 600 / 2, 0),
@@ -170,4 +169,20 @@ void World::onMouseWheelScrolled(const sf::Event &event)
 const std::vector<Entity *> &World::getEntitys() const
 {
     return entities_;
+}
+
+bool World::findPath(const Entity &entity, const Vector3f &end,
+              const bool &diagonal,
+              std::deque<Vector3f> &resultPath)
+{
+    if (!canMoveTo(entity, entity.getPosition())) {
+        std::cout << "Entity is at an invalid position\n";
+        return false;
+    }
+    return pathfinder_.findPath(entity.getPosition(), end, diagonal, resultPath);
+}
+
+bool World::canMoveTo(const Entity &entity, const Vector3f &point) const
+{
+    return pathfinder_.isAreaFree(point, entity.getSize());
 }

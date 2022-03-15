@@ -46,7 +46,30 @@ void Pathfinder::addObstacle(const Entity &entity)
             setCellValue(i, j, 0);
         }
     }
+}
 
+bool Pathfinder::isAreaFree(const Vector3f &position, const Vector3f &size) const
+{
+    Vector3f topLeft = position - position_ - (size / 2.f);
+
+    int start_i = (int)floor(topLeft.x / cellWidth_);
+    int start_j = (int)floor(topLeft.y / cellHeight_);
+
+    int end_i = (int)ceil((topLeft.x + size.x) / cellWidth_);
+    int end_j = (int)ceil((topLeft.y + size.y) / cellHeight_);
+
+    for (int i = start_i; i < end_i; i++)
+    {
+        for (int j = start_j; j < end_j; j++)
+        {
+            if (cellValue(i, j) == 0)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
 bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
@@ -74,7 +97,7 @@ bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
     }
 
     resultPath.pop_front();
-    resultPath.back() = end;
+    //resultPath.back() = end;
 
     return true;
 }
