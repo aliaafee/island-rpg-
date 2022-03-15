@@ -11,15 +11,15 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
         std::cout << "Could not load shader" << std::endl;
     }
 
-    arr[0].position = Vector2f(0, 0);
-    arr[1].position = Vector2f(0, 64);
-    arr[2].position = Vector2f(64, 64);
-    arr[3].position = Vector2f(64, 0);
+    arr[0].position = Vector2f(32, 0);
+    arr[1].position = Vector2f(64, 16);
+    arr[2].position = Vector2f(32, 32);
+    arr[3].position = Vector2f(0, 16);
 
-    arr[0].texCoords = Vector2f(0, 0);
-    arr[1].texCoords = Vector2f(0, 1);
-    arr[2].texCoords = Vector2f(1, 1);
-    arr[3].texCoords = Vector2f(1, 0);
+    arr[0].texCoords = Vector2f(0.5, 0);
+    arr[1].texCoords = Vector2f(1.0, 0.25);
+    arr[2].texCoords = Vector2f(0.5, 0.5);
+    arr[3].texCoords = Vector2f(0, 0.25);
 
     arr[0].color = sf::Color::Black;
     arr[1].color = sf::Color::Red;
@@ -48,12 +48,12 @@ void ShaderEntity::transform(Camera &camera)
     rect_.setPosition(getScreenPosition2());
 
     rs.transform = sf::Transform(1, 0, getScreenPosition2().x - 32,
-                                 0, 1, getScreenPosition2().y - 64,
+                                 0, 1, getScreenPosition2().y,
                                  0, 0, 1);
 
     shader_.setUniform("screenPosition", getScreenPosition());
     shader_.setUniform("worldPosition", camera.transform(getPosition(), 0));
-    shader_.setUniform("screenSize", Vector2f(800, 600));
+    shader_.setUniform("screenSize", Vector2f(800, 300));
 }
 
 void ShaderEntity::draw(sf::RenderTarget *screen)

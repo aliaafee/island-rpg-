@@ -5,7 +5,7 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
-                                              cursor_(new Entity(rm)),
+                                              cursor_(new ShaderEntity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
