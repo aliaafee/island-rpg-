@@ -10,10 +10,12 @@ public:
     ShaderEntity(ResourceManager &rm);
     ~ShaderEntity();
 
+    virtual void update(sf::Time &elapsed, World &world);
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
 private:
+    sf::Clock clock_;
     sf::Shader shader_;
     sf::RectangleShape rect_;
 

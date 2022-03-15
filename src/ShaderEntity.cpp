@@ -6,7 +6,7 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     rect_.setFillColor(sf::Color::Red);
     rect_.setOrigin(50, 100);
 
-    if (!shader_.loadFromFile("graphics/shaders/test.vert", "graphics/shaders/test.frag"))
+    if (!shader_.loadFromFile("graphics/shaders/water.vert", "graphics/shaders/water.frag"))
     {
         std::cout << "Could not load shader" << std::endl;
     }
@@ -26,11 +26,20 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     arr[2].color = sf::Color::Green;
     arr[3].color = sf::Color::Blue;
 
+    shader_.setUniform("textureSize", Vector2f(64, 64));
+
     rs.shader = &shader_;
 }
 
 ShaderEntity::~ShaderEntity()
 {
+}
+
+void ShaderEntity::update(sf::Time &elapsed, World &world)
+{
+    shader_.setUniform("iTime", clock_.getElapsedTime().asSeconds());
+
+    
 }
 
 void ShaderEntity::transform(Camera &camera)
@@ -41,6 +50,10 @@ void ShaderEntity::transform(Camera &camera)
     rs.transform = sf::Transform(1, 0, getScreenPosition2().x - 32,
                                  0, 1, getScreenPosition2().y - 64,
                                  0, 0, 1);
+
+    shader_.setUniform("screenPosition", getScreenPosition());
+    shader_.setUniform("worldPosition", camera.transform(getPosition(), 0));
+    shader_.setUniform("screenSize", Vector2f(800, 600));
 }
 
 void ShaderEntity::draw(sf::RenderTarget *screen)

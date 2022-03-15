@@ -5,7 +5,7 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
-                                              cursor_(new Entity(rm)),
+                                              cursor_(new ShaderEntity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -20,7 +20,7 @@ World::World(sf::RenderWindow &window,
     player_->move(20, 20, 0);
 
     addEntity(cursor_);
-    cursor_->setSize(Vector3f(5, 5, 5));
+    //cursor_->setSize(Vector3f(5, 5, 5));
 
     Entity *grid = new PathfinderGrid(pathfinder_);
     addEntity(grid);

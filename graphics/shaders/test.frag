@@ -9,5 +9,6 @@ void main()
     //gl_FragColor = vec4(gl_TexCoord[0].xy);
 
     
-    gl_FragColor = vec4(gl_TexCoord[0].x, gl_TexCoord[0].y, 0, gl_TexCoord[0].y);
+    //gl_FragColor = vec4(gl_TexCoord[0].x, gl_TexCoord[0].y, 0, gl_TexCoord[0].y);
+    gl_FragColor = vec4(gl_TexCoord[0].x, 0, 0, 1);
 }
