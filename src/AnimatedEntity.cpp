@@ -1,10 +1,10 @@
 #include "AnimatedEntity.hpp"
 
 AnimatedEntity::AnimatedEntity(ResourceManager &rm) : SpriteEntity(rm),
-                                                    currentFrame(0),
-                                                    currentAnimationName(""),
-                                                    currentSequence(nullptr),
-                                                    speed(10)
+                                                      currentFrame(0),
+                                                      currentAnimationName(""),
+                                                      currentSequence(nullptr),
+                                                      speed(10)
 {
 }
 

@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Iinclude -g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
+CFLAGS=-std=c++17 -Iinclude -g -lsfml-audio -lsfml-graphics -lsfml-system -lsfml-window
 
 SRC=src
 OBJ=obj

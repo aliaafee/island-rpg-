@@ -94,7 +94,7 @@ void World::input_(sf::Time &elapsed)
     {
         panDir.y = speed;
     }
-    if (abs(panDir.x) > 0 || abs(panDir.y) > 0)
+    if (std::abs(panDir.x) > 0 || std::abs(panDir.y) > 0)
     {
         camera_->pan(panDir);
     }
@@ -172,13 +172,14 @@ const std::vector<Entity *> &World::getEntitys() const
 }
 
 bool World::findPath(const Entity &entity, const Vector3f &end,
-              const bool &diagonal,
-              std::deque<Vector3f> &resultPath)
+                     const bool &diagonal,
+                     std::deque<Vector3f> &resultPath)
 {
-    if (!canMoveTo(entity, entity.getPosition())) {
+    if (!canMoveTo(entity, entity.getPosition()))
+    {
         std::cout << "Entity is at an invalid position...";
         Vector3f validPos;
-        if (pathfinder_.findFreePosition(entity.getPosition(), validPos)) 
+        if (pathfinder_.findFreePosition(entity.getPosition(), validPos))
         {
             std::cout << "Consider move to " << validPos;
         }
