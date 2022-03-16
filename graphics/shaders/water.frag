@@ -18,7 +18,7 @@ void main()
     uv.y = (fragCoord.y * textureSize.y + worldPosition.y)/ screenSize.y;
 
     // Scale
-    uv *= 5.;
+    uv *= 3.;
 
     vec4 texture_color = vec4(0.192156862745098, 0.6627450980392157, 0.9333333333333333, 1.0);
 

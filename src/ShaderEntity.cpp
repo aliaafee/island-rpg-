@@ -11,22 +11,28 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
         std::cout << "Could not load shader" << std::endl;
     }
 
-    arr[0].position = Vector2f(32, 0);
-    arr[1].position = Vector2f(64, 16);
-    arr[2].position = Vector2f(32, 32);
-    arr[3].position = Vector2f(0, 16);
+    arr[0].position = Vector2f(32, 0) * 10.f;
+    arr[1].position = Vector2f(64, 16) * 10.f;
+    arr[2].position = Vector2f(32, 32) * 10.f;
+    arr[3].position = Vector2f(0, 16) * 10.f;
 
-    arr[0].texCoords = Vector2f(0.5, 0);
-    arr[1].texCoords = Vector2f(1.0, 0.25);
-    arr[2].texCoords = Vector2f(0.5, 0.5);
-    arr[3].texCoords = Vector2f(0, 0.25);
+    // arr[0].texCoords = Vector2f(0.5, 0);
+    // arr[1].texCoords = Vector2f(1.0, 0.25);
+    // arr[2].texCoords = Vector2f(0.5, 0.5);
+    // arr[3].texCoords = Vector2f(0, 0.25);
+
+    for (int i = 0; i < arr.getVertexCount(); i++)
+    {
+        arr[i].texCoords = arr[i].position;
+    }
 
     arr[0].color = sf::Color::Black;
     arr[1].color = sf::Color::Red;
     arr[2].color = sf::Color::Green;
     arr[3].color = sf::Color::Blue;
 
-    shader_.setUniform("textureSize", Vector2f(64, 64));
+    //shader_.setUniform("textureSize", Vector2f(64, 64));
+    shader_.setUniform("textureSize", Vector2f(1, 1));
 
     rs.shader = &shader_;
 }
@@ -47,7 +53,7 @@ void ShaderEntity::transform(Camera &camera)
     Entity::transform(camera);
     rect_.setPosition(getScreenPosition2());
 
-    rs.transform = sf::Transform(1, 0, getScreenPosition2().x - 32,
+    rs.transform = sf::Transform(1, 0, getScreenPosition2().x - arr.getBounds().width/2.0,
                                  0, 1, getScreenPosition2().y,
                                  0, 0, 1);
 
