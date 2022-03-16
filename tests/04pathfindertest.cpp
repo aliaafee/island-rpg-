@@ -21,12 +21,11 @@ int main()
     Pathfinder pf(
         Vector3f(20.f, 10.f, 0.f),
         100.f, 100.f,
-        g_cols, g_rows
-    );
+        g_cols, g_rows);
     pf.clearGrid();
-    std::cout << "Done" << "\n";
+    std::cout << "Done"
+              << "\n";
 
-    
     std::cout << "Creating Grid.." << std::flush;
     std::vector<int> grid;
     std::cout << grid.max_size() << " " << g_cols * g_rows << " ";
@@ -43,38 +42,40 @@ int main()
     grid[pf.gridIndex(5, 7)] = 0;
     grid[pf.gridIndex(5, 8)] = 1;
     grid[pf.gridIndex(5, 9)] = 0;
-    std::cout << "Done" << "\n";
+    std::cout << "Done"
+              << "\n";
 
     std::cout << "Copying Grid.." << std::flush;
     pf.setGrid(grid);
-    std::cout << "Done" << "\n";
+    std::cout << "Done"
+              << "\n";
 
-    
     bool found = false;
 
     std::cout << "Starting tests.." << std::flush;
-    //std::vector<std::pair<int, int>> result;
+    // std::vector<std::pair<int, int>> result;
     std::deque<Vector3f> result;
     auto t1 = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < reps; i++)
     {
-        //found = pf.searchAStar(start_i, start_j, end_i, end_j, true, result);
+        // found = pf.searchAStar(start_i, start_j, end_i, end_j, true, result);
         found = pf.findPath(
             pf.toPoint(start_i, start_j),
             pf.toPoint(end_i, end_j),
             true,
-            result
-        );
+            result);
     }
     auto t2 = std::chrono::high_resolution_clock::now();
-    std::cout << "Done" << "\n";
+    std::cout << "Done"
+              << "\n";
 
     // for (auto &node : result)
     // {
     //     std::cout << node.first << ", " << node.second << "\n";
     // }
 
-    if (g_cols * g_rows <= 100) {
+    if (g_cols * g_rows <= 100)
+    {
         pf.printGrid(start_i, start_j, end_i, end_j);
     }
     std::cout << "Grid (" << g_cols << "x" << g_rows << ")\n";

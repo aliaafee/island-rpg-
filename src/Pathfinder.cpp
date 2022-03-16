@@ -72,6 +72,45 @@ bool Pathfinder::isAreaFree(const Vector3f &position, const Vector3f &size) cons
     return true;
 }
 
+bool Pathfinder::findFreeCell(const Vector3f &position, int &out_i, int &out_j) const
+{
+    int i, j;
+
+    toGridCoord(position, i, j);
+
+    if (validCell_(i, j))
+    {
+        out_i = i;
+        out_j = j;
+        return true;
+    }
+
+    SpiralOut spiralOut(i, j, g_cols_ * g_rows_);
+
+    while (spiralOut.next(i, j))
+    {
+        if (validCell_(i, j))
+        {
+            out_i = i;
+            out_j = j;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Pathfinder::findFreePosition(const Vector3f &position, Vector3f &out_position) const
+{
+    int i, j;
+    if (!findFreeCell(position, i, j))
+    {
+        return false;
+    }
+    out_position = toPoint(i, j);
+    return true;
+}
+
 bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
                           const bool &diagonal,
                           std::deque<Vector3f> &resultPath)
@@ -97,7 +136,7 @@ bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
     }
 
     resultPath.pop_front();
-    //resultPath.back() = end;
+    // resultPath.back() = end;
 
     return true;
 }

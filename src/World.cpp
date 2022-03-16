@@ -5,7 +5,7 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               player_(new Player(rm)),
-                                              cursor_(new ShaderEntity(rm)),
+                                              cursor_(new Entity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   600, 600,
@@ -176,7 +176,13 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
               std::deque<Vector3f> &resultPath)
 {
     if (!canMoveTo(entity, entity.getPosition())) {
-        std::cout << "Entity is at an invalid position\n";
+        std::cout << "Entity is at an invalid position...";
+        Vector3f validPos;
+        if (pathfinder_.findFreePosition(entity.getPosition(), validPos)) 
+        {
+            std::cout << "Consider move to " << validPos;
+        }
+        std::cout << "\n";
         return false;
     }
     return pathfinder_.findPath(entity.getPosition(), end, diagonal, resultPath);

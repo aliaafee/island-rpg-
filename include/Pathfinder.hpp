@@ -36,6 +36,55 @@ struct MoreThanByF
     }
 };
 
+class SpiralOut
+{
+public:
+    SpiralOut(int start_i,
+              int start_j,
+              int max) : i_(start_i),
+                         j_(start_j),
+                         max_(max),
+                         steps_(1),
+                         t_(0), s_(0), count_(0),
+                         d_i(1), d_j(0) {}
+
+    bool next(int &out_i, int &out_j)
+    {
+        if (count_ > max_)
+        {
+            return false;
+        }
+
+        i_ += d_i;
+        j_ += d_j;
+
+        out_i = i_;
+        out_j = j_;
+
+        count_ += 1;
+
+        s_++;
+        if (s_ > steps_ - 1)
+        {
+            std::swap(d_i, d_j);
+            d_j *= -1;
+            t_++;
+            if (t_ > 1)
+            {
+                steps_++;
+                t_ = 0;
+            }
+
+            s_ = 0;
+        }
+
+        return true;
+    }
+
+private:
+    int i_, j_, max_, steps_, t_, s_, count_, d_i, d_j;
+};
+
 class Pathfinder
 {
 public:
@@ -50,6 +99,8 @@ public:
     void addObstacle(const Entity &entity);
 
     bool isAreaFree(const Vector3f &position, const Vector3f &size) const;
+    bool findFreeCell(const Vector3f &position, int &out_i, int &out_j) const;
+    bool findFreePosition(const Vector3f &position, Vector3f &out_position) const;
 
     bool findPath(const Vector3f &start, const Vector3f &end,
                   const bool &diagonal,
