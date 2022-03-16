@@ -192,7 +192,7 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                 // Reached the end backtrack and build the path from currentNode
                 while (currentNode != nullptr)
                 {
-                    resultPath.insert(resultPath.begin(), std::pair(currentNode->i, currentNode->j));
+                    resultPath.insert(resultPath.begin(), std::pair<int, int>(currentNode->i, currentNode->j));
                     currentNode = currentNode->parent;
                 }
 
