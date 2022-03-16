@@ -3,12 +3,12 @@
 
 #include <cmath>
 #include <iostream>
-#include <SFML/System/Vector2.hpp>
-#include <SFML/System/Vector3.hpp>
+#include <SFML/Graphics.hpp>
 
 using Vector3f = sf::Vector3f;
 using Vector2f = sf::Vector2f;
 using Vector2i = sf::Vector2i;
+using FloatRect = sf::FloatRect;
 
 inline std::ostream &operator<<(std::ostream &os, const Vector3f &v)
 {

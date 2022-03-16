@@ -24,3 +24,16 @@ void SpriteEntity::setTexture(sf::Texture *texture)
 {
     sprite_.setTexture(*texture);
 }
+
+Vector2f SpriteEntity::getSpriteSize() const
+{
+    sf::IntRect r = sprite_.getTextureRect();
+    return Vector2f(
+        (float)r.width,
+        (float)r.height);
+}
+
+FloatRect SpriteEntity::getSpriteRect() const
+{
+    return FloatRect(sprite_.getTextureRect());
+}

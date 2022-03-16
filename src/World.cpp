@@ -22,6 +22,15 @@ World::World(sf::RenderWindow &window,
     addEntity(cursor_);
     cursor_->setSize(Vector3f(5, 5, 5));
 
+    Entity *e;
+    e = addEntity(new Tree(rm));
+    e->move(100.f, 50.f, 0.f);
+    pathfinder_.addObstacle(*e);
+
+    e = addEntity(new Palm(rm));
+    e->move(50.f, 150.f, 0.f);
+    pathfinder_.addObstacle(*e);
+
     Entity *grid = new PathfinderGrid(pathfinder_);
     addEntity(grid);
 
@@ -132,9 +141,10 @@ void World::draw(sf::RenderTarget *screen)
     }
 }
 
-void World::addEntity(Entity *entity)
+Entity *World::addEntity(Entity *entity)
 {
     entities_.push_back(entity);
+    return entity;
 }
 
 void World::onMouseButtonReleased(const sf::Event &event)

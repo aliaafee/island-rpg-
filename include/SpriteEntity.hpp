@@ -20,6 +20,10 @@ public:
     void setTexture(sf::Texture *texture);
     void setSpriteOrigin(const float &x, const float &y) { sprite_.setOrigin(x, y); }
 
+    Vector2f getSpriteSize() const;
+
+    FloatRect getSpriteRect() const;
+
 private:
     sf::Sprite sprite_;
 };

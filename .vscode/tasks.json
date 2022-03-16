@@ -2,9 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "MakeAll",
+            "label": "make all",
             "type": "shell",
-            "command": "make"
+            "command": "make all",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "make test",
+            "type": "shell",
+            "command": "make test",
+            "problemMatcher": "$gcc"
         }
     ]
 }

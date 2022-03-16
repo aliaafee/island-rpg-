@@ -36,8 +36,7 @@ StateId TrackingCamera::trackingState(bool firstRun, sf::Time &elapsed, int &dat
         return idleStateId;
     }
 
-
-    //setPosition(trackTarget_->getPosition() * 0.02f + getPosition() * 0.98f);
+    // setPosition(trackTarget_->getPosition() * 0.02f + getPosition() * 0.98f);
     move((trackTarget_->getPosition() - getPosition()) * trackSpeed_ * elapsed.asSeconds());
 
     return trackingStateId;

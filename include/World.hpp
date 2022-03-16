@@ -18,6 +18,7 @@
 #include "Guides.hpp"
 #include "TrackingCamera.hpp"
 #include "ShaderEntity.hpp"
+#include "Vegetation.hpp"
 
 class Player;
 
@@ -31,7 +32,7 @@ public:
     void transform();
     void draw(sf::RenderTarget *screen);
 
-    void addEntity(Entity *entity);
+    Entity *addEntity(Entity *entity);
     const std::vector<Entity *> &getEntitys() const;
 
     void onMouseButtonReleased(const sf::Event &event);
