@@ -10,6 +10,7 @@
 #include "Guides.hpp"
 #include "SpiralOut.hpp"
 #include "Vegetation.hpp"
+#include "Ground.hpp"
 
 class WorldConfig
 {

@@ -102,6 +102,18 @@ Vector3f Camera::transform(const Vector3f &point, const float &w) const
     return matMultipy(transformMatrix_, point, w);
 }
 
+Vector2f Camera::transform2(const Vector3f &point, const float &w) const
+{
+    Vector3f p = transform(point, w);
+    return Vector2f(p.x, p.y);
+}
+
+Vector2f Camera::transform2(const Vector3f &point) const
+{
+    Vector3f p = transform(point);
+    return Vector2f(p.x, p.y);
+}
+
 Vector3f Camera::itransform(const Vector3f &point, const float &w) const
 {
     return matMultipy(inverseTransform_, point, w);

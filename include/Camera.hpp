@@ -34,9 +34,13 @@ public:
     virtual void update(sf::Time &elapsed){};
 
     Vector3f transform(const Vector3f &point) const;
+    Vector2f transform2(const Vector3f &point) const;
+
     Vector3f itransform(const Vector3f &point) const;
 
     Vector3f transform(const Vector3f &point, const float &w) const;
+    Vector2f transform2(const Vector3f &point, const float &w) const;
+
     Vector3f itransform(const Vector3f &point, const float &w) const;
 
     Vector3f projectGround(const Vector3f &point) const;

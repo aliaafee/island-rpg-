@@ -150,12 +150,12 @@ void World::updateCells_()
     pathfinder_.clearGrid();
     for (auto entity : visibleEntities_)
     {
-        entity->setLocalOrigin(pathfinder_.getPosition());
+        entity->translateOrigin(pathfinder_.getPosition());
         pathfinder_.addObstacle(*entity);
     }
 
     visibleEntities_.push_back(player_);
-    player_->setLocalOrigin(pathfinder_.getPosition());
+    player_->translateOrigin(pathfinder_.getPosition());
 
     visibleEntities_.push_back(&pathfinderGrid_);
     visibleEntities_.push_back(cursor_);

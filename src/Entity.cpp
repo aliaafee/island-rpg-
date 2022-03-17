@@ -68,10 +68,10 @@ void Entity::setLocalPosition(const Vector3f &position)
     position_ = position;
 }
 
-void Entity::setLocalOrigin(const Vector3f &newOrigin)
+void Entity::translateOrigin(const Vector3f &newOrigin)
 {
     // position_ += origin_ - newOrigin;
-    position_ = setOriginForPoint(origin_, newOrigin, position_);
+    position_ = translateOrigin(origin_, newOrigin, position_);
     origin_ = newOrigin;
 }
 
@@ -80,7 +80,7 @@ const Vector3f &Entity::getOrigin() const
     return origin_;
 }
 
-Vector3f Entity::setOriginForPoint(const Vector3f &oldOrigin, const Vector3f &newOrigin, const Vector3f point) const
+Vector3f Entity::translateOrigin(const Vector3f &oldOrigin, const Vector3f &newOrigin, const Vector3f point) const
 {
     return point + oldOrigin - newOrigin;
 }

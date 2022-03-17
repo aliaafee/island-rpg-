@@ -43,6 +43,10 @@ WorldCell::WorldCell(ResourceManager &rm,
             0);
     }
 
+    e = new Ground(*rm_, width_, height_, 20, 20);
+    e->setPosition(position_.x, position_.y, 0);
+    entities_.push_back(e);
+
     loaded_ = true;
 }
 

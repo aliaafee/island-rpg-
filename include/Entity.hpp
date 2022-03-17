@@ -32,9 +32,11 @@ public:
 
     const Vector3f &getLocalPosition() const;
     void setLocalPosition(const Vector3f &position);
-    void setLocalOrigin(const Vector3f &newOrigin);
+
+    virtual void translateOrigin(const Vector3f &newOrigin);
     const Vector3f &getOrigin() const;
-    Vector3f setOriginForPoint(const Vector3f &oldOrigin, const Vector3f &newOrigin, const Vector3f point) const;
+
+    Vector3f translateOrigin(const Vector3f &oldOrigin, const Vector3f &newOrigin, const Vector3f point) const;
 
     Vector3f toLocal(const Vector3f &globalPoint);
 
