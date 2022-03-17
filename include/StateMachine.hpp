@@ -12,9 +12,10 @@ class StateMachine
 {
 public:
     StateMachine(TargetType *target) : startState(0),
+                                       target_(target),
                                        firstRunCurrentState(true),
-                                       currentState(nullptr),
-                                       target_(target){};
+                                       currentState(nullptr)
+                                       {};
     ~StateMachine(){};
 
     StateId addState(StateId (TargetType::*handler)(bool, sf::Time &, DataType &));
