@@ -46,10 +46,20 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
                                            std::vector<sf::Texture *> *output)
 {
     std::vector<std::string> filenames;
-    for (const auto &entry : std::filesystem::directory_iterator(directory))
+
+    try
     {
-        filenames.push_back(entry.path());
+        for (const auto &entry : std::filesystem::directory_iterator(directory))
+        {
+            filenames.push_back(entry.path());
+        }
     }
+    catch (std::filesystem::filesystem_error const &ex)
+    {
+        std::cout << "ResourceManager: Failed Directory Load" << directory << "\n";
+        return false;
+    }
+
     std::sort(filenames.begin(), filenames.end());
 
     sf::Texture *newTexture;
