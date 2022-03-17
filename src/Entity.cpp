@@ -1,7 +1,7 @@
 #include "Entity.hpp"
 
 Entity::Entity() : baseRect2_(sf::LinesStrip, 7),
-                 position_(0, 0, 0)
+                   position_(0, 0, 0)
 {
     std::cout << "Creating Entity"
               << "\n";
@@ -89,14 +89,7 @@ const Vector3f &Entity::getSize() const
 
 void Entity::setSize(const Vector3f &size)
 {
-    size_ = size;
-    baseRect3_[0] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
-    baseRect3_[1] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
-    baseRect3_[2] = Vector3f(-size_.x / 2.0, -size_.y / 2.0, 0);
-    baseRect3_[3] = Vector3f(-size_.x / 2.0, size_.y / 2.0, 0);
-    baseRect3_[4] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
-    baseRect3_[5] = Vector3f(0, 0, 0);
-    baseRect3_[6] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
+    setSize(size.z, size.y, size.z);
 }
 
 void Entity::setSize(const float &x, const float &y, const float &z)
@@ -104,6 +97,13 @@ void Entity::setSize(const float &x, const float &y, const float &z)
     size_.x = x;
     size_.y = y;
     size_.z = z;
+    baseRect3_[0] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
+    baseRect3_[1] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
+    baseRect3_[2] = Vector3f(-size_.x / 2.0, -size_.y / 2.0, 0);
+    baseRect3_[3] = Vector3f(-size_.x / 2.0, size_.y / 2.0, 0);
+    baseRect3_[4] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
+    baseRect3_[5] = Vector3f(0, 0, 0);
+    baseRect3_[6] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
 }
 
 const Vector3f &Entity::getScreenPosition() const

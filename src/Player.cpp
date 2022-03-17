@@ -134,18 +134,19 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
 
     if (!world.canMoveTo(*this, position))
     {
-        walkPath_.clear();
-        bool found = world.findPath(
-            *this,
-            walkTarget_,
-            true,
-            walkPath_);
-        if (!found)
-        {
-            std::cout << "Not found\n";
-            return idleStateId;
-        }
-        return walkStateId;
+        // walkPath_.clear();
+        // bool found = world.findPath(
+        //     *this,
+        //     walkTarget_,
+        //     true,
+        //     walkPath_);
+        // if (!found)
+        // {
+        //     std::cout << "Not found\n";
+        //     return idleStateId;
+        // }
+        // return walkStateId;
+        return idleStateId;
     }
 
     setPosition(position);

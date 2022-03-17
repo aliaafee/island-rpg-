@@ -19,6 +19,7 @@
 #include "TrackingCamera.hpp"
 #include "ShaderEntity.hpp"
 #include "Vegetation.hpp"
+#include "WorldCell.hpp"
 
 class Player;
 
@@ -53,9 +54,18 @@ private:
     ResourceManager *rm_;
     sf::RenderWindow *window_;
 
+    std::unordered_map<int, WorldCell *> cellCache_;
+
+    std::vector<Entity *> visibleEntities_;
+
+    WorldConfig worldConfig_;
+
     Pathfinder pathfinder_;
+    PathfinderGrid pathfinderGrid_;
 
     void input_(sf::Time &elapsed);
+
+    void updateCells_();
 };
 
 #endif // __WORLD_H__

@@ -7,6 +7,7 @@ Tree::Tree(ResourceManager &rm) : SpriteEntity(rm)
     sf::FloatRect r = getSpriteRect();
 
     setSpriteOrigin(r.width / 2.f, r.height - 60.f);
+    setSize(5, 5, 5);
 }
 
 Palm::Palm(ResourceManager &rm) : SpriteEntity(rm)
@@ -16,4 +17,5 @@ Palm::Palm(ResourceManager &rm) : SpriteEntity(rm)
     sf::FloatRect r = getSpriteRect();
 
     setSpriteOrigin(r.width / 2.f, r.height - 20.f);
+    setSize(5, 5, 5);
 }

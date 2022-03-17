@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <random>
 #include <SFML/Graphics.hpp>
 
 using Vector3f = sf::Vector3f;
@@ -26,5 +27,21 @@ float vecDistance2(const Vector3f &a, const Vector3f &b);
 bool intersetPlane(const Vector3f &n, const Vector3f &p0,
                    const Vector3f &l0, const Vector3f &l,
                    Vector3f *i);
+
+inline void srand(int seed)
+{
+    std::srand(seed);
+}
+
+inline float randf()
+{
+    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+}
+
+inline int randi(int start, int end)
+{
+    float v = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    return std::round((float)start + (v * (float)(end - start)));
+}
 
 #endif // __VECTOR_H__

@@ -16,6 +16,7 @@ public:
 
     const Vector3f &getPosition() const;
     void setPosition(const Vector3f &position);
+    void setPosition(const float &x, const float &y, const float &z);
     void move(const Vector3f &velocity);
     void move(const float &x, const float &y, const float &z);
 

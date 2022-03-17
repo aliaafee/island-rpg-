@@ -105,6 +105,8 @@ void PathfinderGrid::transform(Camera &camera)
         cell_[i].position.x = t.x;
         cell_[i].position.y = t.y;
     }
+
+    setPosition(pathfinder_->getPosition());
 }
 
 void PathfinderGrid::draw(sf::RenderTarget *screen)

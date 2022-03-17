@@ -43,6 +43,14 @@ void Camera::setPosition(const Vector3f &position)
     updateTransforms_();
 }
 
+void Camera::setPosition(const float &x, const float &y, const float &z)
+{
+    position_.x = x;
+    position_.y = y;
+    position_.z = z;
+    updateTransforms_();
+}
+
 void Camera::move(const Vector3f &velocity)
 {
     position_ += velocity;
