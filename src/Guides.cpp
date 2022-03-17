@@ -94,7 +94,10 @@ PathfinderGrid::PathfinderGrid(Pathfinder &pathfinder) : Grid(
 
 void PathfinderGrid::transform(Camera &camera)
 {
+    setPosition(pathfinder_->getPosition());
+
     Grid::transform(camera);
+
     i_hat = camera.transform(Vector3f(cellWidth_, 0, 0), 0);
     j_hat = camera.transform(Vector3f(0, cellHeight_, 0), 0);
 
@@ -105,8 +108,6 @@ void PathfinderGrid::transform(Camera &camera)
         cell_[i].position.x = t.x;
         cell_[i].position.y = t.y;
     }
-
-    setPosition(pathfinder_->getPosition());
 }
 
 void PathfinderGrid::draw(sf::RenderTarget *screen)
