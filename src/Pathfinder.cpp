@@ -48,9 +48,9 @@ void Pathfinder::addObstacle(const Entity &entity)
     }
 }
 
-bool Pathfinder::isAreaFree(const Vector3f &position, const Vector3f &size) const
+bool Pathfinder::isAreaFree(const Vector3f &localPosition, const Vector3f &size) const
 {
-    Vector3f topLeft = position - position_ - (size / 2.f);
+    Vector3f topLeft = localPosition - (size / 2.f);
 
     int start_i = (int)floor(topLeft.x / cellWidth_);
     int start_j = (int)floor(topLeft.y / cellHeight_);
@@ -130,13 +130,12 @@ bool Pathfinder::findPath(const Vector3f &start, const Vector3f &end,
     if (!found)
         return false;
 
-    for (auto &cell : resultPathCells_)
+    for (auto [i, j] : resultPathCells_)
     {
-        resultPath.push_back(toPoint(cell.first, cell.second));
+        resultPath.push_back(toPoint(i, j));
     }
 
     resultPath.pop_front();
-    // resultPath.back() = end;
 
     return true;
 }
@@ -396,12 +395,23 @@ void Pathfinder::toGridCoord(const Vector3f &point, int &out_i, int &out_j) cons
     out_j = (int)floor((point.y - position_.y) / cellHeight_);
 }
 
+void Pathfinder::toLocalGridCoord(const Vector3f &localPoint, int &out_i, int &out_j) const
+{
+    out_i = (int)floor((localPoint.x) / cellWidth_);
+    out_j = (int)floor((localPoint.y) / cellHeight_);
+}
+
 Vector3f Pathfinder::toPoint(const int &i, const int &j) const
 {
+    return position_ + toLocalPoint(i, j);
+}
+
+Vector3f Pathfinder::toLocalPoint(const int &i, const int &j) const
+{
     return Vector3f(
-        (float)i * cellWidth_ + cellWidth_ / 2.f + position_.x,
-        (float)j * cellHeight_ + cellHeight_ / 2.f + position_.y,
-        position_.z);
+        (float)i * cellWidth_ + cellWidth_ / 2.f,
+        (float)j * cellHeight_ + cellHeight_ / 2.f,
+        0);
 }
 
 const int &Pathfinder::cellValue(const int &i, const int &j) const

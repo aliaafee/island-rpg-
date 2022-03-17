@@ -146,10 +146,13 @@ void World::updateCells_()
     pathfinder_.clearGrid();
     for (auto entity : visibleEntities_)
     {
+        entity->setLocalOrigin(pathfinder_.getPosition());
         pathfinder_.addObstacle(*entity);
     }
 
     visibleEntities_.push_back(player_);
+    player_->setLocalOrigin(pathfinder_.getPosition());
+
     visibleEntities_.push_back(&pathfinderGrid_);
     visibleEntities_.push_back(cursor_);
 }
@@ -232,7 +235,7 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
                      const bool &diagonal,
                      std::deque<Vector3f> &resultPath)
 {
-    if (!canMoveTo(entity, entity.getPosition()))
+    if (!canMoveTo(entity, entity.getLocalPosition()))
     {
         std::cout << "Entity is at an invalid position...";
         Vector3f validPos;
@@ -246,7 +249,7 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
     return pathfinder_.findPath(entity.getPosition(), end, diagonal, resultPath);
 }
 
-bool World::canMoveTo(const Entity &entity, const Vector3f &point) const
+bool World::canMoveTo(const Entity &entity, const Vector3f &localPoint) const
 {
-    return pathfinder_.isAreaFree(point, entity.getSize());
+    return pathfinder_.isAreaFree(localPoint, entity.getSize() * 0.8f);
 }

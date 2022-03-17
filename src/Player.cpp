@@ -51,6 +51,10 @@ void Player::stop()
     statemachine_.queueEvent(STOP);
 }
 
+// void Player::setPosition(const Vector3f &position)
+//{
+// }
+
 StateId Player::idleState(bool firstRun, sf::Time &elapsed, World &world)
 {
     if (firstRun)
@@ -117,18 +121,18 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
     float stepSize = 1.f * 60.f * elapsed.asSeconds();
     Vector3f position;
 
-    float distance2 = vecMagnitude2(walkPath_.front() - getPosition());
+    float distance2 = vecMagnitude2(toLocal(walkPath_.front()) - getLocalPosition());
     if (distance2 > stepSize * stepSize)
     {
         float distance = sqrt(distance2);
-        Vector3f direction = (walkPath_.front() - getPosition()) / distance;
+        Vector3f direction = (toLocal(walkPath_.front()) - getLocalPosition()) / distance;
 
         setAnimationDirection(direction);
-        position = getPosition() + direction * stepSize;
+        position = getLocalPosition() + direction * stepSize;
     }
     else
     {
-        position = walkPath_.front();
+        position = toLocal(walkPath_.front());
         walkPath_.pop_front();
     }
 
@@ -146,10 +150,10 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
         //     return idleStateId;
         // }
         // return walkStateId;
-        return idleStateId;
+        // return idleStateId;
     }
 
-    setPosition(position);
+    setLocalPosition(position);
 
     return walkStateId;
 }

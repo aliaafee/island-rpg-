@@ -53,7 +53,7 @@ public:
 
     void addObstacle(const Entity &entity);
 
-    bool isAreaFree(const Vector3f &position, const Vector3f &size) const;
+    bool isAreaFree(const Vector3f &localPosition, const Vector3f &size) const;
     bool findFreeCell(const Vector3f &position, int &out_i, int &out_j) const;
     bool findFreePosition(const Vector3f &position, Vector3f &out_position) const;
 
@@ -79,7 +79,9 @@ public:
 
     int gridIndex(const int &i, const int &j) const { return index_(i, j); }
     void toGridCoord(const Vector3f &point, int &out_i, int &out_j) const;
+    void toLocalGridCoord(const Vector3f &localPoint, int &out_i, int &out_j) const;
     Vector3f toPoint(const int &i, const int &j) const;
+    Vector3f toLocalPoint(const int &i, const int &j) const;
 
     const int &cellValue(const int &i, const int &j) const;
     const int &cellValue(const Vector3f &point) const;

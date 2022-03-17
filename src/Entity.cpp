@@ -37,12 +37,12 @@ void Entity::update(sf::Time &elapsed, World &world)
 
 void Entity::transform(Camera &camera)
 {
-    screenPosition_ = camera.transform(position_);
+    screenPosition_ = camera.transform(getPosition());
 
     Vector3f t;
     for (int i = 0; i < baseRect3_.size(); ++i)
     {
-        t = camera.transform(baseRect3_[i] + position_);
+        t = camera.transform(baseRect3_[i] + getPosition());
         baseRect2_[i].position.x = t.x;
         baseRect2_[i].position.y = t.y;
     }
@@ -53,21 +53,53 @@ void Entity::draw(sf::RenderTarget *screen)
     screen->draw(baseRect2_);
 }
 
-const Vector3f &Entity::getPosition() const
+Vector3f Entity::getPosition() const
+{
+    return origin_ + position_;
+}
+
+const Vector3f &Entity::getLocalPosition() const
 {
     return position_;
 }
 
-void Entity::setPosition(const Vector3f &position)
+void Entity::setLocalPosition(const Vector3f &position)
 {
     position_ = position;
 }
 
+void Entity::setLocalOrigin(const Vector3f &newOrigin)
+{
+    // position_ += origin_ - newOrigin;
+    position_ = setOriginForPoint(origin_, newOrigin, position_);
+    origin_ = newOrigin;
+}
+
+const Vector3f &Entity::getOrigin() const
+{
+    return origin_;
+}
+
+Vector3f Entity::setOriginForPoint(const Vector3f &oldOrigin, const Vector3f &newOrigin, const Vector3f point) const
+{
+    return point + oldOrigin - newOrigin;
+}
+
+Vector3f Entity::toLocal(const Vector3f &globalPoint)
+{
+    return globalPoint - origin_;
+}
+
+void Entity::setPosition(const Vector3f &position)
+{
+    position_ = position - origin_;
+}
+
 void Entity::setPosition(const float &x, const float &y, const float &z)
 {
-    position_.x = x;
-    position_.y = y;
-    position_.z = z;
+    position_.x = x - origin_.x;
+    position_.y = y - origin_.y;
+    position_.z = z - origin_.z;
 }
 
 void Entity::move(const Vector3f &velocity)
