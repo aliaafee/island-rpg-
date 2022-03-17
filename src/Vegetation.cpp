@@ -2,7 +2,11 @@
 
 Tree::Tree(ResourceManager &rm) : SpriteEntity(rm)
 {
-    setTexture(rm.loadTexture("graphics/vegetation/tree01.png"));
+    std::string n = std::to_string(randi(1, 14));
+    n.insert(n.begin(), 2 - n.size(), '0');
+    std::string filename = "graphics/vegetation/_tree_" + n + "_" + std::to_string(randi(0, 7)) + "0000.png";
+
+    setTexture(rm.loadTexture(filename));
 
     sf::FloatRect r = getSpriteRect();
 
@@ -12,7 +16,11 @@ Tree::Tree(ResourceManager &rm) : SpriteEntity(rm)
 
 Palm::Palm(ResourceManager &rm) : SpriteEntity(rm)
 {
-    setTexture(rm.loadTexture("graphics/vegetation/palm01.png"));
+    std::string n = std::to_string(randi(1, 14));
+    n.insert(n.begin(), 2 - n.size(), '0');
+    std::string filename = "graphics/vegetation/_tree_" + n + "_" + std::to_string(randi(0, 7)) + "0000.png";
+
+    setTexture(rm.loadTexture(filename));
 
     sf::FloatRect r = getSpriteRect();
 

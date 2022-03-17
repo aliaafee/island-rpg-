@@ -22,6 +22,8 @@ void SpriteEntity::draw(sf::RenderTarget *screen)
 
 void SpriteEntity::setTexture(sf::Texture *texture)
 {
+    if (texture == nullptr)
+        return;
     sprite_.setTexture(*texture);
 }
 
