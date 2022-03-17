@@ -51,6 +51,8 @@ public:
     void clearGrid();
     void setGrid(const std::vector<int> &grid);
 
+    void setActiveGridArea(const int &cols, const int &rows);
+
     void addObstacle(const Entity &entity);
 
     bool isAreaFree(const Vector3f &localPosition, const Vector3f &size) const;
@@ -89,8 +91,8 @@ public:
 
     const float &getWidth() const { return width_; }
     const float &getHeight() const { return height_; }
-    const int &getCols() const { return g_cols_; }
-    const int &getRows() const { return g_rows_; }
+    const int &getCols() const { return active_cols_; }
+    const int &getRows() const { return active_rows_; }
 
 private:
     Vector3f position_;
@@ -98,6 +100,9 @@ private:
     float height_;
     int g_cols_;
     int g_rows_;
+
+    int active_cols_;
+    int active_rows_;
 
     float cellWidth_;
     float cellHeight_;

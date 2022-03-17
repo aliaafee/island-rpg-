@@ -7,7 +7,9 @@ Pathfinder::Pathfinder(const Vector3f &position,
                                                                    height_(height),
                                                                    g_cols_(gridCols),
                                                                    g_rows_(gridRows),
-                                                                   zero_(0)
+                                                                   zero_(0),
+                                                                   active_cols_(g_cols_),
+                                                                   active_rows_(g_rows_)
 {
     cellWidth_ = width_ / ((float)g_cols_);
     cellHeight_ = height_ / ((float)g_rows_);
@@ -27,6 +29,12 @@ void Pathfinder::clearGrid()
 void Pathfinder::setGrid(const std::vector<int> &grid)
 {
     grid_ = grid;
+}
+
+void Pathfinder::setActiveGridArea(const int &cols, const int &rows)
+{
+    active_cols_ = cols;
+    active_rows_ = rows;
 }
 
 void Pathfinder::addObstacle(const Entity &entity)
@@ -255,11 +263,11 @@ bool Pathfinder::validIndex_(const int &i, const int &j) const
 {
     if (i < 0)
         return false;
-    if (i > g_cols_ - 1)
+    if (i > active_cols_ - 1)
         return false;
     if (j < 0)
         return false;
-    if (j > g_rows_ - 1)
+    if (j > active_rows_ - 1)
         return false;
     return true;
 }

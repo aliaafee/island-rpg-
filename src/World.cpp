@@ -39,8 +39,8 @@ World::World(sf::RenderWindow &window,
 
     camera_ = camera;
 
-    player_->setPosition(600, 600, 0);
-    camera_->setPosition(600, 600, 0);
+    player_->setPosition(200000 - 50, 200000 - 50, 0);
+    camera_->setPosition(0, 0, 0);
 
     // addEntity(new Player(rm_));
 
@@ -137,12 +137,16 @@ void World::updateCells_()
             min_j = j;
         if (i > max_i)
             max_i = i;
-        if (j < max_j)
+        if (j > max_j)
             max_j = j;
     }
 
     pathfinder_.setPosition(
         worldConfig_.getCellPosition(min_i, min_j));
+    pathfinder_.setActiveGridArea(
+        (max_i - min_i + 1) * 20,
+        (max_j - min_j + 1) * 20);
+
     pathfinder_.clearGrid();
     for (auto entity : visibleEntities_)
     {
@@ -235,17 +239,17 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
                      const bool &diagonal,
                      std::deque<Vector3f> &resultPath)
 {
-    if (!canMoveTo(entity, entity.getLocalPosition()))
-    {
-        std::cout << "Entity is at an invalid position...";
-        Vector3f validPos;
-        if (pathfinder_.findFreePosition(entity.getPosition(), validPos))
-        {
-            std::cout << "Consider move to " << validPos;
-        }
-        std::cout << "\n";
-        return false;
-    }
+    // if (!canMoveTo(entity, entity.getLocalPosition()))
+    // {
+    //     std::cout << "Entity is at an invalid position...";
+    //     Vector3f validPos;
+    //     if (pathfinder_.findFreePosition(entity.getPosition(), validPos))
+    //     {
+    //         std::cout << "Consider move to " << validPos;
+    //     }
+    //     std::cout << "\n";
+    //     return false;
+    // }
     return pathfinder_.findPath(entity.getPosition(), end, diagonal, resultPath);
 }
 
