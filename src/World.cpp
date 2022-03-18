@@ -30,7 +30,7 @@ World::World(sf::RenderWindow &window,
     addEntity(grid);
 
     TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
-                                                Vector3f(800 / 2, 600 / 2, 0),
+                                                Vector3f(window.getSize().x / 2, window.getSize().y / 2, 0),
                                                 Vector2f(64, 32),
                                                 10,
                                                 window.getSize().x, window.getSize().y);

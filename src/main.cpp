@@ -10,7 +10,7 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Island RPG", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Island RPG", sf::Style::Default, settings);
     // window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
 
