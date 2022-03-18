@@ -32,8 +32,6 @@ public:
 private:
     std::vector<int> grid_;
 
-    int zero_;
-
     int active_cols_;
     int active_rows_;
 };

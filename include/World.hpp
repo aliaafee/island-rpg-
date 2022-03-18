@@ -62,7 +62,7 @@ private:
 
     WorldConfig worldConfig_;
 
-    GridPathfinder pathfinder_;
+    WorldPathfinder pathfinder_;
     PathfinderVisualizer pathfinderGrid_;
 
     void input_(sf::Time &elapsed);

@@ -5,20 +5,18 @@ World::World(sf::RenderWindow &window,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
                                               worldConfig_(
-                                                  200000.f, 200000.f,
-                                                  1000, 1000),
+                                                  4000000.f, 4000000.f,
+                                                  10000, 10000,
+                                                  40, 40),
                                               player_(new Player(rm)),
                                               cursor_(new Entity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
-                                                  worldConfig_.getCellWidth() * 3.f, worldConfig_.getCellHeight() * 3.f,
-                                                  60, 60),
+                                                  worldConfig_),
                                               pathfinderGrid_(pathfinder_)
 {
     std::cout << "Creating World"
               << "\n";
-
-    pathfinder_.clearGrid();
 
     addEntity(player_);
     player_->move(20, 20, 0);
@@ -39,26 +37,8 @@ World::World(sf::RenderWindow &window,
 
     camera_ = camera;
 
-    // player_->setPosition(200000 / 2, 200000 / 2, 0);
-    // camera_->setPosition(200000 / 2, 200000 / 2, 0);
-
-    player_->setPosition(200000 - 20, 200000 - 20, 0);
-    camera_->setPosition(200000 - 20, 200000 - 20, 0);
-
-    // addEntity(new Player(rm_));
-
-    // addEntity(new Player(rm_));
-
-    // entities_[0]->setPosition(Vector3f(0, 20, 0));
-    // // entities_[1]->setPosition(Vector3f(0, 30, 10));
-
-    // Entity *a;
-    // for (float i; i < 10; i++)
-    // {
-    //     a = new Player(rm_);
-    //     a->setPosition(Vector3f(20 + i * 6, 0, 0));
-    //     addEntity(a);
-    // }
+    player_->setPosition(400000 / 2, 400000 / 2, 0);
+    camera->setPosition(player_->getPosition());
 }
 
 World::~World()
@@ -115,7 +95,7 @@ void World::updateCells_()
     int min_j = worldConfig_.cols();
     int max_i = 0;
     int max_j = 0;
-    for (auto [i, j] : worldConfig_.getAdjacentIds(camera_->getPosition(), 9))
+    for (auto [i, j] : worldConfig_.getAdjacentIds(player_->getPosition(), 9))
     {
         WorldCell *currentCell;
 
@@ -150,20 +130,13 @@ void World::updateCells_()
 
     pathfinder_.setPosition(
         worldConfig_.getCellPosition(min_i, min_j));
-    pathfinder_.setActiveGridArea(
-        (max_i - min_i + 1) * 20,
-        (max_j - min_j + 1) * 20);
+
+    pathfinder_.setActiveCells(min_i, min_j, activeCells_);
 
     for (auto &cell : activeCells_)
     {
         cell->translateOrigin(pathfinder_.getPosition());
         floorEntities_.push_back(cell->getFloor());
-    }
-
-    pathfinder_.clearGrid();
-    for (auto &entity : visibleEntities_)
-    {
-        pathfinder_.addObstacle(*entity);
     }
 
     visibleEntities_.push_back(player_);
@@ -241,7 +214,6 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         std::cout << "Right"
                   << "\n";
-        pathfinder_.addObstacle(*cursor_);
     }
 }
 

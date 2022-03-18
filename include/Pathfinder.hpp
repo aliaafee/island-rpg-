@@ -12,6 +12,9 @@
 #include "Entity.hpp"
 #include "SpiralOut.hpp"
 
+const int ZERO = 0;
+const int ONE = 1;
+
 class Node
 {
 public:

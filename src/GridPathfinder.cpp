@@ -9,15 +9,14 @@ GridPathfinder::GridPathfinder(const Vector3f &position,
                                                                  gridCols,
                                                                  gridRows),
                                                       active_cols_(gridCols),
-                                                      active_rows_(gridRows),
-                                                      zero_(0)
+                                                      active_rows_(gridRows)
 {
     grid_.resize(gridCols * gridRows);
 }
 
 void GridPathfinder::clearGrid()
 {
-    std::fill(grid_.begin(), grid_.end(), 1);
+    std::fill(grid_.begin(), grid_.end(), ONE);
 }
 
 void GridPathfinder::setGrid(const std::vector<int> &grid)
@@ -53,7 +52,7 @@ void GridPathfinder::addObstacle(const Entity &entity)
 const int &GridPathfinder::cellValue(const int &i, const int &j) const
 {
     if (!validIndex(i, j))
-        return zero_;
+        return ZERO;
 
     return grid_[index(i, j)];
 }
@@ -84,7 +83,7 @@ bool GridPathfinder::validCell(const int &i, const int &j) const
     if (!validIndex(i, j))
         return false;
 
-    if (grid_[index(i, j)] == 0)
+    if (grid_[index(i, j)] == ZERO)
         return false;
 
     return true;

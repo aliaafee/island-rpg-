@@ -11,6 +11,8 @@
 #include "SpiralOut.hpp"
 #include "Vegetation.hpp"
 #include "Ground.hpp"
+#include "ValueGrid.hpp"
+#include "Pathfinder.hpp"
 
 class WorldConfig
 {
@@ -18,10 +20,14 @@ public:
     WorldConfig(const float &width,
                 const float &height,
                 const int &cols,
-                const int &rows) : width_(width),
-                                   height_(height),
-                                   cols_(cols),
-                                   rows_(rows){};
+                const int &rows,
+                const int &subCols,
+                const int &subRows) : width_(width),
+                                      height_(height),
+                                      cols_(cols),
+                                      rows_(rows),
+                                      subCols_(subCols),
+                                      subRows_(subRows){};
 
     int getId(const int &i, const int &j) { return i + cols_ * j; }
 
@@ -97,10 +103,13 @@ public:
 
     const int &cols() const { return cols_; }
     const int &rows() const { return rows_; }
+    const int &subCols() const { return subCols_; }
+    const int &subRows() const { return subRows_; }
 
 private:
     float width_, height_;
     int cols_, rows_;
+    int subCols_, subRows_;
 };
 
 class WorldCell
@@ -112,10 +121,17 @@ public:
 
     int getId();
 
+    const int &geti() const { return cell_i_; }
+    const int &getj() const { return cell_j_; }
+
+    void load();
+
     std::vector<Entity *> &getEntities();
     Entity *getFloor();
 
     void translateOrigin(const Vector3f &newOrigin);
+
+    const int &obstacleGridValue(const int &i, const int &j) const;
 
 private:
     Vector3f origin_;
@@ -130,7 +146,30 @@ private:
     std::vector<Entity *> placeholders_;
     Grid placeholder_;
 
+    ValueGrid<int> obstacleGrid_;
+    void addObstacle(const Entity &entity);
+
     bool loaded_;
+};
+
+class WorldPathfinder : public Pathfinder
+{
+public:
+    WorldPathfinder(const Vector3f &position, WorldConfig &worldConfig);
+
+    void setActiveCells(const int &start_i, const int &start_j,
+                        const std::vector<WorldCell *> &activeCells);
+
+    virtual bool validCell(const int &i, const int &j) const;
+    virtual const int &cellValue(const int &i, const int &j) const;
+
+private:
+    int cellCols_;
+    int cellRows_;
+
+    WorldCell *currentCells_[3][3];
+
+    const int &value_(const int &i, const int &j) const;
 };
 
 #endif // __WORLDCELL_H__
