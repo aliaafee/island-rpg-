@@ -68,13 +68,13 @@ void Grid::draw(sf::RenderTarget *screen)
     screen->draw(gridPoints2_, gridTransform2_);
 }
 
-PathfinderGrid::PathfinderGrid(Pathfinder &pathfinder) : Grid(
-                                                             pathfinder.getWidth(),
-                                                             pathfinder.getHeight(),
-                                                             pathfinder.getCols(),
-                                                             pathfinder.getRows()),
-                                                         pathfinder_(&pathfinder),
-                                                         cell_(sf::Quads, 4)
+PathfinderVisualizer::PathfinderVisualizer(Pathfinder &pathfinder) : Grid(
+                                                                         pathfinder.getWidth(),
+                                                                         pathfinder.getHeight(),
+                                                                         pathfinder.getCols(),
+                                                                         pathfinder.getRows()),
+                                                                     pathfinder_(&pathfinder),
+                                                                     cell_(sf::Quads, 4)
 {
     cellPoints_.resize(4);
     cellPoints_[0] = Vector3f(0, 0, 0);
@@ -92,7 +92,7 @@ PathfinderGrid::PathfinderGrid(Pathfinder &pathfinder) : Grid(
     cell_[3].color = col;
 }
 
-void PathfinderGrid::transform(Camera &camera)
+void PathfinderVisualizer::transform(Camera &camera)
 {
     setPosition(pathfinder_->getPosition());
 
@@ -110,7 +110,7 @@ void PathfinderGrid::transform(Camera &camera)
     }
 }
 
-void PathfinderGrid::draw(sf::RenderTarget *screen)
+void PathfinderVisualizer::draw(sf::RenderTarget *screen)
 {
     Grid::draw(screen);
 

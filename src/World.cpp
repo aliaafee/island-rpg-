@@ -26,7 +26,7 @@ World::World(sf::RenderWindow &window,
     addEntity(cursor_);
     cursor_->setSize(Vector3f(5, 5, 5));
 
-    Entity *grid = new PathfinderGrid(pathfinder_);
+    Entity *grid = new PathfinderVisualizer(pathfinder_);
     addEntity(grid);
 
     TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
@@ -109,6 +109,7 @@ void World::updateCells_()
 {
     activeCells_.clear();
     visibleEntities_.clear();
+    floorEntities_.clear();
 
     int min_i = worldConfig_.rows();
     int min_j = worldConfig_.cols();
@@ -156,6 +157,7 @@ void World::updateCells_()
     for (auto &cell : activeCells_)
     {
         cell->translateOrigin(pathfinder_.getPosition());
+        floorEntities_.push_back(cell->getFloor());
     }
 
     pathfinder_.clearGrid();
@@ -179,6 +181,11 @@ void World::update(sf::Time &elapsed)
 
     input_(elapsed);
 
+    for (auto &entity : floorEntities_)
+    {
+        entity->update(elapsed, *this);
+    }
+
     for (auto &entity : visibleEntities_)
     {
         entity->update(elapsed, *this);
@@ -189,6 +196,11 @@ void World::update(sf::Time &elapsed)
 
 void World::transform()
 {
+    for (auto &entity : floorEntities_)
+    {
+        entity->transform(*camera_);
+    }
+
     for (auto &entity : visibleEntities_)
     {
         entity->transform(*camera_);
@@ -198,6 +210,11 @@ void World::transform()
 void World::draw(sf::RenderTarget *screen)
 {
     std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
+
+    for (auto &entity : floorEntities_)
+    {
+        entity->draw(screen);
+    }
 
     for (auto &entity : visibleEntities_)
     {

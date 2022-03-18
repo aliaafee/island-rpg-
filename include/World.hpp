@@ -58,11 +58,12 @@ private:
     std::vector<WorldCell *> activeCells_;
 
     std::vector<Entity *> visibleEntities_;
+    std::vector<Entity *> floorEntities_;
 
     WorldConfig worldConfig_;
 
     GridPathfinder pathfinder_;
-    PathfinderGrid pathfinderGrid_;
+    PathfinderVisualizer pathfinderGrid_;
 
     void input_(sf::Time &elapsed);
 

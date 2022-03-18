@@ -113,6 +113,7 @@ public:
     int getId();
 
     std::vector<Entity *> &getEntities();
+    Entity *getFloor();
 
     void translateOrigin(const Vector3f &newOrigin);
 
@@ -124,6 +125,7 @@ private:
     float width_, height_;
     Vector3f position_;
 
+    Entity *floor_;
     std::vector<Entity *> entities_;
     std::vector<Entity *> placeholders_;
     Grid placeholder_;

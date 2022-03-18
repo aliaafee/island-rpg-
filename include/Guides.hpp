@@ -26,10 +26,10 @@ private:
     sf::Transform gridTransform2_;
 };
 
-class PathfinderGrid : public Grid
+class PathfinderVisualizer : public Grid
 {
 public:
-    PathfinderGrid(Pathfinder &pathfinder);
+    PathfinderVisualizer(Pathfinder &pathfinder);
 
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);

@@ -13,12 +13,16 @@ WorldCell::WorldCell(ResourceManager &rm,
                                                        width_,
                                                        height_,
                                                        1, 1),
-                                                   loaded_(false)
+                                                   loaded_(false),
+                                                   floor_(nullptr)
 {
     placeholder_.setPosition(position_);
     placeholders_.push_back(&placeholder_);
 
     srand(getId());
+
+    floor_ = new Ground(*rm_, width_, height_, 20, 20);
+    floor_->setPosition(position_.x, position_.y, 0);
 
     Entity *e;
     int count = randi(0, 5);
@@ -43,16 +47,25 @@ WorldCell::WorldCell(ResourceManager &rm,
             0);
     }
 
-    // e = new Ground(*rm_, width_, height_, 20, 20);
-    // e->setPosition(position_.x, position_.y, 0);
-    // entities_.push_back(e);
-
     loaded_ = true;
 }
 
 int WorldCell::getId()
 {
     return worldConfig_->getId(cell_i_, cell_j_);
+}
+
+Entity *WorldCell::getFloor()
+{
+    if (!loaded_)
+    {
+        return &placeholder_;
+    }
+
+    if (floor_ == nullptr)
+        return &placeholder_;
+
+    return floor_;
 }
 
 std::vector<Entity *> &WorldCell::getEntities()
@@ -70,6 +83,7 @@ void WorldCell::translateOrigin(const Vector3f &newOrigin)
     if (origin_ == newOrigin)
         return;
 
+    floor_->translateOrigin(newOrigin);
     for (auto &entity : entities_)
     {
         entity->translateOrigin(newOrigin);
