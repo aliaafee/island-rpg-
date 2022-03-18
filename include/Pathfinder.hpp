@@ -12,8 +12,6 @@
 #include "Entity.hpp"
 #include "SpiralOut.hpp"
 
-typedef std::pair<int, int> GridCell;
-
 class Node
 {
 public:
@@ -48,13 +46,6 @@ public:
     void setPosition(const Vector3f &position) { position_ = position; }
     const Vector3f &getPosition() const { return position_; }
 
-    void clearGrid();
-    void setGrid(const std::vector<int> &grid);
-
-    void setActiveGridArea(const int &cols, const int &rows);
-
-    void addObstacle(const Entity &entity);
-
     bool isAreaFree(const Vector3f &localPosition, const Vector3f &size) const;
     bool findFreeCell(const Vector3f &position, int &out_i, int &out_j) const;
     bool findFreePosition(const Vector3f &position, Vector3f &out_position) const;
@@ -68,31 +59,34 @@ public:
                      const bool &diagonal,
                      std::vector<std::pair<int, int>> &resultPath);
 
-    void printGrid(const int &start_i, const int &start_j,
-                   const int &end_i, const int &end_j,
-                   const std::vector<std::pair<int, int>> &resultPath) const;
-
-    void printGrid(const int &start_i, const int &start_j,
-                   const int &end_i, const int &end_j) const;
+    const std::vector<std::pair<int, int>> &getLastResultPath() const { return resultPathCells_; }
 
     const int &getRuns() const { return runs_; }
     const int &getNodesUsed() const { return nodesUsed_; }
     const int &getNodesReused() const { return reusedNodes_; }
 
-    int gridIndex(const int &i, const int &j) const { return index_(i, j); }
     void toGridCoord(const Vector3f &point, int &out_i, int &out_j) const;
     void toLocalGridCoord(const Vector3f &localPoint, int &out_i, int &out_j) const;
     Vector3f toPoint(const int &i, const int &j) const;
     Vector3f toLocalPoint(const int &i, const int &j) const;
 
-    const int &cellValue(const int &i, const int &j) const;
     const int &cellValue(const Vector3f &point) const;
-    void setCellValue(const int &i, const int &j, const int &value);
 
     const float &getWidth() const { return width_; }
     const float &getHeight() const { return height_; }
-    const int &getCols() const { return active_cols_; }
-    const int &getRows() const { return active_rows_; }
+    const int &getCols() const { return g_cols_; }
+    const int &getRows() const { return g_rows_; }
+    const float &getCellWidth() const { return cellWidth_; }
+    const float &getCellHeight() const { return cellHeight_; }
+
+    int index(const int &i, const int &j) const { return i + g_cols_ * j; }
+
+    virtual bool validIndex(const int &i, const int &j) const;
+
+    // Pathfinder does not implement any method of storing cell values
+    // these need to be overriden in child class
+    virtual bool validCell(const int &i, const int &j) const = 0;
+    virtual const int &cellValue(const int &i, const int &j) const = 0;
 
 private:
     Vector3f position_;
@@ -101,9 +95,6 @@ private:
     int g_cols_;
     int g_rows_;
 
-    int active_cols_;
-    int active_rows_;
-
     float cellWidth_;
     float cellHeight_;
 
@@ -111,11 +102,7 @@ private:
     int nodesUsed_;
     int reusedNodes_;
 
-    int zero_;
-
     std::vector<std::pair<int, int>> resultPathCells_;
-
-    std::vector<int> grid_;
 
     std::vector<Node *> nodeList_;
 
@@ -129,10 +116,6 @@ private:
                   const float &G, const float &H, const float &F,
                   Node *Parent);
     void cleanUp();
-
-    int index_(const int &i, const int &j) const { return i + g_cols_ * j; }
-    bool validIndex_(const int &i, const int &j) const;
-    bool validCell_(const int &i, const int &j) const;
 
     bool validAdjacent_(const int &i, const int &j, const int &center_i, const int &center_j, const bool &diagonal) const;
 };

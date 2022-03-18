@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 
-#include "../include/Pathfinder.hpp"
+#include "../include/GridPathfinder.hpp"
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
     int end_j = 5;
 
     std::cout << "Creating Pathfinder Instance.." << std::flush;
-    Pathfinder pf(
+    GridPathfinder pf(
         Vector3f(20.f, 10.f, 0.f),
         100.f, 100.f,
         g_cols, g_rows);
@@ -31,17 +31,17 @@ int main()
     std::cout << grid.max_size() << " " << g_cols * g_rows << " ";
     grid.resize(g_cols * g_rows);
     std::fill(grid.begin(), grid.end(), 1);
-    grid[pf.gridIndex(0, 1)] = 0;
-    grid[pf.gridIndex(5, 0)] = 0;
-    grid[pf.gridIndex(5, 1)] = 0;
-    grid[pf.gridIndex(5, 2)] = 0;
-    grid[pf.gridIndex(5, 3)] = 0;
-    grid[pf.gridIndex(5, 4)] = 0;
-    grid[pf.gridIndex(5, 5)] = 0;
-    grid[pf.gridIndex(5, 6)] = 0;
-    grid[pf.gridIndex(5, 7)] = 0;
-    grid[pf.gridIndex(5, 8)] = 1;
-    grid[pf.gridIndex(5, 9)] = 0;
+    grid[pf.index(0, 1)] = 0;
+    grid[pf.index(5, 0)] = 0;
+    grid[pf.index(5, 1)] = 0;
+    grid[pf.index(5, 2)] = 0;
+    grid[pf.index(5, 3)] = 0;
+    grid[pf.index(5, 4)] = 0;
+    grid[pf.index(5, 5)] = 0;
+    grid[pf.index(5, 6)] = 0;
+    grid[pf.index(5, 7)] = 0;
+    grid[pf.index(5, 8)] = 1;
+    grid[pf.index(5, 9)] = 0;
     std::cout << "Done"
               << "\n";
 

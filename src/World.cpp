@@ -39,8 +39,11 @@ World::World(sf::RenderWindow &window,
 
     camera_ = camera;
 
-    player_->setPosition(200000 / 2, 200000 / 2, 0);
-    camera_->setPosition(200000 / 2, 200000 / 2, 0);
+    // player_->setPosition(200000 / 2, 200000 / 2, 0);
+    // camera_->setPosition(200000 / 2, 200000 / 2, 0);
+
+    player_->setPosition(200000 - 20, 200000 - 20, 0);
+    camera_->setPosition(200000 - 20, 200000 - 20, 0);
 
     // addEntity(new Player(rm_));
 

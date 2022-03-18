@@ -10,7 +10,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector.hpp"
-#include "Pathfinder.hpp"
+#include "GridPathfinder.hpp"
 #include "Entity.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
@@ -60,7 +60,7 @@ private:
 
     WorldConfig worldConfig_;
 
-    Pathfinder pathfinder_;
+    GridPathfinder pathfinder_;
     PathfinderGrid pathfinderGrid_;
 
     void input_(sf::Time &elapsed);
