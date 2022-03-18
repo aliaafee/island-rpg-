@@ -55,6 +55,7 @@ private:
     sf::RenderWindow *window_;
 
     std::unordered_map<int, WorldCell *> cellCache_;
+    std::vector<WorldCell *> activeCells_;
 
     std::vector<Entity *> visibleEntities_;
 

@@ -107,6 +107,7 @@ void World::input_(sf::Time &elapsed)
 
 void World::updateCells_()
 {
+    activeCells_.clear();
     visibleEntities_.clear();
 
     int min_i = worldConfig_.rows();
@@ -130,6 +131,8 @@ void World::updateCells_()
         {
             currentCell = search->second;
         }
+
+        activeCells_.push_back(currentCell);
         for (auto entity : currentCell->getEntities())
         {
             visibleEntities_.push_back(entity);
@@ -150,10 +153,14 @@ void World::updateCells_()
         (max_i - min_i + 1) * 20,
         (max_j - min_j + 1) * 20);
 
-    pathfinder_.clearGrid();
-    for (auto entity : visibleEntities_)
+    for (auto &cell : activeCells_)
     {
-        entity->translateOrigin(pathfinder_.getPosition());
+        cell->translateOrigin(pathfinder_.getPosition());
+    }
+
+    pathfinder_.clearGrid();
+    for (auto &entity : visibleEntities_)
+    {
         pathfinder_.addObstacle(*entity);
     }
 

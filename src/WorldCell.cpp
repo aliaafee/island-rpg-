@@ -43,9 +43,9 @@ WorldCell::WorldCell(ResourceManager &rm,
             0);
     }
 
-    e = new Ground(*rm_, width_, height_, 20, 20);
-    e->setPosition(position_.x, position_.y, 0);
-    entities_.push_back(e);
+    // e = new Ground(*rm_, width_, height_, 20, 20);
+    // e->setPosition(position_.x, position_.y, 0);
+    // entities_.push_back(e);
 
     loaded_ = true;
 }
@@ -63,4 +63,17 @@ std::vector<Entity *> &WorldCell::getEntities()
     }
 
     return entities_;
+}
+
+void WorldCell::translateOrigin(const Vector3f &newOrigin)
+{
+    if (origin_ == newOrigin)
+        return;
+
+    for (auto &entity : entities_)
+    {
+        entity->translateOrigin(newOrigin);
+    }
+
+    origin_ = newOrigin;
 }

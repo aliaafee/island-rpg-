@@ -99,8 +99,7 @@ public:
     const int &rows() const { return rows_; }
 
 private:
-    float width_,
-        height_;
+    float width_, height_;
     int cols_, rows_;
 };
 
@@ -115,7 +114,10 @@ public:
 
     std::vector<Entity *> &getEntities();
 
+    void translateOrigin(const Vector3f &newOrigin);
+
 private:
+    Vector3f origin_;
     ResourceManager *rm_;
     WorldConfig *worldConfig_;
     int cell_i_, cell_j_;
