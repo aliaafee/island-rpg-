@@ -19,6 +19,7 @@
 #include "WorldConfig.hpp"
 #include "WorldCell.hpp"
 #include "WorldPathfinder.hpp"
+#include "ShaderEntity.hpp"
 
 class Player;
 
@@ -47,6 +48,7 @@ public:
 private:
     Player *player_;
     Entity *cursor_;
+    ShaderEntity *water_;
     std::vector<Entity *> entities_;
 
     Camera *camera_;

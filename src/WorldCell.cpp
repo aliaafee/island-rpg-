@@ -55,8 +55,42 @@ void WorldCell::load()
 
     srand(getId());
 
-    floor_ = new Ground(*rm_, width_, height_, 40, 40);
-    floor_->setPosition(position_.x, position_.y, 0);
+    floor_ = new Ground(*rm_, position_, width_, height_, 40, 40, *worldConfig_);
+
+    Entity *e;
+    for (int i = 0; i < worldConfig_->subCols(); i++)
+    {
+        for (int j = 0; j < worldConfig_->subRows(); j++)
+        {
+            Vector3f point(
+                (float)i / (float)worldConfig_->subCols() * width_ + position_.x,
+                (float)j / (float)worldConfig_->subRows() * width_ + position_.y,
+                0);
+
+            float elevation = worldConfig_->getElevation(point);
+            if (elevation > 0.25)
+            {
+                if (randi(0, 8) == 0)
+                {
+
+                    e = new Tree(*rm_);
+                    entities_.push_back(e);
+                    e->setPosition(
+                        point.x + (randf() * 5.f - 5.f),
+                        point.y + (randf() * 5.f - 5.f),
+                        0);
+                    _addObstacle(*e);
+                }
+            }
+
+            if (elevation < 0.f)
+            {
+                obstacleGrid_.fill(i, j, i + 1, j + 1, ZERO);
+            }
+        }
+    }
+
+    /*
 
     Entity *e;
     int count = randi(0, 5);
@@ -81,7 +115,7 @@ void WorldCell::load()
             position_.y + height_ * randf(),
             0);
         _addObstacle(*e);
-    }
+    }*/
 
     // sleep(1);
 

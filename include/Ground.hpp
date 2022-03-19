@@ -4,13 +4,17 @@
 #include <vector>
 
 #include "Entity.hpp"
+#include "SimplexNoise.hpp"
+#include "WorldConfig.hpp"
 
 class Ground : public Entity
 {
 public:
     Ground(ResourceManager &rm,
+           const Vector3f &position,
            const float &width, const float &height,
-           const int &cols, const int &rows);
+           const int &cols, const int &rows,
+           WorldConfig &worldConfig);
 
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
@@ -30,5 +34,7 @@ private:
     Vector2f j_hat;
 
     sf::Sprite sprite_;
+
+    SimplexNoise noise_;
 };
 #endif // __GROUND_H__

@@ -10,6 +10,7 @@ World::World(sf::RenderWindow &window,
                                                   40, 40),
                                               player_(new Player(rm)),
                                               cursor_(new Entity(rm)),
+                                              water_(new ShaderEntity(rm)),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   worldConfig_),
@@ -23,6 +24,12 @@ World::World(sf::RenderWindow &window,
 
     addEntity(cursor_);
     cursor_->setSize(Vector3f(5, 5, 5));
+
+    addEntity(water_);
+    water_->setSize(
+        worldConfig_.getCellWidth() * 3.f,
+        worldConfig_.getCellHeight() * 3.f,
+        0);
 
     Entity *grid = new PathfinderVisualizer(pathfinder_);
     addEntity(grid);
@@ -139,6 +146,8 @@ void World::updateCells_()
 
     pathfinder_.setActiveCells(min_i, min_j, activeCells_);
 
+    water_->setPosition(pathfinder_.getPosition());
+
     for (auto &cell : activeCells_)
     {
         cell->translateOrigin(pathfinder_.getPosition());
@@ -148,12 +157,14 @@ void World::updateCells_()
     visibleEntities_.push_back(player_);
     player_->translateOrigin(pathfinder_.getPosition());
 
-    visibleEntities_.push_back(&pathfinderGrid_);
+    // visibleEntities_.push_back(&pathfinderGrid_);
     visibleEntities_.push_back(cursor_);
 }
 
 void World::update(sf::Time &elapsed)
 {
+    water_->update(elapsed, *this);
+
     updateCells_();
 
     camera_->updateWindow(*window_);
@@ -175,6 +186,8 @@ void World::update(sf::Time &elapsed)
 
 void World::transform()
 {
+    water_->transform(*camera_);
+
     for (auto &entity : floorEntities_)
     {
         entity->transform(*camera_);
@@ -188,12 +201,14 @@ void World::transform()
 
 void World::draw(sf::RenderTarget *screen)
 {
-    std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
+    water_->draw(screen);
 
     for (auto &entity : floorEntities_)
     {
         entity->draw(screen);
     }
+
+    std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
 
     for (auto &entity : visibleEntities_)
     {
