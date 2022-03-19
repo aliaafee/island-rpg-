@@ -10,16 +10,15 @@
 #include <SFML/Graphics.hpp>
 
 #include "Vector.hpp"
-#include "GridPathfinder.hpp"
 #include "Entity.hpp"
 #include "Camera.hpp"
 #include "ResourceManager.hpp"
 #include "Player.hpp"
 #include "Guides.hpp"
 #include "TrackingCamera.hpp"
-#include "ShaderEntity.hpp"
-#include "Vegetation.hpp"
+#include "WorldConfig.hpp"
 #include "WorldCell.hpp"
+#include "WorldPathfinder.hpp"
 
 class Player;
 
