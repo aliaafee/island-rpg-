@@ -88,7 +88,7 @@ sf::Texture *ResourceManager::insertTexture_(const std::string &filename, sf::Te
         return search->second;
     }
 
-    textures_.insert(std::pair(filename, addTexture));
+    textures_[filename] = addTexture;
 
     return addTexture;
 }
