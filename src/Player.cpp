@@ -108,7 +108,20 @@ StateId Player::walkState(bool firstRun, sf::Time &elapsed, World &world)
         case STOP:
             return idleStateId;
             break;
-        default:
+        case WALK_TO_TARGET:
+            std::cout << "Recalc Path.." << std::flush;
+            walkPath_.clear();
+            bool found = world.findPath(
+                *this,
+                walkTarget_,
+                true,
+                walkPath_);
+            if (!found)
+            {
+                std::cout << "Not found\n";
+                return idleStateId;
+            }
+            std::cout << "Found\n";
             break;
         }
     }

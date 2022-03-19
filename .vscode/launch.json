@@ -5,7 +5,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/app",
+            "program": "${workspaceFolder}/bin/island-rpg",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
