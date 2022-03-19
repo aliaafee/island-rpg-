@@ -16,6 +16,15 @@ Only tested on Archlinux with GCC.
 ## Run
 
     bin/island-rpg
+
+## TODO
+
+* Smooth transitions between terrain.
+* More interesting terrain, and make the islands more island like. Variation in color of ocean based on depth.
+* Add fauna. Marine, land and air.
+* Add structures, buildings etc.
+* Traverese water, with a boat, maybe?
+* Add tasks, interactions, quests, maybe a story.
     
     
 ## Artwork
