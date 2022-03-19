@@ -24,7 +24,6 @@ sf::Texture *ResourceManager::loadTexture(const std::string &filename)
 
     if (search != textures_.end())
     {
-        std::cout << "ResourceManager: Already Loaded '" << filename << "'\n";
         return search->second;
     }
 
@@ -84,7 +83,6 @@ sf::Texture *ResourceManager::insertTexture_(const std::string &filename, sf::Te
 
     if (search != textures_.end())
     {
-        std::cout << "ResourceManager: Already Loaded '" << filename << "'\n";
         return search->second;
     }
 

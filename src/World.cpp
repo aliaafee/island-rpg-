@@ -50,6 +50,12 @@ World::~World()
     {
         delete entity;
     }
+
+    for (auto &item : cellCache_)
+    {
+        delete item.second;
+    }
+
     entities_.clear();
 }
 

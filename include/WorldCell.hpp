@@ -13,6 +13,13 @@
 #include "Ground.hpp"
 #include "ValueGrid.hpp"
 #include "Pathfinder.hpp"
+#include "thread"
+
+// #ifdef _WIN32
+// #include <Windows.h>
+// #else
+// #include <unistd.h>
+// #endif
 
 class WorldConfig
 {
@@ -119,6 +126,8 @@ public:
               WorldConfig &worldConfig,
               const int &i, const int &j);
 
+    ~WorldCell();
+
     int getId();
 
     const int &geti() const { return cell_i_; }
@@ -147,7 +156,9 @@ private:
     Grid placeholder_;
 
     ValueGrid<int> obstacleGrid_;
-    void addObstacle(const Entity &entity);
+    void _addObstacle(const Entity &entity);
+
+    std::thread loadThread_;
 
     bool loaded_;
 };

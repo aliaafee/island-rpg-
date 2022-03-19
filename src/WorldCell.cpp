@@ -17,12 +17,31 @@ WorldCell::WorldCell(ResourceManager &rm,
                                                    floor_(nullptr),
                                                    obstacleGrid_(
                                                        worldConfig_->subCols(),
-                                                       worldConfig_->subRows())
+                                                       worldConfig_->subRows()),
+                                                   loadThread_(&WorldCell::load, this)
 {
     placeholder_.setPosition(position_);
     placeholders_.push_back(&placeholder_);
+}
 
-    load();
+WorldCell::~WorldCell()
+{
+    std::cout << "Destroying World Cell " << cell_i_ << ", " << cell_j_
+              << "\n";
+
+    loadThread_.join();
+
+    if (!loaded_)
+        return;
+
+    for (auto &entity : entities_)
+    {
+        delete entity;
+    }
+    entities_.clear();
+
+    if (floor_ != nullptr)
+        delete floor_;
 }
 
 int WorldCell::getId()
@@ -49,7 +68,7 @@ void WorldCell::load()
             position_.x + width_ * randf(),
             position_.y + height_ * randf(),
             0);
-        addObstacle(*e);
+        _addObstacle(*e);
     }
 
     count = randi(0, 5);
@@ -61,13 +80,18 @@ void WorldCell::load()
             position_.x + width_ * randf(),
             position_.y + height_ * randf(),
             0);
-        addObstacle(*e);
+        _addObstacle(*e);
     }
 
+    // sleep(1);
+
     loaded_ = true;
+
+    std::cout << "World Cell " << cell_i_ << ", " << cell_j_ << " loaded"
+              << "\n";
 }
 
-void WorldCell::addObstacle(const Entity &entity)
+void WorldCell::_addObstacle(const Entity &entity)
 {
     Vector3f topLeft = entity.getPosition() - position_ - (entity.getSize() / 2.f);
 
@@ -82,6 +106,9 @@ void WorldCell::addObstacle(const Entity &entity)
 
 const int &WorldCell::obstacleGridValue(const int &i, const int &j) const
 {
+    if (!loaded_)
+        return ZERO;
+
     if (!obstacleGrid_.validIndex(i, j))
         return ZERO;
 
@@ -104,15 +131,16 @@ Entity *WorldCell::getFloor()
 std::vector<Entity *> &WorldCell::getEntities()
 {
     if (!loaded_)
-    {
         return placeholders_;
-    }
 
     return entities_;
 }
 
 void WorldCell::translateOrigin(const Vector3f &newOrigin)
 {
+    if (!loaded_)
+        return;
+
     if (origin_ == newOrigin)
         return;
 
