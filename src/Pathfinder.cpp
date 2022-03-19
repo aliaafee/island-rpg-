@@ -200,13 +200,17 @@ bool Pathfinder::searchAStar(const int &start_i, const int &start_j,
                             }
                             else
                             {
-                                // Update the existing node
-                                foundNode->second->g = child_g;
-                                foundNode->second->h = child_h;
-                                foundNode->second->f = child_f;
-                                foundNode->second->parent = currentNode;
-                                openQueue_.push(foundNode->second);
-                                reusedNodes_ += 1;
+                                if (foundNode->second->g > child_g)
+                                {
+                                    // if current child is furthur from origin than the one in
+                                    // the open list, switch to current child
+                                    foundNode->second->g = child_g;
+                                    foundNode->second->h = child_h;
+                                    foundNode->second->f = child_f;
+                                    foundNode->second->parent = currentNode;
+                                    openQueue_.push(foundNode->second);
+                                    reusedNodes_ += 1;
+                                }
                             }
                         }
                     }
