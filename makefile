@@ -11,7 +11,7 @@ DEPS=$(patsubst $(SRC)/%.cpp,$(OBJ)/%.d,$(SRCS))
 TESTS=$(wildcard $(TEST)/*.cpp)
 TESTBINS=$(patsubst $(TEST)/%.cpp,$(TEST)/bin/%,$(TESTS))
 
-BIN = $(BINDIR)/app
+BIN = $(BINDIR)/island-rpg
 
 SRC_DIR = src
 BUILD_DIR = build
