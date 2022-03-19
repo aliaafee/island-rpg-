@@ -10,6 +10,8 @@ Install in the standard manner for your system.
 ## Build
 
     make
+    
+Only tested on Archlinux with GCC.
 
 ## Run
 
