@@ -1,7 +1,8 @@
 #include "ShaderEntity.hpp"
 
 ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
-                                                  arr(sf::Quads, 4)
+                                                  arr(sf::Quads, 4),
+                                                  shaderLoaded_(false)
 {
     rect_.setFillColor(sf::Color::Red);
     rect_.setOrigin(50, 100);
@@ -9,6 +10,11 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     if (!shader_.loadFromFile("graphics/shaders/water.vert", "graphics/shaders/water.frag"))
     {
         std::cout << "Could not load shader" << std::endl;
+        shaderLoaded_ = false;
+    }
+    else
+    {
+        shaderLoaded_ = true;
     }
 
     arr[0].position = Vector2f(32, 0) * 100.f;
@@ -75,5 +81,9 @@ void ShaderEntity::draw(sf::RenderTarget *screen)
     // Entity::draw(screen);
 
     // screen->draw(rect_, &shader_);
+
+    if (!shaderLoaded_)
+        return;
+
     screen->draw(arr, rs);
 }

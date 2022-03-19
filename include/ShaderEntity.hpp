@@ -3,7 +3,6 @@
 
 #include "Entity.hpp"
 
-
 class ShaderEntity : public Entity
 {
 public:
@@ -17,6 +16,7 @@ public:
 private:
     sf::Clock clock_;
     sf::Shader shader_;
+    bool shaderLoaded_;
     sf::RectangleShape rect_;
 
     sf::VertexArray arr;

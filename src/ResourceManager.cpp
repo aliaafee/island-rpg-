@@ -14,7 +14,10 @@ ResourceManager::~ResourceManager()
 
     for (auto &it : textures_)
     {
-        delete it.second;
+        if (it.second != nullptr)
+        {
+            delete it.second;
+        }
     }
 }
 
@@ -33,7 +36,8 @@ sf::Texture *ResourceManager::loadTexture(const std::string &filename)
     {
         std::cout << "ResourceManager: Load Failed '" << filename << "'\n";
         delete newTexture;
-        return nullptr;
+        // Mark as invalid texture source
+        return insertTexture_(filename, nullptr);
     }
 
     std::cout << "ResourceManager: Loaded '" << filename << "'\n";

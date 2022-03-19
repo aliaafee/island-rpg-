@@ -17,11 +17,13 @@ WorldCell::WorldCell(ResourceManager &rm,
                                                    floor_(nullptr),
                                                    obstacleGrid_(
                                                        worldConfig_->subCols(),
-                                                       worldConfig_->subRows()),
-                                                   loadThread_(&WorldCell::load, this)
+                                                       worldConfig_->subRows())
 {
     placeholder_.setPosition(position_);
     placeholders_.push_back(&placeholder_);
+
+    loadThread_ = std::thread(&WorldCell::load, this);
+    // loadThread_.join();
 }
 
 WorldCell::~WorldCell()
@@ -29,7 +31,8 @@ WorldCell::~WorldCell()
     std::cout << "Destroying World Cell " << cell_i_ << ", " << cell_j_
               << "\n";
 
-    loadThread_.join();
+    if (loadThread_.joinable())
+        loadThread_.join();
 
     if (!loaded_)
         return;

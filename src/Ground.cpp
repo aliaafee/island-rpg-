@@ -51,8 +51,6 @@ Ground::Ground(ResourceManager &rm,
         }
     }
 
-    sf::Texture *w = rm.loadTexture("graphics/tiles/ts_beach0/straight/45/0.png");
-    sprite_.setTexture(*w);
     sprite_.setOrigin(32, 32);
 }
 
