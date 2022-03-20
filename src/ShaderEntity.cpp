@@ -1,8 +1,8 @@
-#include "ShaderEntity.hpp"
+#include "Ocean.hpp"
 
-ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
-                                                  arr(sf::Quads, 4),
-                                                  shaderLoaded_(false)
+Ocean::Ocean(ResourceManager &rm) : rect_(Vector2f(100, 100)),
+                                    arr(sf::Quads, 4),
+                                    shaderLoaded_(false)
 {
     rect_.setFillColor(sf::Color::Red);
     rect_.setOrigin(50, 100);
@@ -43,16 +43,16 @@ ShaderEntity::ShaderEntity(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     rs.shader = &shader_;
 }
 
-ShaderEntity::~ShaderEntity()
+Ocean::~Ocean()
 {
 }
 
-void ShaderEntity::update(sf::Time &elapsed, World &world)
+void Ocean::update(sf::Time &elapsed, World &world)
 {
     shader_.setUniform("iTime", clock_.getElapsedTime().asSeconds());
 }
 
-void ShaderEntity::transform(Camera &camera)
+void Ocean::transform(Camera &camera)
 {
     Entity::transform(camera);
     rect_.setPosition(getScreenPosition2());
@@ -76,7 +76,7 @@ void ShaderEntity::transform(Camera &camera)
     shader_.setUniform("screenSize", Vector2f(800, 300));
 }
 
-void ShaderEntity::draw(sf::RenderTarget *screen)
+void Ocean::draw(sf::RenderTarget *screen)
 {
     // Entity::draw(screen);
 

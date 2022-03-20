@@ -3,11 +3,11 @@
 
 #include "Entity.hpp"
 
-class ShaderEntity : public Entity
+class Ocean : public Entity
 {
 public:
-    ShaderEntity(ResourceManager &rm);
-    ~ShaderEntity();
+    Ocean(ResourceManager &rm);
+    ~Ocean();
 
     virtual void update(sf::Time &elapsed, World &world);
     virtual void transform(Camera &camera);
