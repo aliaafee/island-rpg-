@@ -6,15 +6,18 @@
  *
  * Distributed under the MIT License (MIT) (See accompanying file LICENSE.txt
  * or copy at http://opensource.org/licenses/MIT)
+ *
+ * Source: https://github.com/SRombauts/SimplexNoise
  */
 #pragma once
 
-#include <cstddef>  // size_t
+#include <cstddef> // size_t
 
 /**
  * @brief A Perlin Simplex Noise C++ Implementation (1D, 2D, 3D, 4D).
  */
-class SimplexNoise {
+class SimplexNoise
+{
 public:
     // 1D Perlin simplex noise
     static float noise(float x);
@@ -39,11 +42,11 @@ public:
     explicit SimplexNoise(float frequency = 1.0f,
                           float amplitude = 1.0f,
                           float lacunarity = 2.0f,
-                          float persistence = 0.5f) :
-        mFrequency(frequency),
-        mAmplitude(amplitude),
-        mLacunarity(lacunarity),
-        mPersistence(persistence) {
+                          float persistence = 0.5f) : mFrequency(frequency),
+                                                      mAmplitude(amplitude),
+                                                      mLacunarity(lacunarity),
+                                                      mPersistence(persistence)
+    {
     }
 
 private:

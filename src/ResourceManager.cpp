@@ -2,15 +2,15 @@
 
 ResourceManager::ResourceManager()
 {
-    std::cout << "Creating ResourceManager"
-              << "\n";
+    // std::cout << "Creating ResourceManager"
+    //           << "\n";
     ;
 }
 
 ResourceManager::~ResourceManager()
 {
-    std::cout << "Destroying ResourceManager"
-              << "\n";
+    // std::cout << "Destroying ResourceManager"
+    //           << "\n";
 
     for (auto &it : textures_)
     {
@@ -34,13 +34,13 @@ sf::Texture *ResourceManager::loadTexture(const std::string &filename)
 
     if (!newTexture->loadFromFile(filename))
     {
-        std::cout << "ResourceManager: Load Failed '" << filename << "'\n";
+        // std::cout << "ResourceManager: Load Failed '" << filename << "'\n";
         delete newTexture;
         // Mark as invalid texture source
         return insertTexture_(filename, nullptr);
     }
 
-    std::cout << "ResourceManager: Loaded '" << filename << "'\n";
+    // std::cout << "ResourceManager: Loaded '" << filename << "'\n";
 
     return insertTexture_(filename, newTexture);
 }
@@ -59,7 +59,7 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
     }
     catch (std::filesystem::filesystem_error const &ex)
     {
-        std::cout << "ResourceManager: Failed Directory Load" << directory << "\n";
+        // std::cout << "ResourceManager: Failed Directory Load" << directory << "\n";
         return false;
     }
 

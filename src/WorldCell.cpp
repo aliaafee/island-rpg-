@@ -28,8 +28,8 @@ WorldCell::WorldCell(ResourceManager &rm,
 
 WorldCell::~WorldCell()
 {
-    std::cout << "Destroying World Cell " << cell_i_ << ", " << cell_j_
-              << "\n";
+    // std::cout << "Destroying World Cell " << cell_i_ << ", " << cell_j_
+    //           << "\n";
 
     if (loadThread_.joinable())
         loadThread_.join();
@@ -124,8 +124,8 @@ void WorldCell::load()
 
     loaded_ = true;
 
-    std::cout << "World Cell " << cell_i_ << ", " << cell_j_ << " loaded"
-              << "\n";
+    // std::cout << "World Cell " << cell_i_ << ", " << cell_j_ << " loaded"
+    //           << "\n";
 }
 
 void WorldCell::_addObstacle(const Entity &entity)

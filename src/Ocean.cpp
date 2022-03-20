@@ -39,6 +39,9 @@ Ocean::Ocean(ResourceManager &rm) : rect_(Vector2f(100, 100)),
 
     // shader_.setUniform("textureSize", Vector2f(64, 64));
     shader_.setUniform("textureSize", Vector2f(1, 1));
+    // shader_.setUniform("screenPosition", getScreenPosition());
+    shader_.setUniform("worldPosition", getPosition());
+    shader_.setUniform("screenSize", Vector2f(800, 300));
 
     rs.shader = &shader_;
 }
@@ -74,6 +77,7 @@ void Ocean::transform(Camera &camera)
     shader_.setUniform("screenPosition", getScreenPosition());
     shader_.setUniform("worldPosition", camera.transform(getPosition(), 0));
     shader_.setUniform("screenSize", Vector2f(800, 300));
+    shader_.setUniform("scale", 1.f);
 }
 
 void Ocean::draw(sf::RenderTarget *screen)

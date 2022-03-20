@@ -9,10 +9,18 @@ int main()
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
+    settings.majorVersion = 3;
+    settings.minorVersion = 3;
 
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Island RPG", sf::Style::Default, settings);
     // window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
+
+    sf::ContextSettings settings2 = window.getSettings();
+    std::cout << "depth bits:" << settings2.depthBits << std::endl;
+    std::cout << "stencil bits:" << settings2.stencilBits << std::endl;
+    std::cout << "antialiasing level:" << settings2.antialiasingLevel << std::endl;
+    std::cout << "version:" << settings2.majorVersion << "." << settings2.minorVersion << std::endl;
 
     ResourceManager rm;
     World world(window, rm, 100, 100);
@@ -31,13 +39,9 @@ int main()
                 window.close();
                 break;
             case sf::Event::LostFocus:
-                std::cout << "Lost focus"
-                          << "\n";
                 windowFocused = false;
                 break;
             case sf::Event::GainedFocus:
-                std::cout << "Gained focus"
-                          << "\n";
                 windowFocused = true;
                 break;
             case sf::Event::MouseButtonReleased:

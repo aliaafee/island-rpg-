@@ -3,8 +3,8 @@
 Entity::Entity() : baseRect2_(sf::LinesStrip, 7),
                    position_(0, 0, 0)
 {
-    std::cout << "Creating Entity"
-              << "\n";
+    // std::cout << "Creating Entity"
+    //           << "\n";
 
     baseRect3_.resize(7);
 
@@ -26,8 +26,9 @@ Entity::Entity(ResourceManager &rm) : Entity()
 
 Entity::~Entity()
 {
-    std::cout << "Destroying Entity"
-              << "\n";
+    // std::cout << "Destroying Entity"
+    //           << "\n";
+    ;
 }
 
 void Entity::update(sf::Time &elapsed, World &world)

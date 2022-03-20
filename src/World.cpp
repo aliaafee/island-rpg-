@@ -16,8 +16,8 @@ World::World(sf::RenderWindow &window,
                                                   worldConfig_),
                                               pathfinderGrid_(pathfinder_)
 {
-    std::cout << "Creating World"
-              << "\n";
+    // std::cout << "Creating World"
+    //           << "\n";
 
     addEntity(player_);
     player_->move(20, 20, 0);
@@ -50,8 +50,8 @@ World::World(sf::RenderWindow &window,
 
 World::~World()
 {
-    std::cout << "Destroying World"
-              << "\n";
+    // std::cout << "Destroying World"
+    //           << "\n";
 
     for (auto &entity : entities_)
     {
@@ -224,17 +224,17 @@ Entity *World::addEntity(Entity *entity)
 
 void World::onMouseButtonReleased(const sf::Event &event)
 {
-    std::cout << "Mouse Release ";
+    // std::cout << "Mouse Release ";
     if (event.mouseButton.button == sf::Mouse::Left)
     {
-        std::cout << "Left"
-                  << "\n";
+        // std::cout << "Left"
+        //           << "\n";
         player_->walkTo(cursor_->getPosition());
     }
     else if (event.mouseButton.button == sf::Mouse::Right)
     {
-        std::cout << "Right"
-                  << "\n";
+        // std::cout << "Right"
+        //           << "\n";
     }
 }
 

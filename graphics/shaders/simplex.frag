@@ -1,9 +1,3 @@
-#version 150
-
-uniform float scale;
-
-in vec2 texCoord;
-
 /**
  * Adapted from "A Perlin Simplex Noise C++ Implementation (1D, 2D, 3D)."
  * by Sebastien Rombauts (sebastien.rombauts@gmail.com)
@@ -32,6 +26,7 @@ float grad(int hash, float x, float y) {
     float u = h < 4 ? x : y; // into 8 simple gradient directions,
     float v = h < 4 ? y : x;
     return (bool(h & 1) ? -u : u) + (bool(h & 2) ? -2.0f * v : 2.0f * v);
+    return 0.f;
 }
 
 float noise(float x, float y) {
@@ -123,16 +118,4 @@ float fractal(int octaves, float x, float y) {
     }
 
     return (noise_output / denom);
-}
-
-void main() {
-
-    vec2 uv = texCoord;
-
-    float d = fractal(6, (uv.x + 1.) * scale, (uv.y + 1.) * scale);
-
-    vec3 col = vec3((d + 1.) / 2.);
-
-    gl_FragColor = vec4(col, 1.);
-
 }
