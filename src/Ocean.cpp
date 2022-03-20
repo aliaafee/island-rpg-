@@ -7,7 +7,7 @@ Ocean::Ocean(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     rect_.setFillColor(sf::Color::Red);
     rect_.setOrigin(50, 100);
 
-    if (!shader_.loadFromFile("graphics/shaders/water.vert", "graphics/shaders/water.frag"))
+    if (!shader_.loadFromFile("graphics/shaders/test.vert", "graphics/shaders/test.frag"))
     {
         std::cout << "Could not load shader" << std::endl;
         shaderLoaded_ = false;
@@ -82,6 +82,9 @@ void Ocean::transform(Camera &camera)
 
 void Ocean::draw(sf::RenderTarget *screen)
 {
+    sf::Transform t = screen->getView().getTransform();
+
+    shader_.setUniform("viewMatrix", sf::Glsl::Mat4(t.getMatrix()));
     // Entity::draw(screen);
 
     // screen->draw(rect_, &shader_);

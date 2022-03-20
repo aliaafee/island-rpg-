@@ -2,21 +2,23 @@
 
 uniform vec3 screenPosition;
 
-uniform mat4 viewMatrix, projMatrix;
-in vec4 position;
+uniform mat4 viewMatrix;
 
-out vec2 texCoord;
+in vec4 position;
+//in vec4 texCoord;
+
+out vec2 texCoordV;
 
 void main() {
     // transform the vertex position
     //gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-    gl_Position = position;
+    //gl_Position = viewMatrix * position;
+    gl_Position = viewMatrix * position;
 
-    texCoord.x = position.x;
-    texCoord.y = position.y;
+    texCoordV = gl_Position.xy;
 
     // transform the texture coordinates
-    //gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+    //gl_TexCoord[0] = viewMatrix * gl_MultiTexCoord0;
 
     // forward the vertex color
     //gl_FrontColor = gl_Color;
