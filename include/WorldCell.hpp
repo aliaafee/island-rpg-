@@ -9,7 +9,7 @@
 #include "Entity.hpp"
 #include "ResourceManager.hpp"
 #include "Guides.hpp"
-#include "SpiralOut.hpp"
+#include "Algorithm.hpp"
 #include "Vegetation.hpp"
 #include "Ground.hpp"
 #include "ValueGrid.hpp"

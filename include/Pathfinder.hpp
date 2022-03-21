@@ -10,7 +10,7 @@
 
 #include "Vector.hpp"
 #include "Entity.hpp"
-#include "SpiralOut.hpp"
+#include "Algorithm.hpp"
 
 const int ZERO = 0;
 const int ONE = 1;

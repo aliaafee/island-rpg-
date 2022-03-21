@@ -2,7 +2,7 @@
 #define __WORLDCONFIG_H__
 
 #include "Vector.hpp"
-#include "SpiralOut.hpp"
+#include "Algorithm.hpp"
 #include "SimplexNoise.hpp"
 #include "Camera.hpp"
 

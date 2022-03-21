@@ -44,7 +44,8 @@ World::World(sf::RenderWindow &window,
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
 
-    player_->setPosition(400000 / 2, 400000 / 2, 0);
+    // player_->setPosition(400000 / 2, 400000 / 2, 0);
+    player_->setPosition(700, 200, 0);
     camera->setPosition(player_->getPosition());
 }
 
@@ -157,7 +158,7 @@ void World::updateCells_()
     visibleEntities_.push_back(player_);
     player_->translateOrigin(pathfinder_.getPosition());
 
-    // visibleEntities_.push_back(&pathfinderGrid_);
+    visibleEntities_.push_back(&pathfinderGrid_);
     visibleEntities_.push_back(cursor_);
 }
 
@@ -203,6 +204,8 @@ void World::draw(sf::RenderTarget *screen)
 {
     ocean_->draw(screen);
 
+    std::sort(floorEntities_.begin(), floorEntities_.end(), entityDepthComp);
+
     for (auto &entity : floorEntities_)
     {
         entity->draw(screen);
@@ -230,6 +233,7 @@ void World::onMouseButtonReleased(const sf::Event &event)
         // std::cout << "Left"
         //           << "\n";
         player_->walkTo(cursor_->getPosition());
+        std::cout << "e" << worldConfig_.getElevation(cursor_->getPosition()) << "\n";
     }
     else if (event.mouseButton.button == sf::Mouse::Right)
     {

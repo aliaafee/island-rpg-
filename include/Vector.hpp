@@ -9,6 +9,7 @@
 using Vector3f = sf::Vector3f;
 using Vector2f = sf::Vector2f;
 using Vector2i = sf::Vector2i;
+using Vector2u = sf::Vector2u;
 using FloatRect = sf::FloatRect;
 
 inline std::ostream &operator<<(std::ostream &os, const Vector3f &v)

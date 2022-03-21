@@ -7,6 +7,7 @@
 #include "Entity.hpp"
 #include "SimplexNoise.hpp"
 #include "WorldConfig.hpp"
+#include "Algorithm.hpp"
 
 class Ground : public Entity
 {
@@ -21,9 +22,6 @@ public:
     virtual void draw(sf::RenderTarget *screen);
 
 private:
-    std::vector<sf::Texture *> tiles_;
-    std::vector<int> map_;
-
     float width_;
     float height_;
     int cols_;
@@ -34,8 +32,7 @@ private:
     Vector2f i_hat;
     Vector2f j_hat;
 
-    sf::Sprite sprite_;
-
-    SimplexNoise noise_;
+    sf::Sprite floorSprite_;
+    sf::Texture floor_;
 };
 #endif // __GROUND_H__
