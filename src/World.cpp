@@ -158,7 +158,7 @@ void World::updateCells_()
     visibleEntities_.push_back(player_);
     player_->translateOrigin(pathfinder_.getPosition());
 
-    visibleEntities_.push_back(&pathfinderGrid_);
+    // visibleEntities_.push_back(&pathfinderGrid_);
     visibleEntities_.push_back(cursor_);
 }
 

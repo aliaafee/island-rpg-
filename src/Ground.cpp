@@ -13,7 +13,6 @@ Ground::Ground(ResourceManager &rm,
                                            tileHeight_(height / (float)rows)
 {
     setPosition(position);
-    transform(*(worldConfig.getCamera()));
 
     Vector2f i_hat = worldConfig.getCamera()->transform2(Vector3f(tileWidth_, 0, 0), 0);
     Vector2f j_hat = worldConfig.getCamera()->transform2(Vector3f(0, tileHeight_, 0), 0);
@@ -70,7 +69,8 @@ Ground::Ground(ResourceManager &rm,
     {
         for (unsigned int j = 0; j < floor.getSize().y; j++)
         {
-            Vector3f p = getScreenPosition() - spriteOrigin + Vector3f((float)i, (float)j, 0);
+            Vector3f screenpos = worldConfig.getCamera()->transform(getPosition());
+            Vector3f p = screenpos - spriteOrigin + Vector3f((float)i, (float)j, 0);
             float h = worldConfig.getElevation(
                 worldConfig.getCamera()->projectGround(p));
 
