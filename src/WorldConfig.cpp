@@ -5,13 +5,15 @@ WorldConfig::WorldConfig(const float &width,
                          const int &cols,
                          const int &rows,
                          const int &subCols,
-                         const int &subRows) : width_(width),
-                                               height_(height),
-                                               cols_(cols),
-                                               rows_(rows),
-                                               subCols_(subCols),
-                                               subRows_(subRows),
-                                               terrainNoise_()
+                         const int &subRows,
+                         Camera &camera) : width_(width),
+                                           height_(height),
+                                           cols_(cols),
+                                           rows_(rows),
+                                           subCols_(subCols),
+                                           subRows_(subRows),
+                                           terrainNoise_(),
+                                           camera_(&camera)
 
 {
     ;

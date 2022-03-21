@@ -4,13 +4,15 @@
 #include "Vector.hpp"
 #include "SpiralOut.hpp"
 #include "SimplexNoise.hpp"
+#include "Camera.hpp"
 
 class WorldConfig
 {
 public:
     WorldConfig(const float &width, const float &height,
                 const int &cols, const int &rows,
-                const int &subCols, const int &subRows);
+                const int &subCols, const int &subRows,
+                Camera &camera);
 
     int getId(const int &i, const int &j) { return i + cols_ * j; }
     int getId(const Vector3f &point);
@@ -33,6 +35,8 @@ public:
 
     float getElevation(const Vector3f &point) const;
 
+    Camera *getCamera() const { return camera_; }
+
 private:
     float width_, height_;
     int cols_, rows_;
@@ -41,5 +45,7 @@ private:
     SimplexNoise terrainNoise_;
     float terrainScale_ = 0.0009f;
     int terrainOctaves_ = 6;
+
+    Camera *camera_;
 };
 #endif // __WORLDCONFIG_H__

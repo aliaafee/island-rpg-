@@ -2,47 +2,17 @@
 
 ResourceManager::ResourceManager()
 {
-    // std::cout << "Creating ResourceManager"
-    //           << "\n";
     ;
 }
 
 ResourceManager::~ResourceManager()
 {
-    // std::cout << "Destroying ResourceManager"
-    //           << "\n";
-
-    for (auto &it : textures_)
-    {
-        if (it.second != nullptr)
-        {
-            delete it.second;
-        }
-    }
+    ;
 }
 
 sf::Texture *ResourceManager::loadTexture(const std::string &filename)
 {
-    auto search = textures_.find(filename);
-
-    if (search != textures_.end())
-    {
-        return search->second;
-    }
-
-    sf::Texture *newTexture = new sf::Texture();
-
-    if (!newTexture->loadFromFile(filename))
-    {
-        // std::cout << "ResourceManager: Load Failed '" << filename << "'\n";
-        delete newTexture;
-        // Mark as invalid texture source
-        return insertTexture_(filename, nullptr);
-    }
-
-    // std::cout << "ResourceManager: Loaded '" << filename << "'\n";
-
-    return insertTexture_(filename, newTexture);
+    return textures_.load(filename);
 }
 
 bool ResourceManager::loadTextureDirectory(const std::string &directory,
@@ -78,19 +48,7 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
     return true;
 }
 
-sf::Texture *ResourceManager::insertTexture_(const std::string &filename, sf::Texture *addTexture)
+sf::Image *ResourceManager::loadImage(const std::string &filename)
 {
-    // Insert texture to cache in a thread safe manner
-    std::lock_guard<std::mutex> lock(mutex_);
-
-    auto search = textures_.find(filename);
-
-    if (search != textures_.end())
-    {
-        return search->second;
-    }
-
-    textures_[filename] = addTexture;
-
-    return addTexture;
+    return images_.load(filename);
 }

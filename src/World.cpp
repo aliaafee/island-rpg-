@@ -4,10 +4,17 @@ World::World(sf::RenderWindow &window,
              ResourceManager &rm,
              int64_t width, int64_t height) : window_(&window),
                                               rm_(&rm),
+                                              camera_(
+                                                  new TrackingCamera(Vector3f(0, 0, 0),
+                                                                     Vector3f(window.getSize().x / 2, window.getSize().y / 2, 0),
+                                                                     Vector2f(64, 32),
+                                                                     10,
+                                                                     window.getSize().x, window.getSize().y)),
                                               worldConfig_(
                                                   4000000.f, 4000000.f,
                                                   10000, 10000,
-                                                  40, 40),
+                                                  40, 40,
+                                                  *camera_),
                                               player_(new Player(rm)),
                                               cursor_(new Entity(rm)),
                                               ocean_(new Ocean(rm)),
@@ -34,15 +41,8 @@ World::World(sf::RenderWindow &window,
     Entity *grid = new PathfinderVisualizer(pathfinder_);
     addEntity(grid);
 
-    TrackingCamera *camera = new TrackingCamera(Vector3f(0, 0, 0),
-                                                Vector3f(window.getSize().x / 2, window.getSize().y / 2, 0),
-                                                Vector2f(64, 32),
-                                                10,
-                                                window.getSize().x, window.getSize().y);
-
+    TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
-
-    camera_ = camera;
 
     player_->setPosition(400000 / 2, 400000 / 2, 0);
     camera->setPosition(player_->getPosition());

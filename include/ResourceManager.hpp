@@ -9,6 +9,7 @@
 #include <iostream>
 #include <mutex>
 #include <SFML/Graphics.hpp>
+#include <ResourceCache.hpp>
 
 class ResourceManager
 {
@@ -19,11 +20,11 @@ public:
     sf::Texture *loadTexture(const std::string &filename);
     bool loadTextureDirectory(const std::string &directory, std::vector<sf::Texture *> *output);
 
-private:
-    sf::Texture *insertTexture_(const std::string &filename, sf::Texture *addTexture);
+    sf::Image *loadImage(const std::string &filename);
 
-    std::map<const std::string, sf::Texture *> textures_;
-    std::mutex mutex_;
+private:
+    ResourceCache<sf::Texture> textures_;
+    ResourceCache<sf::Image> images_;
 };
 
 #endif // __RESOURCEMANAGER_H__

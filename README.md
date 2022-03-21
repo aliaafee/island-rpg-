@@ -2,7 +2,7 @@
 
 Explore an archipelago of procedurally generated Islands. Point and click to move.
 
-![Demo Animation](screenshots/01.png?raw=true)
+![Demo Animation](screenshots/02.png?raw=true)
 
 ## Required Dependencies
 

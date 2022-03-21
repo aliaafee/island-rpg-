@@ -1,6 +1,7 @@
 #ifndef __GROUND_H__
 #define __GROUND_H__
 
+#include <algorithm>
 #include <vector>
 
 #include "Entity.hpp"
