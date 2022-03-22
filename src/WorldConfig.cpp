@@ -79,10 +79,10 @@ std::vector<std::pair<int, int>> WorldConfig::getAdjacentIds(const int &i, const
     return r;
 }
 
-float WorldConfig::getElevation(const Vector3f &point) const
+float WorldConfig::getElevation(const Vector3f &point, int octaves) const
 {
     return terrainNoise_.fractal(
-        3,
+        octaves,
         point.x * terrainScale_,
         point.y * terrainScale_);
 }

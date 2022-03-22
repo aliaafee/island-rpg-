@@ -28,6 +28,9 @@ Ground::Ground(ResourceManager &rm,
     sf::Image floor;
     floor.create(cols_ * 64, rows_ * 32 + 32, sf::Color::Transparent);
 
+    sf::Image grass;
+    grass.create(cols_ * 64, rows_ * 32 + 32, sf::Color::Transparent);
+
     DiagonalIterateGrid gridIterator(rows_);
     int i, j;
     Vector2i origin(floor.getSize().x / 2 - 32, 0);
@@ -56,9 +59,17 @@ Ground::Ground(ResourceManager &rm,
             sf::IntRect(
                 0, 0, tile->getSize().x, tile->getSize().y),
             true);
-    }
 
-    float w = floor.getSize().x;
+        type = "ts_grass0";
+        tile = rm.loadImage("graphics/tiles/" + type + "/straight/" + dir + "/0.png");
+        grass.copy(
+            *tile,
+            cellPos.x,
+            cellPos.y + 6,
+            sf::IntRect(
+                0, 0, tile->getSize().x, tile->getSize().y),
+            true);
+    }
 
     Vector3f spriteOrigin(
         floor.getSize().x / 2.f,
@@ -70,9 +81,11 @@ Ground::Ground(ResourceManager &rm,
         for (unsigned int j = 0; j < floor.getSize().y; j++)
         {
             Vector3f screenpos = worldConfig.getCamera()->transform(getPosition());
-            Vector3f p = screenpos - spriteOrigin + Vector3f((float)i, (float)j, 0);
-            float h = worldConfig.getElevation(
-                worldConfig.getCamera()->projectGround(p));
+
+            Vector3f groundPoint = worldConfig.getCamera()->projectGround(
+                screenpos - spriteOrigin + Vector3f((float)i, (float)j, 0));
+
+            float h = worldConfig.getElevation(groundPoint);
 
             sf::Color color = floor.getPixel(i, j);
             if (h < 0)
@@ -87,6 +100,13 @@ Ground::Ground(ResourceManager &rm,
                 ;
                 // color.r = (int)(h * 255.f);
                 // floor.setPixel(i, j, color);
+                h = worldConfig.getElevation(groundPoint, 10);
+                h = std::clamp(h * 2.f, 0.f, 1.f);
+                h = h * h;
+                h = h < 0.3 ? 0 : h;
+                h = h * h;
+                color = mixColor(color, grass.getPixel(i, j), h);
+                floor.setPixel(i, j, color);
             }
         }
     }

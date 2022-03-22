@@ -33,7 +33,7 @@ public:
     float getCellWidth() { return width_ / (float)cols_; }
     float getCellHeight() { return height_ / (float)rows_; }
 
-    float getElevation(const Vector3f &point) const;
+    float getElevation(const Vector3f &point, int octaves = 3) const;
 
     Camera *getCamera() const { return camera_; }
 

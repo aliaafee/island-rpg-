@@ -45,4 +45,22 @@ inline int randi(int start, int end)
     return std::round((float)start + (v * (float)(end - start)));
 }
 
+inline sf::Color mixColor(sf::Color a, sf::Color b, float factor)
+{
+    Vector3f av(
+        (float)a.r / 255.f,
+        (float)a.g / 255.f,
+        (float)a.b / 255.f);
+    Vector3f bv(
+        (float)b.r / 255.f,
+        (float)b.g / 255.f,
+        (float)b.b / 255.f);
+    Vector3f r = (av + (bv - av) * factor) * 255.f;
+    return sf::Color(
+        (int)r.x,
+        (int)r.y,
+        (int)r.z,
+        a.a);
+}
+
 #endif // __VECTOR_H__
