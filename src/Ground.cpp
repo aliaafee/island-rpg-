@@ -93,21 +93,18 @@ Ground::Ground(ResourceManager &rm,
                 h += 0.8f;
                 h = h * h * h;
                 color.a = std::min((int)(h * 255), (int)color.a);
-                floor.setPixel(i, j, color);
             }
             else
             {
-                ;
-                // color.r = (int)(h * 255.f);
-                // floor.setPixel(i, j, color);
                 h = worldConfig.getElevation(groundPoint, 10);
                 h = std::clamp(h * 2.f, 0.f, 1.f);
                 h = h * h;
                 h = h < 0.3 ? 0 : h;
                 h = h * h;
                 color = mixColor(color, grass.getPixel(i, j), h);
-                floor.setPixel(i, j, color);
             }
+
+            floor.setPixel(i, j, color);
         }
     }
 
@@ -118,6 +115,8 @@ Ground::Ground(ResourceManager &rm,
         Vector2f(
             spriteOrigin.x,
             spriteOrigin.y));
+
+    // floor_.setSmooth(true);
 }
 
 void Ground::transform(Camera &camera)
