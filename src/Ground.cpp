@@ -9,8 +9,8 @@ Ground::Ground(ResourceManager &rm,
                                            height_(height),
                                            rows_(rows),
                                            cols_(cols),
-                                           tileWidth_(width / (float)cols),
-                                           tileHeight_(height / (float)rows)
+                                           tileWidth_(width_ / (float)cols),
+                                           tileHeight_(height_ / (float)rows)
 {
     setPosition(position);
 
