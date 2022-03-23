@@ -7,8 +7,15 @@
 #include "Vector.hpp"
 #include "AnimatedEntity.hpp"
 #include "ResourceManager.hpp"
-#include "StateMachine.hpp"
+#include "StateMachine2.hpp"
 #include "World.hpp"
+
+DEFINE_STATE_EVENTS(Player,
+                    PLAYER_WALK_TARGET,
+                    PLAYER_STOP);
+
+class PlayerIdleState;
+class PlayerWalkState;
 
 class Player : public AnimatedEntity
 {
@@ -29,16 +36,14 @@ private:
         STOP
     };
 
-    StateMachine<Player, World, StateEvent> statemachine_;
+    STATE_MACHINE(Player, World)
+    statemachine_;
 
-    StateId idleStateId;
-    StateId walkStateId;
-
-    StateId idleState(bool firstRun, sf::Time &elapsed, World &world);
+    STATE_INSTANCE(PlayerIdleState);
+    STATE_INSTANCE(PlayerWalkState);
 
     Vector3f walkTarget_;
     std::deque<Vector3f> walkPath_;
-    StateId walkState(bool firstRun, sf::Time &elapsed, World &world);
 
     std::string animationDirection_;
     std::string animationAction_;
@@ -46,6 +51,22 @@ private:
     void setAnimationDirection(const std::string &direction);
     void setAnimationDirection(const Vector3f &direction);
     void setAnimationAction(const std::string &action);
+};
+
+DECLARE_STATE_CLASS(Player, World);
+
+class PlayerIdleState : public STATE_CLASS(Player)
+{
+public:
+    STATE_ENTER(Player, World);
+    STATE_UPDATE(Player, World);
+};
+
+class PlayerWalkState : public STATE_CLASS(Player)
+{
+public:
+    STATE_ENTER(Player, World);
+    STATE_UPDATE(Player, World);
 };
 
 #endif // __PLAYER_H__

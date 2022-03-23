@@ -1,15 +1,19 @@
 #include "TrackingCamera.hpp"
 
-TrackingCamera::TrackingCamera(Vector3f position, Vector3f origin,
-                               Vector2f tileSize, float gridSize,
-                               float windowWidth, float windowHeight) : Camera(position, origin,
-                                                                               tileSize, gridSize,
-                                                                               windowWidth, windowHeight),
-                                                                        statemachine_(this),
-                                                                        trackTarget_(nullptr)
+STATE_INSTANCE_INIT(TrackingCamera, CameraIdleState);
+STATE_INSTANCE_INIT(TrackingCamera, CameraTrackingState);
+
+TrackingCamera::TrackingCamera(Vector3f position,
+                               Vector3f origin,
+                               Vector2f tileSize,
+                               float gridSize,
+                               float windowWidth,
+                               float windowHeight) : Camera(position, origin,
+                                                            tileSize, gridSize,
+                                                            windowWidth, windowHeight),
+                                                     statemachine_(this, STATE(TrackingCamera, CameraIdleState)),
+                                                     trackTarget_(nullptr)
 {
-    idleStateId = statemachine_.addState(&TrackingCamera::idleState);
-    trackingStateId = statemachine_.addState(&TrackingCamera::trackingState);
 }
 
 void TrackingCamera::update(sf::Time &elapsed)
@@ -17,27 +21,27 @@ void TrackingCamera::update(sf::Time &elapsed)
     statemachine_.updateState(elapsed, cameraData_);
 }
 
-StateId TrackingCamera::idleState(bool firstRun, sf::Time &elapsed, int &data)
+STATE_UPDATE_FUNCTION(TrackingCamera, CameraIdleState, int, data)
 {
-    if (trackTarget_ != nullptr)
+    if (t->trackTarget_ != nullptr)
     {
-        if (vecDistance2(getPosition(), trackTarget_->getPosition()) > maxDistance2_)
+        if (vecDistance2(t->getPosition(), t->trackTarget_->getPosition()) > t->maxDistance2_)
         {
-            return trackingStateId;
+            return STATE(TrackingCamera, CameraTrackingState);
         }
     }
-    return idleStateId;
+    return nullptr;
 }
 
-StateId TrackingCamera::trackingState(bool firstRun, sf::Time &elapsed, int &data)
+STATE_UPDATE_FUNCTION(TrackingCamera, CameraTrackingState, int, data)
 {
-    if (vecDistance2(getPosition(), trackTarget_->getPosition()) < minDistance2_)
+    if (vecDistance2(t->getPosition(), t->trackTarget_->getPosition()) < t->minDistance2_)
     {
-        return idleStateId;
+        return STATE(TrackingCamera, CameraIdleState);
     }
 
     // setPosition(trackTarget_->getPosition() * 0.02f + getPosition() * 0.98f);
-    move((trackTarget_->getPosition() - getPosition()) * trackSpeed_ * elapsed.asSeconds());
+    t->move((t->trackTarget_->getPosition() - t->getPosition()) * t->trackSpeed_ * elapsed.asSeconds());
 
-    return trackingStateId;
+    return nullptr;
 }

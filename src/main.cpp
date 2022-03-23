@@ -43,6 +43,7 @@ int main()
                 break;
             case sf::Event::GainedFocus:
                 windowFocused = true;
+                clock.restart();
                 break;
             case sf::Event::MouseButtonReleased:
                 world.onMouseButtonReleased(event);

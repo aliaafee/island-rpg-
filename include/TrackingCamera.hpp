@@ -3,7 +3,13 @@
 
 #include "Entity.hpp"
 #include "Camera.hpp"
-#include "StateMachine.hpp"
+#include "StateMachine2.hpp"
+
+DEFINE_STATE_EVENTS(TrackingCamera,
+                    CAMERA_STOP);
+
+class CameraIdleState;
+class CameraTrackingState;
 
 class TrackingCamera : public Camera
 {
@@ -28,19 +34,32 @@ private:
         DEFAULT
     };
 
-    StateMachine<TrackingCamera, int, StateEvent> statemachine_;
+    STATE_MACHINE(TrackingCamera, int)
+    statemachine_;
 
     int cameraData_;
 
-    StateId idleStateId;
-    StateId trackingStateId;
-
-    StateId idleState(bool firstRun, sf::Time &elapsed, int &data);
+    STATE_INSTANCE(CameraIdleState);
+    STATE_INSTANCE(CameraTrackingState);
 
     Entity *trackTarget_;
     float minDistance2_;
     float maxDistance2_;
     float trackSpeed_;
-    StateId trackingState(bool firstRun, sf::Time &elapsed, int &data);
 };
+
+DECLARE_STATE_CLASS(TrackingCamera, int);
+
+class CameraIdleState : public STATE_CLASS(TrackingCamera)
+{
+public:
+    STATE_UPDATE(TrackingCamera, int);
+};
+
+class CameraTrackingState : public STATE_CLASS(TrackingCamera)
+{
+public:
+    STATE_UPDATE(TrackingCamera, int);
+};
+
 #endif // __TRACKINGCAMERA_H__
