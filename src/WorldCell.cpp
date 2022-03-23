@@ -56,9 +56,9 @@ void WorldCell::load()
 {
     obstacleGrid_.clear(1);
 
-    srand(getId());
+    RandomGenerator r(getId());
 
-    floor_ = new Ground(*rm_, position_, width_, height_, 40, 40, *worldConfig_);
+    floor_ = new Ground(*rm_, position_, width_, height_, 40, 40, *worldConfig_, r);
 
     Entity *e;
     for (int i = 0; i < worldConfig_->subCols(); i++)
@@ -73,14 +73,14 @@ void WorldCell::load()
             float elevation = worldConfig_->getElevation(point);
             if (elevation > 0.25)
             {
-                if (randi(0, 8) == 0)
+                if (r.randomInt(0, 8) == 0)
                 {
 
-                    e = new Tree(*rm_);
+                    e = new Tree(*rm_, r);
                     entities_.push_back(e);
                     e->setPosition(
-                        point.x + (randf() * 5.f - 5.f),
-                        point.y + (randf() * 5.f - 5.f),
+                        point.x + (r.randomFloat() * 5.f - 5.f),
+                        point.y + (r.randomFloat() * 5.f - 5.f),
                         0);
                     _addObstacle(*e);
                 }
@@ -93,39 +93,7 @@ void WorldCell::load()
         }
     }
 
-    /*
-
-    Entity *e;
-    int count = randi(0, 5);
-    for (int c = 0; c < count; c++)
-    {
-        e = new Tree(*rm_);
-        entities_.push_back(e);
-        e->setPosition(
-            position_.x + width_ * randf(),
-            position_.y + height_ * randf(),
-            0);
-        _addObstacle(*e);
-    }
-
-    count = randi(0, 5);
-    for (int c = 0; c < count; c++)
-    {
-        e = new Palm(*rm_);
-        entities_.push_back(e);
-        e->setPosition(
-            position_.x + width_ * randf(),
-            position_.y + height_ * randf(),
-            0);
-        _addObstacle(*e);
-    }*/
-
-    // sleep(1);
-
     loaded_ = true;
-
-    // std::cout << "World Cell " << cell_i_ << ", " << cell_j_ << " loaded"
-    //           << "\n";
 }
 
 void WorldCell::_addObstacle(const Entity &entity)

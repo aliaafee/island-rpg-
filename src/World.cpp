@@ -43,6 +43,7 @@ World::World(sf::RenderWindow &window,
 
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
+    camera->setZoom(0.75);
 
     player_->setPosition(400000 / 2, 400000 / 2, 0);
     // player_->setPosition(700, 200, 0);

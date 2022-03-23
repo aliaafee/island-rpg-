@@ -8,6 +8,7 @@
 #include "SimplexNoise.hpp"
 #include "WorldConfig.hpp"
 #include "Algorithm.hpp"
+#include "RandomGenerator.hpp"
 
 class Ground : public Entity
 {
@@ -16,7 +17,8 @@ public:
            const Vector3f &position,
            const float &width, const float &height,
            const int &cols, const int &rows,
-           WorldConfig &worldConfig);
+           WorldConfig &worldConfig,
+           RandomGenerator &r);
 
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);

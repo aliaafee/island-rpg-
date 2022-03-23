@@ -4,13 +4,14 @@ Ground::Ground(ResourceManager &rm,
                const Vector3f &position,
                const float &width, const float &height,
                const int &rows, const int &cols,
-               WorldConfig &worldConfig) : Entity(rm),
-                                           width_(width),
-                                           height_(height),
-                                           rows_(rows),
-                                           cols_(cols),
-                                           tileWidth_(width_ / (float)cols),
-                                           tileHeight_(height_ / (float)rows)
+               WorldConfig &worldConfig,
+               RandomGenerator &r) : Entity(rm),
+                                     width_(width),
+                                     height_(height),
+                                     rows_(rows),
+                                     cols_(cols),
+                                     tileWidth_(width_ / (float)cols),
+                                     tileHeight_(height_ / (float)rows)
 {
     setPosition(position);
 
@@ -38,7 +39,7 @@ Ground::Ground(ResourceManager &rm,
     {
         Vector2i cellPos = origin + i_hati * i + j_hati * j;
 
-        int d = randi(0, 4);
+        int d = r.randomInt(0, 4);
         std::string dir = "45";
         if (d == 0)
             dir = "135";
@@ -46,7 +47,7 @@ Ground::Ground(ResourceManager &rm,
             dir = "225";
         if (d == 2)
             dir = "315";
-        d = randi(0, 4);
+        d = r.randomInt(0, 4);
         std::string type = "ts_beach0";
         // type = "ts_grass0";
 

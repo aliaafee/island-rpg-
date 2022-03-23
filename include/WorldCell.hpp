@@ -14,6 +14,7 @@
 #include "Ground.hpp"
 #include "ValueGrid.hpp"
 #include "WorldConfig.hpp"
+#include "RandomGenerator.hpp"
 
 // #ifdef _WIN32
 // #include <Windows.h>
