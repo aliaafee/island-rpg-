@@ -20,7 +20,7 @@ Only tested on Archlinux.
 
 ## Run
 
-    build/island-rpg resources/
+    island-rpg ../resources/
 
 ## TODO
 
