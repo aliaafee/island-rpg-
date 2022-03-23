@@ -7,7 +7,7 @@ Ocean::Ocean(ResourceManager &rm) : rect_(Vector2f(100, 100)),
     rect_.setFillColor(sf::Color::Red);
     rect_.setOrigin(50, 100);
 
-    if (!shader_.loadFromFile("graphics/shaders/ocean.vert", "graphics/shaders/ocean.frag"))
+    if (!rm.loadShader(shader_, "graphics/shaders/ocean.vert", "graphics/shaders/ocean.frag"))
     {
         std::cout << "Could not load shader" << std::endl;
         shaderLoaded_ = false;

@@ -9,7 +9,7 @@ int Matrix3Test(const Vector3f &test)
 
     Vector2f tileSize_(64, 32);
     float gridSize_(10.f);
-    Vector3f position_(10,20,30);
+    Vector3f position_(10, 20, 30);
     Vector3f origin_(400, 300, 0);
 
     float w_h = tileSize_.x / 2.0;
@@ -20,8 +20,7 @@ int Matrix3Test(const Vector3f &test)
     Matrix3 displaceMatrix_(
         w_h / s.x, -1 * w_h / s.y, 0,
         h_h / s.x, h_h / s.y, -1 * l / s.z,
-        w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0
-    );
+        w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0);
 
     Vector3f translation_ = origin_ - (displaceMatrix_ * position_);
 
@@ -37,10 +36,10 @@ int Matrix3Test(const Vector3f &test)
 
     std::cout << "    Inverse of Transformed: " << inverseDisplace * (transformed - translation_) << std::endl;
 
-    transformed = (displaceMatrix_ * test) ;
+    transformed = (displaceMatrix_ * test);
     std::cout << "                Transfomed: " << transformed << std::endl;
 
-    std::cout << "    Inverse of Transformed: " << inverseDisplace * (transformed ) << std::endl;
+    std::cout << "    Inverse of Transformed: " << inverseDisplace * (transformed) << std::endl;
 
     return 0;
 }
@@ -51,7 +50,7 @@ int Matrix4Test(const Vector3f &test)
 
     Vector2f tileSize_(64, 32);
     float gridSize_(10.f);
-    Vector3f position_(10,20,300);
+    Vector3f position_(10, 20, 300);
     Vector3f origin_(400, 300, 0);
 
     float w_h = tileSize_.x / 2.0;
@@ -63,8 +62,7 @@ int Matrix4Test(const Vector3f &test)
         w_h / s.x, -1 * w_h / s.y, 0, 0,
         h_h / s.x, h_h / s.y, -1 * l / s.z, 0,
         w_h * tan((45.0 / 180.0) * M_PI) / s.x, w_h * tan((45.0 / 180.0) * M_PI) / s.y, 0, 0,
-        0,0,0,1
-    );
+        0, 0, 0, 1);
 
     Vector3f translation_ = origin_ - matMultipy(displaceMatrix_, position_);
 

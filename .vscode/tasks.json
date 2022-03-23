@@ -4,14 +4,8 @@
         {
             "label": "make all",
             "type": "shell",
-            "command": "make all",
-            "problemMatcher": "$gcc"
+            "command": "cd build && make all",
+            "problemMatcher": "$gcc",
         },
-        {
-            "label": "make test",
-            "type": "shell",
-            "command": "make test",
-            "problemMatcher": "$gcc"
-        }
     ]
 }

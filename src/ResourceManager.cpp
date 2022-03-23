@@ -1,6 +1,6 @@
 #include "ResourceManager.hpp"
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(const std::string &resourceDirectory) : resourceDir_(resourceDirectory)
 {
     ;
 }
@@ -12,7 +12,7 @@ ResourceManager::~ResourceManager()
 
 sf::Texture *ResourceManager::loadTexture(const std::string &filename)
 {
-    return textures_.load(filename);
+    return textures_.load(resourceDir_ + filename);
 }
 
 bool ResourceManager::loadTextureDirectory(const std::string &directory,
@@ -22,7 +22,7 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
 
     try
     {
-        for (const auto &entry : std::filesystem::directory_iterator(directory))
+        for (const auto &entry : std::filesystem::directory_iterator(resourceDir_ + directory))
         {
             filenames.push_back(entry.path());
         }
@@ -38,7 +38,7 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
     sf::Texture *newTexture;
     for (const auto &filename : filenames)
     {
-        newTexture = loadTexture(filename);
+        newTexture = textures_.load(filename);
         if (newTexture == nullptr)
         {
             return false;
@@ -50,5 +50,10 @@ bool ResourceManager::loadTextureDirectory(const std::string &directory,
 
 sf::Image *ResourceManager::loadImage(const std::string &filename)
 {
-    return images_.load(filename);
+    return images_.load(resourceDir_ + filename);
+}
+
+bool ResourceManager::loadShader(sf::Shader &shader, std::string vertShaderFilename, std::string fragShaderFilename)
+{
+    return shader.loadFromFile(resourceDir_ + vertShaderFilename, resourceDir_ + fragShaderFilename);
 }

@@ -11,17 +11,19 @@ Install in the standard manner for your system.
 
 ## Build
 
+    mkdir build
+    cd build
+    cmake ..
     make
     
-Only tested on Archlinux with GCC.
+Only tested on Archlinux.
 
 ## Run
 
-    bin/island-rpg
+    build/island-rpg resources/
 
 ## TODO
 
-* Smooth transitions between terrain.
 * More interesting terrain, and make the islands more island like. Variation in color of ocean based on depth.
 * Add fauna. Marine, land and air.
 * Add structures, buildings etc.

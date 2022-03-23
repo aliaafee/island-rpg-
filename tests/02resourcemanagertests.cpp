@@ -4,7 +4,7 @@ int main()
 {
     std::cout << "# Testing Resource Manager" << std::endl;
 
-    ResourceManager mngr;
+    ResourceManager mngr("");
 
     sf::Texture *tex = mngr.loadTexture("graphics/test/player.png");
 

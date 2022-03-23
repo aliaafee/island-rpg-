@@ -14,7 +14,7 @@
 class ResourceManager
 {
 public:
-    ResourceManager();
+    ResourceManager(const std::string &resourceDirectory);
     ~ResourceManager();
 
     sf::Texture *loadTexture(const std::string &filename);
@@ -22,7 +22,10 @@ public:
 
     sf::Image *loadImage(const std::string &filename);
 
+    bool loadShader(sf::Shader &shader, std::string vertShaderFilename, std::string fragShaderFilename);
+
 private:
+    std::string resourceDir_;
     ResourceCache<sf::Texture> textures_;
     ResourceCache<sf::Image> images_;
 };

@@ -36,12 +36,12 @@ inline void srand(int seed)
 
 inline float randf()
 {
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    return static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
 }
 
 inline int randi(int start, int end)
 {
-    float v = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    float v = static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
     return std::round((float)start + (v * (float)(end - start)));
 }
 

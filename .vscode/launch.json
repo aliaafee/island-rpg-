@@ -5,8 +5,10 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/island-rpg",
-            "args": [],
+            "program": "${workspaceFolder}/build/island-rpg",
+            "args": [
+                "resources/"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

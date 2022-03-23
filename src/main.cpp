@@ -1,11 +1,12 @@
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
 
 #include "World.hpp"
 #include "ResourceManager.hpp"
 #include "Matrix3.hpp"
 
-int main()
+void game(std::string resourceDir)
 {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
@@ -22,7 +23,7 @@ int main()
     std::cout << "antialiasing level:" << settings2.antialiasingLevel << std::endl;
     std::cout << "version:" << settings2.majorVersion << "." << settings2.minorVersion << std::endl;
 
-    ResourceManager rm;
+    ResourceManager rm(resourceDir);
     World world(window, rm, 100, 100);
 
     bool windowFocused = false;
@@ -68,5 +69,22 @@ int main()
             window.display();
         }
     }
+}
+
+void usage(std::string name)
+{
+    std::cerr << "Usage: " << name << " RESOURCE_DIR" << std::endl;
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc < 2)
+    {
+        usage(argv[0]);
+        return 1;
+    }
+
+    game(argv[1]);
+
     return 0;
 }
