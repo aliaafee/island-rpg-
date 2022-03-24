@@ -76,7 +76,7 @@ void WorldCell::load()
                 if (r.randomInt(0, 8) == 0)
                 {
 
-                    e = new Tree(*rm_, r);
+                    e = new TropicalTree(*rm_, r);
                     entities_.push_back(e);
                     e->setPosition(
                         point.x + (r.randomFloat() * 5.f - 5.f),

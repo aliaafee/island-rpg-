@@ -2,6 +2,8 @@
 #define __RANDOMGENERATOR_H__
 
 #include <random>
+#include <string>
+#include <vector>
 
 class RandomGenerator : std::minstd_rand0
 {
@@ -17,6 +19,11 @@ public:
     {
         float v = randomFloat();
         return std::round((float)start + (v * (float)(end - start)));
+    }
+
+    std::string randomChoice(std::vector<std::string> &choices)
+    {
+        return choices[randomInt(0, choices.size() - 1)];
     }
 };
 #endif // __RANDOMGENERATOR_H__
