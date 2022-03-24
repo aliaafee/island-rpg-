@@ -15,6 +15,10 @@ Install in the standard manner for your system.
     cd build
     cmake ..
     make
+
+To enable debug symbols use:
+
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
     
 Only tested on Archlinux.
 

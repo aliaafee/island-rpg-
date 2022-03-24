@@ -34,6 +34,7 @@ public:
     float getCellHeight() { return height_ / (float)rows_; }
 
     float getElevation(const Vector3f &point, int octaves = 3) const;
+    float getElevation(const float &x, const float &y, int octaves = 3) const;
 
     Camera *getCamera() const { return camera_; }
 

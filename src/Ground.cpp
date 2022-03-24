@@ -32,12 +32,30 @@ Ground::Ground(ResourceManager &rm,
     sf::Image grass;
     grass.create(cols_ * 64, rows_ * 32 + 32, sf::Color::Transparent);
 
-    DiagonalIterateGrid gridIterator(rows_);
-    int i, j;
+    DiagonalIterateGrid gridIterator(rows_ + 2);
+    int gi, gj;
     Vector2i origin(floor.getSize().x / 2 - 32, 0);
-    while (gridIterator.next(i, j))
+    while (gridIterator.next(gi, gj))
     {
+        int i = gi - 1;
+        int j = gj - 1;
         Vector2i cellPos = origin + i_hati * i + j_hati * j;
+
+        // if (cellPos.x >= 0 and cellPos.y >= 0)
+
+        int tileOffsetx = 0;
+        if (cellPos.x < 0)
+        {
+            tileOffsetx = abs(cellPos.x);
+            cellPos.x = 0;
+        }
+
+        int tileOffsety = 0;
+        if (cellPos.y < 0)
+        {
+            tileOffsety = abs(cellPos.y);
+            cellPos.y = 0;
+        }
 
         int d = r.randomInt(0, 4);
         std::string dir = "45";
@@ -58,7 +76,7 @@ Ground::Ground(ResourceManager &rm,
             cellPos.x,
             cellPos.y,
             sf::IntRect(
-                0, 0, tile->getSize().x, tile->getSize().y),
+                tileOffsetx, tileOffsety, tile->getSize().x - tileOffsetx, tile->getSize().y - tileOffsety),
             true);
 
         type = "ts_grass0";
@@ -68,7 +86,7 @@ Ground::Ground(ResourceManager &rm,
             cellPos.x,
             cellPos.y + 6,
             sf::IntRect(
-                0, 0, tile->getSize().x, tile->getSize().y),
+                tileOffsetx, tileOffsety, tile->getSize().x - tileOffsetx, tile->getSize().y - tileOffsety),
             true);
     }
 
@@ -77,37 +95,122 @@ Ground::Ground(ResourceManager &rm,
         32,
         0);
 
-    for (unsigned int i = 0; i < floor.getSize().x; i++)
+    // Coastline gen method 1
+    Vector2f originf((float)floor.getSize().x / 2.f, 30.f);
+    float i_max = (width_ / tileWidth_);
+    float j_max = (height_ / tileHeight_);
+    for (float i = -1.f; i < i_max + 1.5; i += 0.03f)
     {
-        for (unsigned int j = 0; j < floor.getSize().y; j++)
+        for (float j = -1.f; j < j_max + 1.5; j += 0.02f)
         {
-            Vector3f screenpos = worldConfig.getCamera()->transform(getPosition());
+            Vector2f cellPos = originf + i_hat * i + j_hat * j;
+            Vector3f cellPosWorld = getPosition() + Vector3f(tileWidth_ * i, tileHeight_ * j, 0);
 
-            Vector3f groundPoint = worldConfig.getCamera()->projectGround(
-                screenpos - spriteOrigin + Vector3f((float)i, (float)j, 0));
+            float h = worldConfig.getElevation(cellPosWorld);
 
-            float h = worldConfig.getElevation(groundPoint);
+            float overlap = 0.f;
 
-            sf::Color color = floor.getPixel(i, j);
-            if (h < 0)
+            float fx = 1;
+            float fy = 1;
+            if (i < overlap)
             {
-                h += 0.8f;
-                h = h * h * h;
-                color.a = std::min((int)(h * 255), (int)color.a);
+                fx = std::max(0.f, 1.f - (overlap - i));
             }
-            else
+            if (i > i_max - overlap)
             {
-                h = worldConfig.getElevation(groundPoint, 10);
-                h = std::clamp(h * 2.f, 0.f, 1.f);
-                h = h * h;
-                h = h < 0.3 ? 0 : h;
-                h = h * h;
-                color = mixColor(color, grass.getPixel(i, j), h);
+                if (i > i_max + (1 - overlap))
+                {
+                    fx = 0;
+                }
+                else
+                {
+                    fx = 1.f - (i - (i_max - overlap));
+                }
+            }
+            if (j < overlap)
+            {
+                fy = std::max(0.f, 1.f - (overlap - j));
+            }
+            if (j > j_max - overlap)
+            {
+                if (j > j_max + (1 - overlap))
+                {
+                    fy = 0;
+                }
+                else
+                {
+                    fy = 1.f - (j - (j_max - overlap));
+                }
             }
 
-            floor.setPixel(i, j, color);
+            int px, py;
+            px = (int)cellPos.x;
+            py = (int)cellPos.y;
+
+            if (px < floor.getSize().x &&
+                py < floor.getSize().y &&
+                px >= 0 &&
+                py >= 0)
+            {
+                sf::Color color = floor.getPixel(px, py);
+
+                float alpha = fx * fy;
+                if (h < 0)
+                {
+                    h += 0.8f;
+                    h = h * h * h;
+                    alpha = std::min(h, alpha * h);
+                }
+                else
+                {
+                    h = worldConfig.getElevation(cellPosWorld, 10);
+                    h = std::clamp(h * 2.f, 0.f, 1.f);
+                    h = h * h;
+                    h = h < 0.3 ? 0 : h;
+                    h = h * h;
+                    color = mixColor(color, grass.getPixel(px, py), h);
+                }
+                color.a = (alpha * 255.f); // std::min((int)(alpha * 255.f), (int)color.a);
+
+                floor.setPixel(px, py, color);
+            }
         }
     }
+    // Coastline gen method 1
+
+    // Coastline gen method 2
+    // for (unsigned int i = 0; i < floor.getSize().x; i++)
+    // {
+    //     for (unsigned int j = 0; j < floor.getSize().y; j++)
+    //     {
+    //         Vector3f screenpos = worldConfig.getCamera()->transform(getPosition());
+
+    //         Vector3f groundPoint = worldConfig.getCamera()->projectGround(
+    //             screenpos - spriteOrigin + Vector3f((float)i, (float)j, 0));
+
+    //         float h = worldConfig.getElevation(groundPoint);
+
+    //         sf::Color color = floor.getPixel(i, j);
+    //         if (h < 0)
+    //         {
+    //             h += 0.8f;
+    //             h = h * h * h;
+    //             color.a = std::min((int)(h * 255), (int)color.a);
+    //         }
+    //         else
+    //         {
+    //             h = worldConfig.getElevation(groundPoint, 10);
+    //             h = std::clamp(h * 2.f, 0.f, 1.f);
+    //             h = h * h;
+    //             h = h < 0.3 ? 0 : h;
+    //             h = h * h;
+    //             color = mixColor(color, grass.getPixel(i, j), h);
+    //         }
+
+    //         floor.setPixel(i, j, color);
+    //     }
+    // }
+    // Coastline gen method 2
 
     floor_.loadFromImage(floor);
 
@@ -129,6 +232,5 @@ void Ground::transform(Camera &camera)
 
 void Ground::draw(sf::RenderTarget *screen)
 {
-
     screen->draw(floorSprite_);
 }

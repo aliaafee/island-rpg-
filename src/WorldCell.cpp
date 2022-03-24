@@ -60,14 +60,17 @@ void WorldCell::load()
 
     floor_ = new Ground(*rm_, position_, width_, height_, 40, 40, *worldConfig_, r);
 
+    float subCellHalfWidth = width_ / (float)worldConfig_->subCols() * 0.5;
+    float subCellHalfHeight = height_ / (float)worldConfig_->subRows() * 0.5;
+
     Entity *e;
     for (int i = 0; i < worldConfig_->subCols(); i++)
     {
         for (int j = 0; j < worldConfig_->subRows(); j++)
         {
             Vector3f point(
-                (float)i / (float)worldConfig_->subCols() * width_ + position_.x,
-                (float)j / (float)worldConfig_->subRows() * width_ + position_.y,
+                (float)i / (float)worldConfig_->subCols() * width_ + position_.x + subCellHalfWidth,
+                (float)j / (float)worldConfig_->subRows() * height_ + position_.y + subCellHalfHeight,
                 0);
 
             float elevation = worldConfig_->getElevation(point);
