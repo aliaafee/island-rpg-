@@ -27,6 +27,47 @@
                 }
             ],
             "preLaunchTask": "make all"
+        },
+        {
+            "name": "(gdb) Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/${input:testName}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "make all tests"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "testName",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "ls -1 *.cpp | sed 's/.cpp//g'",
+                "cwd": "${workspaceFolder}/tests",
+                "env": {
+                    "WORKSPACE": "${workspaceFolder[0]}",
+                    "FILE": "${file}",
+                    "PROJECT": "${workspaceFolderBasename}"
+                }
+            }
         }
     ]
 }

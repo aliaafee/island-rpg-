@@ -7,5 +7,24 @@
             "command": "cd build && make all",
             "problemMatcher": "$gcc",
         },
+        {
+            "label": "make all tests",
+            "type": "shell",
+            "command": "cd build && make all_tests",
+            "problemMatcher": "$gcc",
+        },
+        {
+            "label": "make a test",
+            "type": "shell",
+            "command": "cd build && make ${input:testName}",
+            "problemMatcher": "$gcc",
+        }
+    ],
+    "inputs": [
+        {
+            "id": "testName",
+            "description": "Name of Test to Build",
+            "type": "promptString"
+        }
     ]
 }

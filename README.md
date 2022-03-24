@@ -22,6 +22,12 @@ Only tested on Archlinux.
 
     island-rpg ../resources/
 
+## Run Tests
+
+    cd build
+    cmake ..
+    make all_tests test
+
 ## TODO
 
 * More interesting terrain, and make the islands more island like. Variation in color of ocean based on depth.
