@@ -1,7 +1,9 @@
 #include "Player.hpp"
 
 STATE_INSTANCE_INIT(Player, PlayerIdleState);
+STATE_INSTANCE_INIT(Player, PlayerWalkToState);
 STATE_INSTANCE_INIT(Player, PlayerWalkState);
+STATE_INSTANCE_INIT(Player, PlayerJumpState);
 
 Player::Player(ResourceManager &rm) : AnimatedEntity(rm),
                                       statemachine_(
@@ -97,17 +99,121 @@ STATE_UPDATE_FUNCTION(Player, PlayerIdleState, World, world)
         switch (event)
         {
         case PLAYER_WALK_TARGET:
-            return STATE(Player, PlayerWalkState);
+            return STATE(Player, PlayerWalkToState);
             break;
         default:
             break;
         }
     }
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        return STATE(Player, PlayerWalkState);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        return STATE(Player, PlayerJumpState);
+    }
+
     return nullptr;
 }
 
 STATE_ENTER_FUNCTION(Player, PlayerWalkState, World, world)
+{
+    t->setAnimationAction("walking");
+}
+
+STATE_UPDATE_FUNCTION(Player, PlayerWalkState, World, world)
+{
+    Vector3f direction;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    {
+        direction.x += -1.f;
+        direction.y += -1.f;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    {
+        direction.y += 1.f;
+        direction.x += 1.f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    {
+        direction.x += 1.f;
+        direction.y += -1.f;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    {
+        direction.x += -1.f;
+        direction.y += 1.f;
+    }
+
+    if (vecNull(direction))
+        return STATE(Player, PlayerIdleState);
+
+    vecNormalize(direction);
+
+    float stepSize = t->walkSpeed_ * 60.f * elapsed.asSeconds();
+    direction *= stepSize;
+
+    Vector3f position = t->getLocalPosition();
+
+    position.x += direction.x;
+    if (!world.canMoveTo(*t, position))
+        position.x = t->getLocalPosition().x;
+
+    position.y += direction.y;
+    if (!world.canMoveTo(*t, position))
+        position.y = t->getLocalPosition().y;
+
+    t->setLocalPosition(position);
+
+    t->setAnimationDirection(direction);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        return STATE(Player, PlayerJumpState);
+    }
+
+    return nullptr;
+}
+
+STATE_ENTER_FUNCTION(Player, PlayerJumpState, World, world)
+{
+    t->setAnimationAction("idle");
+    t->vertSpeed = 1.5f;
+    t->jumpCount = 2;
+}
+
+STATE_UPDATE_FUNCTION(Player, PlayerJumpState, World, world)
+{
+    CALL_STATE_UPDATE(PlayerWalkState, world);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        if (t->jumpCount < 2 && t->vertSpeed < 1.f)
+        {
+            t->jumpCount += 1;
+            t->vertSpeed = 1.5;
+        }
+    }
+
+    t->vertSpeed -= 0.1 * 60 * elapsed.asSeconds();
+
+    t->move(0, 0, t->vertSpeed * 60.f * elapsed.asSeconds());
+
+    if (t->getLocalPosition().z < 0)
+    {
+        return STATE(Player, PlayerIdleState);
+    }
+    return nullptr;
+}
+
+STATE_ENTER_FUNCTION(Player, PlayerWalkToState, World, world)
 {
 
     std::cout << "Player to Walk State" << std::endl;
@@ -127,7 +233,7 @@ STATE_ENTER_FUNCTION(Player, PlayerWalkState, World, world)
     t->setAnimationAction("walking");
 }
 
-STATE_UPDATE_FUNCTION(Player, PlayerWalkState, World, world)
+STATE_UPDATE_FUNCTION(Player, PlayerWalkToState, World, world)
 {
     POLL_STATE_EVENTS(Player)
     {
@@ -161,7 +267,7 @@ STATE_UPDATE_FUNCTION(Player, PlayerWalkState, World, world)
         return STATE(Player, PlayerIdleState);
     }
 
-    float stepSize = 1.f * 60.f * elapsed.asSeconds();
+    float stepSize = t->walkSpeed_ * 60.f * elapsed.asSeconds();
     Vector3f position;
 
     float distance2 = vecMagnitude2(t->toLocal(t->walkPath_.front()) - t->getLocalPosition());

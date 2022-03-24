@@ -43,7 +43,7 @@ public:
                   const bool &diagonal,
                   std::deque<Vector3f> &resultPath);
 
-    bool canMoveTo(const Entity &entity, const Vector3f &point) const;
+    bool canMoveTo(const Entity &entity, const Vector3f &localPoint) const;
 
 private:
     Player *player_;

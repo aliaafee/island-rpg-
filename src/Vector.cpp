@@ -25,6 +25,13 @@ float vecMagnitude2(const Vector3f &v)
     return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
+bool vecNull(const Vector3f &v)
+{
+    if (v.x == 0.f && v.y == 0.f and v.z == 0.f)
+        return true;
+    return false;
+}
+
 float vecDistance(const Vector3f &a, const Vector3f &b)
 {
     return vecMagnitude(b - a);

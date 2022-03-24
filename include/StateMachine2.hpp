@@ -152,4 +152,13 @@ public:
     TARGETCLASS##Event event;          \
     while (events.pollEvent(event))
 
+#define CALL_STATE_UPDATE(STATECLASS, DATANAME) \
+    STATECLASS::update(t, elapsed, DATANAME, events);
+
+#define CALL_STATE_ENTER(STATECLASS, DATANAME) \
+    STATECLASS::enter(t, DATANAME);
+
+#define CALL_STATE_EXIT(STATECLASS, DATANAME) \
+    STATECLASS::exit(t, DATANAME);
+
 #endif // __STATEMACHINE2_H__

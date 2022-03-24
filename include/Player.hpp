@@ -15,7 +15,9 @@ DEFINE_STATE_EVENTS(Player,
                     PLAYER_STOP);
 
 class PlayerIdleState;
+class PlayerWalkToState;
 class PlayerWalkState;
+class PlayerJumpState;
 
 class Player : public AnimatedEntity
 {
@@ -30,6 +32,11 @@ public:
     void stop();
 
 private:
+    float walkSpeed_ = 1.f;
+
+    float vertSpeed = 0;
+    int jumpCount = 0;
+
     enum StateEvent
     {
         WALK_TO_TARGET,
@@ -41,6 +48,8 @@ private:
 
     STATE_INSTANCE(PlayerIdleState);
     STATE_INSTANCE(PlayerWalkState);
+    STATE_INSTANCE(PlayerWalkToState);
+    STATE_INSTANCE(PlayerJumpState);
 
     Vector3f walkTarget_;
     std::deque<Vector3f> walkPath_;
@@ -63,6 +72,20 @@ public:
 };
 
 class PlayerWalkState : public STATE_CLASS(Player)
+{
+public:
+    STATE_ENTER(Player, World);
+    STATE_UPDATE(Player, World);
+};
+
+class PlayerJumpState : public PlayerWalkState
+{
+public:
+    STATE_ENTER(Player, World);
+    STATE_UPDATE(Player, World);
+};
+
+class PlayerWalkToState : public STATE_CLASS(Player)
 {
 public:
     STATE_ENTER(Player, World);

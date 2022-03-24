@@ -76,28 +76,28 @@ void World::input_(sf::Time &elapsed)
         camera_->projectGround(mousePosition));
 
     // Camera Pan
-    float speed = elapsed.asSeconds() * 4.0 * 60;
-    Vector2f panDir(0, 0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        panDir.x = speed;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        panDir.x = -speed;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-    {
-        panDir.y = -speed;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        panDir.y = speed;
-    }
-    if (std::abs(panDir.x) > 0 || std::abs(panDir.y) > 0)
-    {
-        camera_->pan(panDir);
-    }
+    // float speed = elapsed.asSeconds() * 4.0 * 60;
+    // Vector2f panDir(0, 0);
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    // {
+    //     panDir.x = speed;
+    // }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    // {
+    //     panDir.x = -speed;
+    // }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    // {
+    //     panDir.y = -speed;
+    // }
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    // {
+    //     panDir.y = speed;
+    // }
+    // if (std::abs(panDir.x) > 0 || std::abs(panDir.y) > 0)
+    // {
+    //     camera_->pan(panDir);
+    // }
 }
 
 void World::updateCells_()
