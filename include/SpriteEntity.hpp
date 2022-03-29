@@ -24,6 +24,8 @@ public:
 
     FloatRect getSpriteRect() const;
 
+    bool loadSprite(std::string filename);
+
 private:
     sf::Sprite sprite_;
 };

@@ -10,6 +10,7 @@
 #include <mutex>
 #include <SFML/Graphics.hpp>
 #include <ResourceCache.hpp>
+#include <ConfigFile.hpp>
 
 class ResourceManager
 {
@@ -24,10 +25,13 @@ public:
 
     bool loadShader(sf::Shader &shader, std::string vertShaderFilename, std::string fragShaderFilename);
 
+    ConfigFile *loadConfig(const std::string &filename);
+
 private:
     std::string resourceDir_;
     ResourceCache<sf::Texture> textures_;
     ResourceCache<sf::Image> images_;
+    ResourceCache<ConfigFile> configs_;
 };
 
 #endif // __RESOURCEMANAGER_H__

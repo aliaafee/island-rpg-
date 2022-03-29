@@ -12,12 +12,6 @@ using Vector2i = sf::Vector2i;
 using Vector2u = sf::Vector2u;
 using FloatRect = sf::FloatRect;
 
-inline std::ostream &operator<<(std::ostream &os, const Vector3f &v)
-{
-    os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-    return os;
-}
-
 float vecDotProd(const Vector3f &a, const Vector3f &b);
 void vecNormalize(Vector3f &v);
 float vecMagnitude(const Vector3f &v);
@@ -47,6 +41,18 @@ inline sf::Color mixColor(sf::Color a, sf::Color b, float factor)
         (int)r.y,
         (int)r.z,
         a.a);
+}
+
+inline std::ostream &operator<<(std::ostream &os, const Vector3f &v)
+{
+    os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+    return os;
+}
+
+inline std::ostream &operator<<(std::ostream &os, const Vector2f &v)
+{
+    os << "(" << v.x << ", " << v.y << ")";
+    return os;
 }
 
 #endif // __VECTOR_H__

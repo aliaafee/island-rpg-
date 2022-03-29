@@ -57,3 +57,8 @@ bool ResourceManager::loadShader(sf::Shader &shader, std::string vertShaderFilen
 {
     return shader.loadFromFile(resourceDir_ + vertShaderFilename, resourceDir_ + fragShaderFilename);
 }
+
+ConfigFile *ResourceManager::loadConfig(const std::string &filename)
+{
+    return configs_.load(resourceDir_ + filename);
+}

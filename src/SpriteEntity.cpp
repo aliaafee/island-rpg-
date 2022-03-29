@@ -39,3 +39,26 @@ FloatRect SpriteEntity::getSpriteRect() const
 {
     return FloatRect(sprite_.getTextureRect());
 }
+
+bool SpriteEntity::loadSprite(std::string filename)
+{
+    auto spriteFile = rm->loadConfig(filename);
+
+    if (spriteFile == nullptr)
+        return false;
+
+    auto texture = rm->loadTexture(spriteFile->getAsString("texture"));
+
+    if (texture == nullptr)
+        return false;
+
+    setTexture(texture);
+
+    setSpriteOrigin(
+        spriteFile->getAsVector2f("origin").x,
+        spriteFile->getAsVector2f("origin").y);
+
+    setSize(spriteFile->getAsVector3f("size"));
+
+    return true;
+}
