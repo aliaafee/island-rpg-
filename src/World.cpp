@@ -6,10 +6,14 @@ World::World(sf::RenderWindow &window,
                                               rm_(&rm),
                                               camera_(
                                                   new TrackingCamera(Vector3f(0, 0, 0),
-                                                                     Vector3f(window.getSize().x / 2, window.getSize().y / 2, 0),
+                                                                     Vector3f(
+                                                                         window.getSize().x / 2,
+                                                                         window.getSize().y / 2,
+                                                                         0),
                                                                      Vector2f(64, 32),
                                                                      10,
-                                                                     window.getSize().x, window.getSize().y)),
+                                                                     window.getSize().x,
+                                                                     window.getSize().y)),
                                               worldConfig_(
                                                   4000000.f, 4000000.f,
                                                   10000, 10000,
@@ -154,6 +158,8 @@ void World::updateCells_()
     {
         entity->translateOrigin(pathfinder_.getPosition());
     }
+
+    cursor_.translateOrigin(pathfinder_.getPosition());
 }
 
 void World::updateVisibileList_()
@@ -311,7 +317,20 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
 
 bool World::canMoveTo(const Entity &entity, const Vector3f &localPoint) const
 {
-    return pathfinder_.isAreaFree(localPoint, entity.getSize() * 0.8f);
+    if (!pathfinder_.isAreaFree(localPoint, entity.getSize() * 0.8f))
+        return false;
+
+    for (auto &e : entities_)
+    {
+        if (e != &entity)
+        {
+            if (e->collision(localPoint, entity.getSize()))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 bool World::findNearbyFreePosition(const Vector3f &position, Vector3f &out_position)

@@ -52,6 +52,7 @@ public:
     Vector2f getScreenPosition2() const;
 
     virtual bool collision(const Entity &other);
+    virtual bool collision(const Vector3f &localPoint, const Vector3f &size);
 
 protected:
     ResourceManager *rm;

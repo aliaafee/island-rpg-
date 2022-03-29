@@ -161,12 +161,28 @@ Vector2f Entity::getScreenPosition2() const
 
 bool Entity::collision(const Entity &other)
 {
-    Vector3f origin = getPosition() - (getSize() / 2.f);
-    Vector3f otherOrigin = other.getPosition() - (other.getSize() / 2.f);
+    Vector3f origin = getLocalPosition() - (getSize() / 2.f);
+    Vector3f otherOrigin = other.getLocalPosition() - (other.getSize() / 2.f);
 
     if ((origin.x < otherOrigin.x + other.getSize().x) &&
         (origin.x + getSize().x > otherOrigin.x) &&
         (origin.y < otherOrigin.y + other.getSize().y) &&
+        (getSize().y + origin.y > otherOrigin.y))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Entity::collision(const Vector3f &localPoint, const Vector3f &size)
+{
+    Vector3f origin = getLocalPosition() - (getSize() / 2.f);
+    Vector3f otherOrigin = localPoint - (size / 2.f);
+
+    if ((origin.x < otherOrigin.x + size.x) &&
+        (origin.x + getSize().x > otherOrigin.x) &&
+        (origin.y < otherOrigin.y + size.y) &&
         (getSize().y + origin.y > otherOrigin.y))
     {
         return true;
