@@ -73,6 +73,7 @@ private:
     void input_(sf::Time &elapsed);
 
     void updateCells_();
+    void updateVisibileList_();
 };
 
 #endif // __WORLD_H__

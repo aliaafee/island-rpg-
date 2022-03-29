@@ -93,20 +93,16 @@ void World::input_(sf::Time &elapsed)
 
 void World::updateCells_()
 {
-    // int cellId = worldConfig_.getId(player_->getPosition());
-    // if (cellId == activeCellId_)
-    // {
-    //     return;
-    // }
+    int cellId = worldConfig_.getId(player_->getPosition());
+    if (cellId == activeCellId_)
+    {
+        return;
+    }
 
-    // activeCellId_ = cellId;
+    activeCellId_ = cellId;
 
-    // std::cout << "Updating cells\n";
+    std::cout << "Updating cells\n";
     activeCells_.clear();
-    visibleEntities_.clear();
-    floorEntities_.clear();
-
-    visibleEntities_ = entities_;
 
     int min_i = worldConfig_.rows();
     int min_j = worldConfig_.cols();
@@ -131,10 +127,7 @@ void World::updateCells_()
         }
 
         activeCells_.push_back(currentCell);
-        for (auto entity : currentCell->getEntities())
-        {
-            visibleEntities_.push_back(entity);
-        }
+
         if (i < min_i)
             min_i = i;
         if (j < min_j)
@@ -155,7 +148,6 @@ void World::updateCells_()
     for (auto &cell : activeCells_)
     {
         cell->translateOrigin(pathfinder_.getPosition());
-        floorEntities_.push_back(cell->getFloor());
     }
 
     for (auto &entity : entities_)
@@ -164,11 +156,28 @@ void World::updateCells_()
     }
 }
 
+void World::updateVisibileList_()
+{
+    visibleEntities_.clear();
+    floorEntities_.clear();
+
+    visibleEntities_ = entities_;
+    for (auto &cell : activeCells_)
+    {
+        for (auto entity : cell->getEntities())
+        {
+            visibleEntities_.push_back(entity);
+        }
+        floorEntities_.push_back(cell->getFloor());
+    }
+}
+
 void World::update(sf::Time &elapsed)
 {
     ocean_.update(elapsed, *this);
 
     updateCells_();
+    updateVisibileList_();
 
     camera_->updateWindow(*window_);
 
