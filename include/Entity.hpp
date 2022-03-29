@@ -23,6 +23,8 @@ public:
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
+    virtual void attack(){};
+
     Vector3f getPosition() const;
 
     virtual void setPosition(const Vector3f &position);
@@ -44,8 +46,12 @@ public:
     void setSize(const Vector3f &size);
     void setSize(const float &x, const float &y, const float &z);
 
+    const float &getSizeRadius() const;
+
     const Vector3f &getScreenPosition() const;
     Vector2f getScreenPosition2() const;
+
+    virtual bool collision(const Entity &other);
 
 protected:
     ResourceManager *rm;
@@ -54,6 +60,7 @@ private:
     Vector3f origin_;
     Vector3f position_; // Position is relative to the origin
     Vector3f size_;
+    float sizeRadius_;
 
     Vector3f screenPosition_;
 

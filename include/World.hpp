@@ -20,6 +20,7 @@
 #include "WorldCell.hpp"
 #include "WorldPathfinder.hpp"
 #include "Ocean.hpp"
+#include "Interactable.hpp"
 
 class Player;
 
@@ -45,10 +46,12 @@ public:
 
     bool canMoveTo(const Entity &entity, const Vector3f &localPoint) const;
 
+    bool findNearbyFreePosition(const Vector3f &position, Vector3f &out_position);
+
 private:
     Player *player_;
-    Entity *cursor_;
-    Ocean *ocean_;
+    Entity cursor_;
+    Ocean ocean_;
     std::vector<Entity *> entities_;
 
     Camera *camera_;
@@ -57,6 +60,7 @@ private:
 
     std::unordered_map<int, WorldCell *> cellCache_;
     std::vector<WorldCell *> activeCells_;
+    int activeCellId_;
 
     std::vector<Entity *> visibleEntities_;
     std::vector<Entity *> floorEntities_;

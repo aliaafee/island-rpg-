@@ -14,7 +14,7 @@ void game(std::string resourceDir)
     settings.minorVersion = 3;
 
     // sf::RenderWindow window(sf::VideoMode(1920, 1080), "Island RPG", sf::Style::Fullscreen, settings);
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Island RPG", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Island RPG", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
     // window.setFramerateLimit(60);
 

@@ -12,12 +12,14 @@
 
 DEFINE_STATE_EVENTS(Player,
                     PLAYER_WALK_TARGET,
-                    PLAYER_STOP);
+                    PLAYER_STOP,
+                    PLAYER_ATTACK_OTHER);
 
 class PlayerIdleState;
 class PlayerWalkToState;
 class PlayerWalkState;
 class PlayerJumpState;
+class PlayerAttackingState;
 
 class Player : public AnimatedEntity
 {
@@ -30,6 +32,7 @@ public:
     void walkTo(const Vector3f &target);
     void walkPath(const std::deque<Vector3f> &path);
     void stop();
+    void attackOther(Entity &entity);
 
 private:
     float walkSpeed_ = 1.f;
@@ -50,12 +53,15 @@ private:
     STATE_INSTANCE(PlayerWalkState);
     STATE_INSTANCE(PlayerWalkToState);
     STATE_INSTANCE(PlayerJumpState);
+    STATE_INSTANCE(PlayerAttackingState);
 
     Vector3f walkTarget_;
     std::deque<Vector3f> walkPath_;
 
     std::string animationDirection_;
     std::string animationAction_;
+
+    Entity *attackingTarget_;
 
     void setAnimationDirection(const std::string &direction);
     void setAnimationDirection(const Vector3f &direction);
@@ -86,6 +92,13 @@ public:
 };
 
 class PlayerWalkToState : public STATE_CLASS(Player)
+{
+public:
+    STATE_ENTER(Player, World);
+    STATE_UPDATE(Player, World);
+};
+
+class PlayerAttackingState : public PlayerWalkToState
 {
 public:
     STATE_ENTER(Player, World);

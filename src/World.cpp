@@ -16,45 +16,36 @@ World::World(sf::RenderWindow &window,
                                                   40, 40,
                                                   *camera_),
                                               player_(new Player(rm)),
-                                              cursor_(new Entity(rm)),
-                                              ocean_(new Ocean(rm)),
+                                              cursor_(rm),
+                                              ocean_(rm),
                                               pathfinder_(
                                                   Vector3f(0, 0, 0),
                                                   worldConfig_),
-                                              pathfinderGrid_(pathfinder_)
+                                              pathfinderGrid_(pathfinder_),
+                                              activeCellId_(-1)
 {
-    // std::cout << "Creating World"
-    //           << "\n";
-
-    addEntity(player_);
-    player_->move(20, 20, 0);
-
-    addEntity(cursor_);
-    cursor_->setSize(Vector3f(5, 5, 5));
-
-    addEntity(ocean_);
-    ocean_->setSize(
+    ocean_.setSize(
         worldConfig_.getCellWidth() * 3.f,
         worldConfig_.getCellHeight() * 3.f,
         0);
 
-    Entity *grid = new PathfinderVisualizer(pathfinder_);
-    addEntity(grid);
+    addEntity(player_);
+    player_->move(20, 20, 0);
+    player_->setPosition(400000 / 2 + 40, 400000 / 2 + 40, 0);
+
+    cursor_.setSize(Vector3f(5, 5, 5));
 
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
     camera->setZoom(0.75);
-
-    player_->setPosition(400000 / 2 + 40, 400000 / 2 + 40, 0);
-    // player_->setPosition(700, 200, 0);
     camera->setPosition(player_->getPosition());
+
+    Entity *fire = addEntity(new FirePit(*rm_));
+    fire->setPosition(player_->getPosition() + Vector3f(30, 30, 0));
 }
 
 World::~World()
 {
-    // std::cout << "Destroying World"
-    //           << "\n";
-
     for (auto &entity : entities_)
     {
         delete entity;
@@ -72,7 +63,7 @@ void World::input_(sf::Time &elapsed)
 {
     // Cursor
     Vector2f mousePosition = window_->mapPixelToCoords(sf::Mouse::getPosition(*window_));
-    cursor_->setPosition(
+    cursor_.setPosition(
         camera_->projectGround(mousePosition));
 
     // Camera Pan
@@ -102,9 +93,20 @@ void World::input_(sf::Time &elapsed)
 
 void World::updateCells_()
 {
+    // int cellId = worldConfig_.getId(player_->getPosition());
+    // if (cellId == activeCellId_)
+    // {
+    //     return;
+    // }
+
+    // activeCellId_ = cellId;
+
+    // std::cout << "Updating cells\n";
     activeCells_.clear();
     visibleEntities_.clear();
     floorEntities_.clear();
+
+    visibleEntities_ = entities_;
 
     int min_i = worldConfig_.rows();
     int min_j = worldConfig_.cols();
@@ -148,7 +150,7 @@ void World::updateCells_()
 
     pathfinder_.setActiveCells(min_i, min_j, activeCells_);
 
-    ocean_->setPosition(pathfinder_.getPosition());
+    ocean_.setPosition(pathfinder_.getPosition());
 
     for (auto &cell : activeCells_)
     {
@@ -156,16 +158,15 @@ void World::updateCells_()
         floorEntities_.push_back(cell->getFloor());
     }
 
-    visibleEntities_.push_back(player_);
-    player_->translateOrigin(pathfinder_.getPosition());
-
-    // visibleEntities_.push_back(&pathfinderGrid_);
-    visibleEntities_.push_back(cursor_);
+    for (auto &entity : entities_)
+    {
+        entity->translateOrigin(pathfinder_.getPosition());
+    }
 }
 
 void World::update(sf::Time &elapsed)
 {
-    ocean_->update(elapsed, *this);
+    ocean_.update(elapsed, *this);
 
     updateCells_();
 
@@ -188,22 +189,26 @@ void World::update(sf::Time &elapsed)
 
 void World::transform()
 {
-    ocean_->transform(*camera_);
+    ocean_.transform(*camera_);
 
     for (auto &entity : floorEntities_)
     {
         entity->transform(*camera_);
     }
 
+    pathfinderGrid_.transform(*camera_);
+
     for (auto &entity : visibleEntities_)
     {
         entity->transform(*camera_);
     }
+
+    cursor_.transform(*camera_);
 }
 
 void World::draw(sf::RenderTarget *screen)
 {
-    ocean_->draw(screen);
+    ocean_.draw(screen);
 
     std::sort(floorEntities_.begin(), floorEntities_.end(), entityDepthComp);
 
@@ -212,12 +217,16 @@ void World::draw(sf::RenderTarget *screen)
         entity->draw(screen);
     }
 
+    pathfinderGrid_.draw(screen);
+
     std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
 
     for (auto &entity : visibleEntities_)
     {
         entity->draw(screen);
     }
+
+    cursor_.draw(screen);
 }
 
 Entity *World::addEntity(Entity *entity)
@@ -233,8 +242,21 @@ void World::onMouseButtonReleased(const sf::Event &event)
     {
         // std::cout << "Left"
         //           << "\n";
-        player_->walkTo(cursor_->getPosition());
-        std::cout << "e" << worldConfig_.getElevation(cursor_->getPosition()) << "\n";
+        for (auto &entity : visibleEntities_)
+        {
+            if (entity != player_)
+            {
+                if (entity->collision(cursor_))
+                {
+                    std::cout << "clicked entity\n";
+                    std::cout << entity->getPosition() << "\n";
+                    player_->attackOther(*entity);
+                    return;
+                }
+            }
+        }
+        player_->walkTo(cursor_.getPosition());
+        std::cout << "e" << worldConfig_.getElevation(cursor_.getPosition()) << "\n";
     }
     else if (event.mouseButton.button == sf::Mouse::Right)
     {
@@ -281,4 +303,9 @@ bool World::findPath(const Entity &entity, const Vector3f &end,
 bool World::canMoveTo(const Entity &entity, const Vector3f &localPoint) const
 {
     return pathfinder_.isAreaFree(localPoint, entity.getSize() * 0.8f);
+}
+
+bool World::findNearbyFreePosition(const Vector3f &position, Vector3f &out_position)
+{
+    return pathfinder_.findFreePosition(position, out_position);
 }

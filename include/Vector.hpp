@@ -32,6 +32,7 @@ bool intersetPlane(const Vector3f &n, const Vector3f &p0,
 
 inline sf::Color mixColor(sf::Color a, sf::Color b, float factor)
 {
+    factor = std::clamp(factor, 0.f, 1.f);
     Vector3f av(
         (float)a.r / 255.f,
         (float)a.g / 255.f,

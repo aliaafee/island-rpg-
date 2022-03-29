@@ -130,6 +130,9 @@ void Entity::setSize(const float &x, const float &y, const float &z)
     size_.x = x;
     size_.y = y;
     size_.z = z;
+
+    sizeRadius_ = sqrt((size_.x / 2.f) * (size_.x / 2.f) + (size_.y / 2.f) * (size_.y / 2.f));
+
     baseRect3_[0] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
     baseRect3_[1] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
     baseRect3_[2] = Vector3f(-size_.x / 2.0, -size_.y / 2.0, 0);
@@ -137,6 +140,11 @@ void Entity::setSize(const float &x, const float &y, const float &z)
     baseRect3_[4] = Vector3f(size_.x / 2.0, size_.y / 2.0, 0);
     baseRect3_[5] = Vector3f(0, 0, 0);
     baseRect3_[6] = Vector3f(size_.x / 2.0, -size_.y / 2.0, 0);
+}
+
+const float &Entity::getSizeRadius() const
+{
+    return sizeRadius_;
 }
 
 const Vector3f &Entity::getScreenPosition() const
@@ -149,6 +157,22 @@ Vector2f Entity::getScreenPosition2() const
     return Vector2f(
         screenPosition_.x,
         screenPosition_.y);
+}
+
+bool Entity::collision(const Entity &other)
+{
+    Vector3f origin = getPosition() - (getSize() / 2.f);
+    Vector3f otherOrigin = other.getPosition() - (other.getSize() / 2.f);
+
+    if ((origin.x < otherOrigin.x + other.getSize().x) &&
+        (origin.x + getSize().x > otherOrigin.x) &&
+        (origin.y < otherOrigin.y + other.getSize().y) &&
+        (getSize().y + origin.y > otherOrigin.y))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 bool entityDepthComp(Entity *a, Entity *b)

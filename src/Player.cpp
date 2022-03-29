@@ -4,6 +4,7 @@ STATE_INSTANCE_INIT(Player, PlayerIdleState);
 STATE_INSTANCE_INIT(Player, PlayerWalkToState);
 STATE_INSTANCE_INIT(Player, PlayerWalkState);
 STATE_INSTANCE_INIT(Player, PlayerJumpState);
+STATE_INSTANCE_INIT(Player, PlayerAttackingState);
 
 Player::Player(ResourceManager &rm) : AnimatedEntity(rm),
                                       statemachine_(
@@ -46,6 +47,12 @@ void Player::walkPath(const std::deque<Vector3f> &path)
 {
     walkPath_ = path;
     statemachine_.queueEvent(PLAYER_WALK_TARGET);
+}
+
+void Player::attackOther(Entity &entity)
+{
+    attackingTarget_ = &entity;
+    statemachine_.queueEvent(PLAYER_ATTACK_OTHER);
 }
 
 void Player::stop()
@@ -100,6 +107,9 @@ STATE_UPDATE_FUNCTION(Player, PlayerIdleState, World, world)
         {
         case PLAYER_WALK_TARGET:
             return STATE(Player, PlayerWalkToState);
+            break;
+        case PLAYER_ATTACK_OTHER:
+            return STATE(Player, PlayerAttackingState);
             break;
         default:
             break;
@@ -305,4 +315,39 @@ STATE_UPDATE_FUNCTION(Player, PlayerWalkToState, World, world)
     t->setLocalPosition(position);
 
     return nullptr;
+}
+
+STATE_ENTER_FUNCTION(Player, PlayerAttackingState, World, world)
+{
+    if (t->attackingTarget_ == nullptr)
+        return;
+
+    float d = t->getSizeRadius() + t->attackingTarget_->getSizeRadius();
+    if (vecDistance2(t->getLocalPosition(), t->attackingTarget_->getLocalPosition()) > d * d)
+    {
+        // t->walkTarget_ = t->attackingTarget_->getPosition();
+        if (world.findNearbyFreePosition(t->attackingTarget_->getPosition(), t->walkTarget_))
+        {
+            CALL_STATE_ENTER(PlayerWalkToState, world);
+        }
+    }
+}
+
+STATE_UPDATE_FUNCTION(Player, PlayerAttackingState, World, world)
+{
+    if (t->attackingTarget_ == nullptr)
+        return STATE(Player, PlayerIdleState);
+
+    float d = t->getSizeRadius() + t->attackingTarget_->getSizeRadius();
+    if (vecDistance2(t->getLocalPosition(), t->attackingTarget_->getLocalPosition()) > d * d)
+    {
+        CALL_STATE_UPDATE(PlayerWalkToState, world);
+        return nullptr;
+    }
+
+    t->attackingTarget_->attack();
+
+    t->attackingTarget_ = nullptr;
+
+    return STATE(Player, PlayerIdleState);
 }

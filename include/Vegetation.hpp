@@ -7,18 +7,6 @@
 #include "SpriteEntity.hpp"
 #include "RandomGenerator.hpp"
 
-class Tree : public SpriteEntity
-{
-public:
-    Tree(ResourceManager &rm, RandomGenerator &r);
-};
-
-class Palm : public SpriteEntity
-{
-public:
-    Palm(ResourceManager &rm, RandomGenerator &r);
-};
-
 class TropicalTree : public SpriteEntity
 {
 public:
