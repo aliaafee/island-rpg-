@@ -37,6 +37,17 @@ ConfigFieldVector2f::ConfigFieldVector2f(const std::string &value)
         std::stof(y));
 }
 
+ConfigFile::~ConfigFile()
+{
+    for (auto &it : data_)
+    {
+        if (it.second != nullptr)
+        {
+            delete it.second;
+        }
+    }
+}
+
 bool ConfigFile::loadFromFile(std::string filename)
 {
     /* Format of config file

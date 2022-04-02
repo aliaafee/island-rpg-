@@ -166,7 +166,7 @@ Ground::Ground(ResourceManager &rm,
                     h = worldConfig.getElevation(cellPosWorld, 10);
                     h = std::clamp(h * 2.f, 0.f, 1.f);
                     h = h * h;
-                    h = h < 0.3 ? 0 : h;
+                    h = h < 0.2 ? 0 : h;
                     h = h * h;
                     color = mixColor(color, grass.getPixel(px, py), h);
                 }

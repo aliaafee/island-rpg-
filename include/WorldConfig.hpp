@@ -33,8 +33,8 @@ public:
     float getCellWidth() { return width_ / (float)cols_; }
     float getCellHeight() { return height_ / (float)rows_; }
 
-    float getElevation(const Vector3f &point, int octaves = 3) const;
-    float getElevation(const float &x, const float &y, int octaves = 3) const;
+    float getElevation(const Vector3f &point, int octaves = -1) const;
+    float getElevation(const float &x, const float &y, int octaves = -1) const;
 
     Camera *getCamera() const { return camera_; }
 
@@ -44,8 +44,9 @@ private:
     int subCols_, subRows_;
 
     SimplexNoise terrainNoise_;
-    float terrainScale_ = 0.0009f;
-    int terrainOctaves_ = 6;
+    // float terrainScale_ = 0.0005f;
+    float terrainScale_;        // = 0.0003f;
+    int terrainOctavesDefault_; // = 6;
 
     Camera *camera_;
 };

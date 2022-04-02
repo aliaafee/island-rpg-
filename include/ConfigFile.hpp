@@ -2,7 +2,7 @@
 #define __CONFIGFILE_H__
 
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <fstream>
 
 #include "Vector.hpp"
@@ -95,6 +95,7 @@ private:
 class ConfigFile
 {
 public:
+    ~ConfigFile();
     bool loadFromFile(std::string filename);
 
     int getAsInt(std::string name);
@@ -104,7 +105,7 @@ public:
     Vector2f getAsVector2f(std::string name);
 
 private:
-    std::map<std::string, ConfigField *> data_;
+    std::unordered_map<std::string, ConfigField *> data_;
 
     ConfigField *makeField_(std::string type, std::string value);
     ConfigField *getField_(std::string name);

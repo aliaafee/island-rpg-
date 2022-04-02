@@ -74,7 +74,7 @@ void WorldCell::load()
                 0);
 
             float elevation = worldConfig_->getElevation(point);
-            if (elevation > 0.25)
+            if (elevation > 0.2)
             {
                 if (r.randomInt(0, 8) == 0)
                 {
@@ -89,10 +89,10 @@ void WorldCell::load()
                 }
             }
 
-            if (elevation < 0.f)
+            /*if (elevation < 0.f)
             {
                 obstacleGrid_.fill(i, j, i + 1, j + 1, ZERO);
-            }
+            }*/
         }
     }
 

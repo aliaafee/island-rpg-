@@ -34,8 +34,8 @@ World::World(sf::RenderWindow &window,
         0);
 
     addEntity(player_);
-    player_->move(20, 20, 0);
-    player_->setPosition(400000 / 2 + 40, 400000 / 2 + 40, 0);
+    // player_->setPosition(198062, 198901, 0);
+    player_->setPosition(2854, 2864, 0);
 
     cursor_.setSize(Vector3f(5, 5, 5));
 

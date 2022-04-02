@@ -3,12 +3,13 @@
 
 #include <string>
 #include <mutex>
+#include <unordered_map>
 
 template <class ResourceType>
 class ResourceCache
 {
 public:
-    ResourceCache();
+    ResourceCache(){};
     ~ResourceCache();
 
     ResourceType *load(const std::string &filename);
@@ -16,14 +17,9 @@ public:
 private:
     ResourceType *insert_(const std::string &filename, ResourceType *addTexture);
 
-    std::map<const std::string, ResourceType *> resources_;
+    std::unordered_map<std::string, ResourceType *> resources_;
     std::mutex mutex_;
 };
-
-template <class ResourceType>
-ResourceCache<ResourceType>::ResourceCache()
-{
-}
 
 template <class ResourceType>
 ResourceCache<ResourceType>::~ResourceCache()

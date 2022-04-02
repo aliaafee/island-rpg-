@@ -13,7 +13,9 @@ WorldConfig::WorldConfig(const float &width,
                                            subCols_(subCols),
                                            subRows_(subRows),
                                            terrainNoise_(),
-                                           camera_(&camera)
+                                           camera_(&camera),
+                                           terrainScale_(0.0003f),
+                                           terrainOctavesDefault_(6)
 
 {
     ;
@@ -86,8 +88,14 @@ float WorldConfig::getElevation(const Vector3f &point, int octaves) const
 
 float WorldConfig::getElevation(const float &x, const float &y, int octaves) const
 {
-    return terrainNoise_.fractal(
-        octaves,
-        x * terrainScale_,
-        y * terrainScale_);
+    if (octaves < 0)
+        octaves = terrainOctavesDefault_;
+
+    float e = terrainNoise_.fractal(
+                  octaves,
+                  x * terrainScale_,
+                  y * terrainScale_) -
+              0.3;
+
+    return std::clamp(e, -1.f, 1.f);
 }
