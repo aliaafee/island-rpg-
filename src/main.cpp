@@ -27,6 +27,11 @@ void game(std::string resourceDir)
     ResourceManager rm(resourceDir);
     World world(window, rm, 100, 100);
 
+    if (!world.loadState("save/"))
+    {
+        world.loadDefault();
+    }
+
     bool windowFocused = false;
 
     sf::Clock clock;
@@ -69,6 +74,15 @@ void game(std::string resourceDir)
             world.draw(&window);
             window.display();
         }
+    }
+
+    if (!world.saveState("save/"))
+    {
+        std::cout << "Failed to save game\n";
+    }
+    else
+    {
+        std::cout << "Saved\n";
     }
 }
 

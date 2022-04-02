@@ -48,6 +48,10 @@ public:
 
     bool findNearbyFreePosition(const Vector3f &position, Vector3f &out_position);
 
+    bool saveState(std::string path);
+    bool loadState(std::string path);
+    void loadDefault();
+
 private:
     Player *player_;
     Entity cursor_;

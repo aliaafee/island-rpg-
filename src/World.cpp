@@ -34,18 +34,14 @@ World::World(sf::RenderWindow &window,
         0);
 
     addEntity(player_);
-    // player_->setPosition(198062, 198901, 0);
-    player_->setPosition(2854, 2864, 0);
 
     cursor_.setSize(Vector3f(5, 5, 5));
 
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
     camera->setZoom(0.75);
-    camera->setPosition(player_->getPosition());
 
     Entity *fire = addEntity(new FirePit(*rm_));
-    fire->setPosition(player_->getPosition() + Vector3f(30, 30, 0));
 }
 
 World::~World()
@@ -232,7 +228,7 @@ void World::draw(sf::RenderTarget *screen)
         entity->draw(screen);
     }
 
-    pathfinderGrid_.draw(screen);
+    // pathfinderGrid_.draw(screen);
 
     std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
 
@@ -336,4 +332,40 @@ bool World::canMoveTo(const Entity &entity, const Vector3f &localPoint) const
 bool World::findNearbyFreePosition(const Vector3f &position, Vector3f &out_position)
 {
     return pathfinder_.findFreePosition(position, out_position);
+}
+
+bool World::saveState(std::string path)
+{
+    ConfigFile worldState;
+
+    worldState.setVector3f("player.origin", player_->getOrigin());
+    worldState.setVector3f("player.localPosition", player_->getLocalPosition());
+
+    worldState.setVector3f("camera.position", camera_->getPosition());
+
+    if (!worldState.saveToFile(path + "world.save"))
+        return false;
+
+    return true;
+}
+
+bool World::loadState(std::string path)
+{
+    ConfigFile worldState;
+
+    if (!worldState.loadFromFile(path + "world.save"))
+        return false;
+
+    player_->translateOrigin(worldState.getAsVector3f("player.origin"));
+    player_->setLocalPosition(worldState.getAsVector3f("player.localPosition"));
+
+    camera_->setPosition(worldState.getAsVector3f("camera.position"));
+
+    return true;
+}
+
+void World::loadDefault()
+{
+    player_->setPosition(2854, 2864, 0);
+    camera_->setPosition(player_->getPosition());
 }
