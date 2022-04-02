@@ -57,7 +57,30 @@ int main()
         return 1;
     }
 
-    std::cout << "Success\n";
+    config.setInt("count", 971);
+    config.saveToFile("test-data/config-test-save.cfg.save");
+
+    ConfigFile reloadedConfig;
+    if (!reloadedConfig.loadFromFile("test-data/config-test-save.cfg.save"))
+    {
+        std::cout << "Failed\n";
+        return 1;
+    }
+
+    if (reloadedConfig.getAsInt("count") != 971)
+    {
+        std::cout << reloadedConfig.getAsInt("count") << "\n";
+        std::cout << "Failed\n";
+        return 1;
+    }
+
+    if (reloadedConfig.saveToFile("test-data/nonexistantfolder/nonexistantfile.save"))
+    {
+        std::cout << "Save to inaccesible location\n";
+        return 1;
+    }
+
+    std::cout << "  Success\n";
 
     return 0;
 }

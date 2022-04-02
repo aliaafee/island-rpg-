@@ -17,7 +17,7 @@ std::pair<std::string, std::string> StringPartition(std::string s, std::string d
     return out;
 }
 
-ConfigFieldVector3f::ConfigFieldVector3f(const std::string &value)
+bool ConfigFieldVector3f::setString(const std::string &value)
 {
     auto [x, yz] = StringPartition(value, ",");
     auto [y, z] = StringPartition(yz, ",");
@@ -26,26 +26,77 @@ ConfigFieldVector3f::ConfigFieldVector3f(const std::string &value)
         std::stof(x),
         std::stof(y),
         std::stof(z));
+
+    return true;
 }
 
-ConfigFieldVector2f::ConfigFieldVector2f(const std::string &value)
+bool ConfigFieldVector2f::setString(const std::string &value)
 {
     auto [x, y] = StringPartition(value, ",");
 
     value_ = Vector2f(
         std::stof(x),
         std::stof(y));
+
+    return true;
 }
 
 ConfigFile::~ConfigFile()
 {
-    for (auto &it : data_)
+    for (auto &field : data_)
     {
-        if (it.second != nullptr)
+        if (field.second != nullptr)
         {
-            delete it.second;
+            delete field.second;
         }
     }
+}
+
+ConfigField *CreateConfigField(std::string type)
+{
+    if (type == "str")
+        return new ConfigFieldString();
+
+    if (type == "int")
+        return new ConfigFieldInt();
+
+    if (type == "float")
+        return new ConfigFieldFloat();
+
+    if (type == "vec3")
+        return new ConfigFieldVector3f();
+
+    if (type == "vec2")
+        return new ConfigFieldVector2f();
+
+    return nullptr;
+}
+
+std::string ConfigFieldToString(std::string name, ConfigField &field)
+{
+    std::string typeName;
+    switch (field.type())
+    {
+    case FieldString:
+        typeName = "str";
+        break;
+    case FieldInt:
+        typeName = "int";
+        break;
+    case FieldFloat:
+        typeName = "float";
+        break;
+    case FieldVector3f:
+        typeName = "vec3";
+        break;
+    case FieldVector2f:
+        typeName = "vec2";
+        break;
+    default:
+        break;
+    }
+
+    return name + " " + typeName + " " + field.getString();
 }
 
 bool ConfigFile::loadFromFile(std::string filename)
@@ -63,27 +114,54 @@ bool ConfigFile::loadFromFile(std::string filename)
      * fields are ignored, only the first one is loaded
      */
     std::ifstream infile(filename);
-    std::string name, type, value;
 
-    std::string line;
+    if (!infile.is_open())
+        return false;
+
+    std::string line, name, type, value;
     while (std::getline(infile, line))
     {
         auto [name, part2] = StringPartition(line, " ");
         auto [type, value] = StringPartition(part2, " ");
 
-        ConfigField *newField = makeField_(type, value);
+        ConfigField *newField = CreateConfigField(type);
 
         if (newField != nullptr)
         {
             if (getField_(name) == nullptr)
             {
-                data_[name] = newField;
+                if (newField->setString(value))
+                {
+                    insertField_(name, newField);
+                }
             }
         }
     }
 
+    infile.close();
+
     if (data_.size() == 0)
         return false;
+
+    return true;
+}
+
+bool ConfigFile::saveToFile(std::string filename)
+{
+    std::ofstream outfile(filename);
+
+    if (!outfile.is_open())
+        return false;
+
+    for (auto [name, field] : data_)
+    {
+        if (field != nullptr)
+        {
+            outfile << ConfigFieldToString(name, *field) << "\n";
+        }
+    }
+
+    outfile.close();
 
     return true;
 }
@@ -128,24 +206,69 @@ Vector2f ConfigFile::getAsVector2f(std::string name)
     return field->getVector2f();
 }
 
-ConfigField *ConfigFile::makeField_(std::string type, std::string value)
+bool ConfigFile::setInt(std::string name, const int &value)
 {
-    if (type == "str")
-        return new ConfigFieldString(value);
+    auto field = getField_(name);
 
-    if (type == "int")
-        return new ConfigFieldInt(value);
+    if (field == nullptr)
+    {
+        field = new ConfigFieldInt();
+        insertField_(name, field);
+    }
 
-    if (type == "float")
-        return new ConfigFieldFloat(value);
+    return field->setInt(value);
+}
 
-    if (type == "vec3")
-        return new ConfigFieldVector3f(value);
+bool ConfigFile::setFloat(std::string name, const float &value)
+{
+    auto field = getField_(name);
 
-    if (type == "vec2")
-        return new ConfigFieldVector2f(value);
+    if (field == nullptr)
+    {
+        field = new ConfigFieldFloat();
+        insertField_(name, field);
+    }
 
-    return nullptr;
+    return field->setFloat(value);
+}
+
+bool ConfigFile::setString(std::string name, const std::string &value)
+{
+    auto field = getField_(name);
+
+    if (field == nullptr)
+    {
+        field = new ConfigFieldString();
+        insertField_(name, field);
+    }
+
+    return field->setString(value);
+}
+
+bool ConfigFile::setVector3f(std::string name, const Vector3f &value)
+{
+    auto field = getField_(name);
+
+    if (field == nullptr)
+    {
+        field = new ConfigFieldVector3f();
+        insertField_(name, field);
+    }
+
+    return field->setVector3f(value);
+}
+
+bool ConfigFile::setVector2f(std::string name, const Vector2f &value)
+{
+    auto field = getField_(name);
+
+    if (field == nullptr)
+    {
+        field = new ConfigFieldVector2f();
+        insertField_(name, field);
+    }
+
+    return field->setVector2f(value);
 }
 
 ConfigField *ConfigFile::getField_(std::string name)
@@ -156,4 +279,11 @@ ConfigField *ConfigFile::getField_(std::string name)
         return nullptr;
 
     return search->second;
+}
+
+bool ConfigFile::insertField_(std::string name, ConfigField *field)
+{
+    data_[name] = field;
+
+    return true;
 }
