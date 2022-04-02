@@ -58,6 +58,7 @@ int main()
     }
 
     config.setInt("count", 971);
+    config.setBool("newitem", true);
     config.saveToFile("test-data/config-test-save.cfg.save");
 
     ConfigFile reloadedConfig;
@@ -70,6 +71,13 @@ int main()
     if (reloadedConfig.getAsInt("count") != 971)
     {
         std::cout << reloadedConfig.getAsInt("count") << "\n";
+        std::cout << "Failed\n";
+        return 1;
+    }
+
+    if (reloadedConfig.getAsBool("newitem") != true)
+    {
+        std::cout << reloadedConfig.getAsString("newitem") << "\n";
         std::cout << "Failed\n";
         return 1;
     }

@@ -60,6 +60,9 @@ ConfigField *CreateConfigField(std::string type)
     if (type == "int")
         return new ConfigFieldInt();
 
+    if (type == "bool")
+        return new ConfigFieldBool();
+
     if (type == "float")
         return new ConfigFieldFloat();
 
@@ -82,6 +85,9 @@ std::string ConfigFieldToString(std::string name, ConfigField &field)
         break;
     case FieldInt:
         typeName = "int";
+        break;
+    case FieldBool:
+        typeName = "bool";
         break;
     case FieldFloat:
         typeName = "float";
@@ -174,6 +180,14 @@ int ConfigFile::getAsInt(std::string name)
     return field->getInt();
 }
 
+bool ConfigFile::getAsBool(std::string name)
+{
+    auto field = getField_(name);
+    if (field == nullptr)
+        return false;
+    return field->getBool();
+}
+
 float ConfigFile::getAsFloat(std::string name)
 {
     auto field = getField_(name);
@@ -217,6 +231,19 @@ bool ConfigFile::setInt(std::string name, const int &value)
     }
 
     return field->setInt(value);
+}
+
+bool ConfigFile::setBool(std::string name, const bool &value)
+{
+    auto field = getField_(name);
+
+    if (field == nullptr)
+    {
+        field = new ConfigFieldBool();
+        insertField_(name, field);
+    }
+
+    return field->setBool(value);
 }
 
 bool ConfigFile::setFloat(std::string name, const float &value)
