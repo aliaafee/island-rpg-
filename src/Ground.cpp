@@ -190,12 +190,6 @@ Ground::Ground(ResourceManager &rm,
 
     floor_.loadFromImage(floor);
 
-    floorSprite_.setTexture(floor_);
-    floorSprite_.setOrigin(
-        Vector2f(
-            spriteOrigin.x,
-            spriteOrigin.y));
-
     float w = cols_ * 64;
     float h = rows_ * 32;
     floorShape_[0].position = Vector2f(0, 0);
@@ -226,6 +220,39 @@ void Ground::transform(Camera &camera)
 }
 
 void Ground::draw(sf::RenderTarget *screen)
+{
+    screen->draw(floorShape_, floorRender_);
+}
+
+GroundPlaceHolder::GroundPlaceHolder(ResourceManager &rm,
+                                     const int &rows, const int &cols) : Entity(rm),
+                                                                         rows_(rows),
+                                                                         cols_(cols),
+                                                                         floorShape_(sf::Quads, 4)
+{
+    float w = cols_ * 64;
+    float h = rows_ * 32;
+    floorShape_[0].position = Vector2f(0, 0);
+    floorShape_[1].position = Vector2f(w / 2.f, h / 2.f);
+    floorShape_[2].position = Vector2f(0, h);
+    floorShape_[3].position = Vector2f(-w / 2.f, h / 2.f);
+
+    floorShape_[0].color = sf::Color::Black;
+    floorShape_[1].color = sf::Color::Black;
+    floorShape_[2].color = sf::Color::Black;
+    floorShape_[3].color = sf::Color::Black;
+}
+
+void GroundPlaceHolder::transform(Camera &camera)
+{
+    Entity::transform(camera);
+
+    floorRender_.transform = sf::Transform(1, 0, getScreenPosition().x,
+                                           0, 1, getScreenPosition().y,
+                                           0, 0, 1);
+}
+
+void GroundPlaceHolder::draw(sf::RenderTarget *screen)
 {
     screen->draw(floorShape_, floorRender_);
 }

@@ -56,7 +56,7 @@ private:
     Entity *floor_;
     std::vector<Entity *> entities_;
     std::vector<Entity *> placeholders_;
-    Grid placeholder_;
+    GroundPlaceHolder placeholder_;
 
     ValueGrid<int> obstacleGrid_;
     void _addObstacle(const Entity &entity);

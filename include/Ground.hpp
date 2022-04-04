@@ -34,8 +34,24 @@ private:
     Vector2f i_hat;
     Vector2f j_hat;
 
-    sf::Sprite floorSprite_;
     sf::Texture floor_;
+
+    sf::VertexArray floorShape_;
+    sf::RenderStates floorRender_;
+};
+
+class GroundPlaceHolder : public Entity
+{
+public:
+    GroundPlaceHolder(ResourceManager &rm,
+                      const int &cols, const int &rows);
+
+    virtual void transform(Camera &camera);
+    virtual void draw(sf::RenderTarget *screen);
+
+private:
+    int cols_;
+    int rows_;
 
     sf::VertexArray floorShape_;
     sf::RenderStates floorRender_;

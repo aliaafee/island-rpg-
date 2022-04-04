@@ -9,10 +9,7 @@ WorldCell::WorldCell(ResourceManager &rm,
                                                    cell_j_(j),
                                                    width_(worldConfig_->getCellWidth()),
                                                    height_(worldConfig_->getCellHeight()),
-                                                   placeholder_(
-                                                       width_,
-                                                       height_,
-                                                       1, 1),
+                                                   placeholder_(rm, worldConfig_->subRows(), worldConfig_->subCols()),
                                                    loaded_(false),
                                                    floor_(nullptr),
                                                    obstacleGrid_(
