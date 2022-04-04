@@ -30,7 +30,7 @@ bool Pathfinder::isAreaFree(const Vector3f &localPosition, const Vector3f &size)
     {
         for (int j = start_j; j < end_j; j++)
         {
-            if (cellValue(i, j) == 0)
+            if (!validCell(i, j))
             {
                 return false;
             }
@@ -40,7 +40,7 @@ bool Pathfinder::isAreaFree(const Vector3f &localPosition, const Vector3f &size)
     return true;
 }
 
-bool Pathfinder::findFreeCell(const Vector3f &position, int &out_i, int &out_j) const
+bool Pathfinder::findFreeCell(const Vector3f &position, const int &maxDiameter, int &out_i, int &out_j) const
 {
     int i, j;
 
@@ -53,7 +53,7 @@ bool Pathfinder::findFreeCell(const Vector3f &position, int &out_i, int &out_j) 
         return true;
     }
 
-    SpiralOut spiralOut(i, j, g_cols_ * g_rows_);
+    SpiralOut spiralOut(i, j, maxDiameter * maxDiameter);
 
     while (spiralOut.next(i, j))
     {
@@ -68,10 +68,10 @@ bool Pathfinder::findFreeCell(const Vector3f &position, int &out_i, int &out_j) 
     return false;
 }
 
-bool Pathfinder::findFreePosition(const Vector3f &position, Vector3f &out_position) const
+bool Pathfinder::findFreePosition(const Vector3f &position, const int &maxDiameter, Vector3f &out_position) const
 {
     int i, j;
-    if (!findFreeCell(position, i, j))
+    if (!findFreeCell(position, maxDiameter, i, j))
     {
         return false;
     }

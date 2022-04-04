@@ -19,7 +19,7 @@ void SpriteEntity::transform(Camera &camera)
 
 void SpriteEntity::draw(sf::RenderTarget *screen)
 {
-    Entity::draw(screen);
+    // Entity::draw(screen);
     screen->draw(sprite_, transform_);
 }
 

@@ -17,9 +17,13 @@ public:
     virtual bool validCell(const int &i, const int &j) const;
     virtual const int &cellValue(const int &i, const int &j) const;
 
+    void setValidCellValue(const int &value) { validCellValue_ = value; }
+
 private:
     int cellCols_;
     int cellRows_;
+
+    int validCellValue_;
 
     WorldCell *currentCells_[3][3];
 

@@ -120,7 +120,7 @@ void PathfinderVisualizer::draw(sf::RenderTarget *screen)
     {
         for (int j = 0; j < gridRows_; j++)
         {
-            if (pathfinder_->cellValue(i, j) == 0)
+            if (!pathfinder_->validCell(i, j))
             {
                 cellPos = pos + i_hat * (float)i + j_hat * (float)j;
                 screen->draw(cell_, sf::Transform(1, 0, cellPos.x,

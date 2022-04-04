@@ -8,7 +8,8 @@ WorldPathfinder::WorldPathfinder(const Vector3f &position,
                                                                         worldConfig.subRows() * 3),
                                                              cellCols_(worldConfig.subCols()),
                                                              cellRows_(worldConfig.subRows()),
-                                                             currentCells_{nullptr}
+                                                             currentCells_{nullptr},
+                                                             validCellValue_(1)
 {
 }
 
@@ -37,7 +38,7 @@ bool WorldPathfinder::validCell(const int &i, const int &j) const
     if (!validIndex(i, j))
         return false;
 
-    if (value_(i, j) == 0)
+    if (value_(i, j) != validCellValue_)
         return false;
 
     return true;

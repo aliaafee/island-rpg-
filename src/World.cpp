@@ -40,7 +40,7 @@ World::World(sf::RenderWindow &window,
 
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
-    camera->setZoom(0.75);
+    // camera->setZoom(0.75);
     camera->setZoomRange(0.0001, 100);
 
     Entity *fire = addEntity(new FirePit(*rm_));
@@ -300,6 +300,41 @@ void World::onKeyReleased(const sf::Event &event)
     {
         gridVisible_ = !gridVisible_;
     }
+
+    if (event.key.code == sf::Keyboard::B)
+    {
+        pathfinder_.setValidCellValue(2);
+        Vector3f newPosition;
+        if (findNearbyFreePosition(player_->getPosition(), newPosition))
+        {
+            player_->setPosition(newPosition);
+            player_->setInWater(true);
+        }
+        else
+        {
+            pathfinder_.setValidCellValue(1);
+        }
+    }
+
+    if (event.key.code == sf::Keyboard::W)
+    {
+        pathfinder_.setValidCellValue(1);
+        Vector3f newPosition;
+        if (findNearbyFreePosition(player_->getPosition(), newPosition))
+        {
+            player_->setPosition(newPosition);
+            player_->setInWater(false);
+        }
+        else
+        {
+            pathfinder_.setValidCellValue(2);
+        }
+    }
+
+    if (event.key.code == sf::Keyboard::R)
+    {
+        player_->rest();
+    }
 }
 
 const std::vector<Entity *> &World::getEntitys() const
@@ -345,7 +380,7 @@ bool World::canMoveTo(const Entity &entity, const Vector3f &localPoint) const
 
 bool World::findNearbyFreePosition(const Vector3f &position, Vector3f &out_position)
 {
-    return pathfinder_.findFreePosition(position, out_position);
+    return pathfinder_.findFreePosition(position, 9, out_position);
 }
 
 bool World::saveState(std::string path)

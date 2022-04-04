@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 STATE_INSTANCE_INIT(Player, PlayerIdleState);
+STATE_INSTANCE_INIT(Player, PlayerRestingState);
 STATE_INSTANCE_INIT(Player, PlayerWalkToState);
 STATE_INSTANCE_INIT(Player, PlayerWalkState);
 STATE_INSTANCE_INIT(Player, PlayerJumpState);
@@ -10,22 +11,33 @@ Player::Player(ResourceManager &rm) : AnimatedEntity(rm),
                                       statemachine_(
                                           this,
                                           STATE(Player, PlayerIdleState)),
-                                      animationDirection_("down"),
-                                      animationAction_("idle")
+                                      animationDirection_("se"),
+                                      animationAction_("swimming")
 {
-    std::string animationNames[12] = {
-        "up_walking", "down_walking", "left_walking", "right_walking",
-        "up_idle", "down_idle", "left_idle", "right_idle",
-        "up_attack", "down_attack", "left_attack", "right_attack"};
+    std::string animationDirectory = "graphics/hunter/";
 
-    std::string animationDirectory = "graphics/player/";
+    std::string animationNames[6] = {"idle", "walking", "swimming", "treading", "sitting", "jumping"};
+
+    std::string animationDirections[8] = {"sw",
+                                          "s",
+                                          "se",
+                                          "e",
+                                          "ne",
+                                          "n",
+                                          "nw",
+                                          "w"};
 
     for (auto &name : animationNames)
     {
-        loadAnimation(name, animationDirectory + name);
+        // loadAnimation(name, animationDirectory + name);
+        for (auto &direction : animationDirections)
+        {
+            std::string filename = animationDirectory + name + "/" + direction;
+            loadAnimation(getAnimationName(name, direction), filename);
+        }
     }
 
-    setSpriteOrigin(32, 64);
+    setSpriteOrigin(68, 102);
 
     setAnimationSpeed(10);
 }
@@ -35,6 +47,13 @@ void Player::update(sf::Time &elapsed, World &world)
     statemachine_.updateState(elapsed, world);
 
     animate(elapsed);
+}
+
+void Player::drawReflection(sf::RenderTarget *screen)
+{
+    if (inWater)
+        return;
+    AnimatedEntity::drawReflection(screen);
 }
 
 void Player::walkTo(const Vector3f &target)
@@ -55,6 +74,25 @@ void Player::attackOther(Entity &entity)
     statemachine_.queueEvent(PLAYER_ATTACK_OTHER);
 }
 
+void Player::rest()
+{
+    statemachine_.queueEvent(PLAYER_REST);
+}
+
+void Player::setInWater(bool in)
+{
+
+    inWater = in;
+
+    if (inWater)
+    {
+        setAnimationAction("treading");
+        return;
+    }
+
+    setAnimationAction("idle");
+}
+
 void Player::stop()
 {
     statemachine_.queueEvent(PLAYER_STOP);
@@ -63,39 +101,79 @@ void Player::stop()
 void Player::setAnimationDirection(const std::string &direction)
 {
     animationDirection_ = direction;
-    setCurrentAnimation(animationDirection_ + "_" + animationAction_);
+    setCurrentAnimation(getAnimationName(animationAction_, animationDirection_));
 }
 
 void Player::setAnimationDirection(const Vector3f &direction)
 {
-    if (direction.x >= 0.f && direction.y < 0.f)
+    float dir = std::atan2(direction.y, direction.x);
+
+    if (dir < 0)
     {
-        setAnimationDirection("right");
+        dir = std::abs(dir);
+        if (dir > M_PI * 5.f / 8.f)
+        {
+            setAnimationDirection("n");
+            return;
+        }
+        if (dir > M_PI * 3.f / 8.f)
+        {
+            setAnimationDirection("ne");
+            return;
+        }
+
+        setAnimationDirection("e");
+        return;
         return;
     }
-    else if (direction.x >= 0.f && direction.y >= 0.f)
+
+    if (dir <= M_PI * 1.f / 8.f)
     {
-        setAnimationDirection("down");
+        setAnimationDirection("se");
         return;
     }
-    else if (direction.x < 0 && direction.y >= 0)
+
+    if (dir <= M_PI * 3.f / 8.f)
     {
-        setAnimationDirection("left");
+        setAnimationDirection("s");
         return;
     }
-    setAnimationDirection("up");
+
+    if (dir <= M_PI * 5.f / 8.f)
+    {
+        setAnimationDirection("sw");
+        return;
+    }
+
+    if (dir <= M_PI * 7.f / 8.f)
+    {
+        setAnimationDirection("w");
+        return;
+    }
+
+    setAnimationDirection("nw");
     return;
 }
 
 void Player::setAnimationAction(const std::string &action)
 {
     animationAction_ = action;
-    setCurrentAnimation(animationDirection_ + "_" + animationAction_);
+    setCurrentAnimation(getAnimationName(animationAction_, animationDirection_));
+}
+
+std::string Player::getAnimationName(const std::string &action, const std::string &direction)
+{
+    return action + "_" + direction;
 }
 
 STATE_ENTER_FUNCTION(Player, PlayerIdleState, World, world)
 {
     std::cout << "Player to Idle State" << std::endl;
+    if (t->inWater)
+    {
+        t->setAnimationAction("treading");
+        return;
+    }
     t->setAnimationAction("idle");
 }
 
@@ -110,6 +188,9 @@ STATE_UPDATE_FUNCTION(Player, PlayerIdleState, World, world)
             break;
         case PLAYER_ATTACK_OTHER:
             return STATE(Player, PlayerAttackingState);
+            break;
+        case PLAYER_REST:
+            return STATE(Player, PlayerRestingState);
             break;
         default:
             break;
@@ -126,14 +207,26 @@ STATE_UPDATE_FUNCTION(Player, PlayerIdleState, World, world)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        return STATE(Player, PlayerJumpState);
+        if (!t->inWater)
+            return STATE(Player, PlayerJumpState);
     }
 
     return nullptr;
 }
 
+STATE_ENTER_FUNCTION(Player, PlayerRestingState, World, world)
+{
+    std::cout << "Player to Rest State" << std::endl;
+    t->setAnimationAction("sitting");
+}
+
 STATE_ENTER_FUNCTION(Player, PlayerWalkState, World, world)
 {
+    if (t->inWater)
+    {
+        t->setAnimationAction("swimming");
+        return;
+    }
     t->setAnimationAction("walking");
 }
 
@@ -186,7 +279,8 @@ STATE_UPDATE_FUNCTION(Player, PlayerWalkState, World, world)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        return STATE(Player, PlayerJumpState);
+        if (!t->inWater)
+            return STATE(Player, PlayerJumpState);
     }
 
     return nullptr;
@@ -194,23 +288,30 @@ STATE_UPDATE_FUNCTION(Player, PlayerWalkState, World, world)
 
 STATE_ENTER_FUNCTION(Player, PlayerJumpState, World, world)
 {
-    t->setAnimationAction("idle");
+    t->setAnimationAction("jumping");
     t->vertSpeed = 1.5f;
     t->jumpCount = 2;
+    t->jumpDelay = 0.5;
 }
 
 STATE_UPDATE_FUNCTION(Player, PlayerJumpState, World, world)
 {
     CALL_STATE_UPDATE(PlayerWalkState, world);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    if (t->jumpDelay > 0.f)
     {
-        if (t->jumpCount < 2 && t->vertSpeed < 1.f)
-        {
-            t->jumpCount += 1;
-            t->vertSpeed = 1.5;
-        }
+        t->jumpDelay -= elapsed.asSeconds();
+        return nullptr;
     }
+
+    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    // {
+    //     if (t->jumpCount < 2 && t->vertSpeed < 1.f)
+    //     {
+    //         t->jumpCount += 1;
+    //         t->vertSpeed = 1.5;
+    //     }
+    // }
 
     t->vertSpeed -= 0.1 * 60 * elapsed.asSeconds();
 
@@ -240,6 +341,11 @@ STATE_ENTER_FUNCTION(Player, PlayerWalkToState, World, world)
         return;
     }
     std::cout << "Found\n";
+    if (t->inWater)
+    {
+        t->setAnimationAction("swimming");
+        return;
+    }
     t->setAnimationAction("walking");
 }
 

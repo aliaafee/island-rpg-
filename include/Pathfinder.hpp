@@ -50,8 +50,8 @@ public:
     const Vector3f &getPosition() const { return position_; }
 
     bool isAreaFree(const Vector3f &localPosition, const Vector3f &size) const;
-    bool findFreeCell(const Vector3f &position, int &out_i, int &out_j) const;
-    bool findFreePosition(const Vector3f &position, Vector3f &out_position) const;
+    bool findFreeCell(const Vector3f &position, const int &maxDiameter, int &out_i, int &out_j) const;
+    bool findFreePosition(const Vector3f &position, const int &maxDiameter, Vector3f &out_position) const;
 
     bool findPath(const Vector3f &start, const Vector3f &end,
                   const bool &diagonal,
