@@ -58,6 +58,9 @@ void game(std::string resourceDir)
             case sf::Event::MouseWheelScrolled:
                 world.onMouseWheelScrolled(event);
                 break;
+            case sf::Event::KeyReleased:
+                world.onKeyReleased(event);
+                break;
             default:
                 break;
             }

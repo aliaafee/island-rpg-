@@ -23,8 +23,8 @@ public:
     void pan(const Vector2f &direction);
     void pan(const float &x, const float &y);
 
-    void zoom(const float &z) { zoomFactor_ *= z; }
-    void setZoom(const float &z) { zoomFactor_ = z; }
+    void setZoom(const float &z);
+    void zoom(const float &z) { setZoom(zoomFactor_ * z); }
 
     void rotate(const float &r) { rotation_ += r; }
     void setRotation(const float &r) { rotation_ = r; }
@@ -65,6 +65,8 @@ private:
     float windowWidth_;
     float windowHeight_;
     float zoomFactor_;
+    float maxZoom_;
+    float minZoom_;
     float rotation_;
 
     void updateTransforms_();

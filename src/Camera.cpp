@@ -15,6 +15,8 @@ Camera::Camera(Vector3f position,
                                      windowWidth_(windowWidth),
                                      windowHeight_(windowHeight),
                                      zoomFactor_(1),
+                                     maxZoom_(1.5),
+                                     minZoom_(0.5),
                                      rotation_(0)
 {
     float w_h = tileSize_.x / 2.0;
@@ -76,6 +78,21 @@ void Camera::pan(const float &x, const float &y)
     screenPosition.x += x * zoomFactor_;
     screenPosition.y += y * zoomFactor_;
     setPosition(projectGround(screenPosition));
+}
+
+void Camera::setZoom(const float &z)
+{
+    if (z > maxZoom_)
+    {
+        zoomFactor_ = maxZoom_;
+        return;
+    }
+    if (z < minZoom_)
+    {
+        zoomFactor_ = minZoom_;
+        return;
+    }
+    zoomFactor_ = z;
 }
 
 void Camera::updateWindow(sf::RenderWindow &window)

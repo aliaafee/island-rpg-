@@ -17,8 +17,14 @@ public:
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
+    virtual void drawReflection(sf::RenderTarget *screen);
+
     void setTexture(sf::Texture *texture);
-    void setSpriteOrigin(const float &x, const float &y) { sprite_.setOrigin(x, y); }
+    void setSpriteOrigin(const float &x, const float &y)
+    {
+        spriteOrigin_ = Vector2f(x, y);
+        sprite_.setOrigin(spriteOrigin_);
+    }
 
     Vector2f getSpriteSize() const;
 
@@ -28,6 +34,8 @@ public:
 
 private:
     sf::Sprite sprite_;
+    sf::Transform transform_;
+    Vector2f spriteOrigin_;
 };
 
 #endif // __SPRITEENTITY_H__

@@ -23,6 +23,8 @@ public:
     virtual void transform(Camera &camera);
     virtual void draw(sf::RenderTarget *screen);
 
+    virtual void drawReflection(sf::RenderTarget *screen){};
+
     virtual void attack(){};
 
     Vector3f getPosition() const;

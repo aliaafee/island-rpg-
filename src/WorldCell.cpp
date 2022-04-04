@@ -89,10 +89,10 @@ void WorldCell::load()
                 }
             }
 
-            /*if (elevation < 0.f)
+            if (elevation < -0.05f)
             {
                 obstacleGrid_.fill(i, j, i + 1, j + 1, ZERO);
-            }*/
+            }
         }
     }
 

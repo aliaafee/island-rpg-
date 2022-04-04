@@ -39,6 +39,7 @@ public:
 
     void onMouseButtonReleased(const sf::Event &event);
     void onMouseWheelScrolled(const sf::Event &event);
+    void onKeyReleased(const sf::Event &event);
 
     bool findPath(const Entity &entity, const Vector3f &end,
                   const bool &diagonal,
@@ -73,6 +74,7 @@ private:
 
     WorldPathfinder pathfinder_;
     PathfinderVisualizer pathfinderGrid_;
+    bool gridVisible_;
 
     void input_(sf::Time &elapsed);
 

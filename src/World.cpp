@@ -26,6 +26,7 @@ World::World(sf::RenderWindow &window,
                                                   Vector3f(0, 0, 0),
                                                   worldConfig_),
                                               pathfinderGrid_(pathfinder_),
+                                              gridVisible_(false),
                                               activeCellId_(-1)
 {
     ocean_.setSize(
@@ -207,7 +208,8 @@ void World::transform()
         entity->transform(*camera_);
     }
 
-    pathfinderGrid_.transform(*camera_);
+    if (gridVisible_)
+        pathfinderGrid_.transform(*camera_);
 
     for (auto &entity : visibleEntities_)
     {
@@ -221,6 +223,8 @@ void World::draw(sf::RenderTarget *screen)
 {
     ocean_.draw(screen);
 
+    player_->drawReflection(screen);
+
     std::sort(floorEntities_.begin(), floorEntities_.end(), entityDepthComp);
 
     for (auto &entity : floorEntities_)
@@ -228,7 +232,8 @@ void World::draw(sf::RenderTarget *screen)
         entity->draw(screen);
     }
 
-    // pathfinderGrid_.draw(screen);
+    if (gridVisible_)
+        pathfinderGrid_.draw(screen);
 
     std::sort(visibleEntities_.begin(), visibleEntities_.end(), entityDepthComp);
 
@@ -285,6 +290,14 @@ void World::onMouseWheelScrolled(const sf::Event &event)
     else
     {
         camera_->zoom(0.9);
+    }
+}
+
+void World::onKeyReleased(const sf::Event &event)
+{
+    if (event.key.code == sf::Keyboard::G)
+    {
+        gridVisible_ = !gridVisible_;
     }
 }
 
