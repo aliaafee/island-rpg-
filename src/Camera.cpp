@@ -95,6 +95,13 @@ void Camera::setZoom(const float &z)
     zoomFactor_ = z;
 }
 
+void Camera::setZoomRange(const float &min, const float &max)
+
+{
+    minZoom_ = min;
+    maxZoom_ = max;
+}
+
 void Camera::updateWindow(sf::RenderWindow &window)
 {
     windowView_.setCenter(windowWidth_ / 2.f, windowHeight_ / 2.f);

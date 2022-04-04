@@ -36,5 +36,8 @@ private:
 
     sf::Sprite floorSprite_;
     sf::Texture floor_;
+
+    sf::VertexArray floorShape_;
+    sf::RenderStates floorRender_;
 };
 #endif // __GROUND_H__

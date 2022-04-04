@@ -11,7 +11,8 @@ Ground::Ground(ResourceManager &rm,
                                      rows_(rows),
                                      cols_(cols),
                                      tileWidth_(width_ / (float)cols),
-                                     tileHeight_(height_ / (float)rows)
+                                     tileHeight_(height_ / (float)rows),
+                                     floorShape_(sf::Quads, 4)
 {
     setPosition(position);
 
@@ -110,39 +111,6 @@ Ground::Ground(ResourceManager &rm,
 
             float overlap = 0.f;
 
-            float fx = 1;
-            float fy = 1;
-            if (i < overlap)
-            {
-                fx = std::max(0.f, 1.f - (overlap - i));
-            }
-            if (i > i_max - overlap)
-            {
-                if (i > i_max + (1 - overlap))
-                {
-                    fx = 0;
-                }
-                else
-                {
-                    fx = 1.f - (i - (i_max - overlap));
-                }
-            }
-            if (j < overlap)
-            {
-                fy = std::max(0.f, 1.f - (overlap - j));
-            }
-            if (j > j_max - overlap)
-            {
-                if (j > j_max + (1 - overlap))
-                {
-                    fy = 0;
-                }
-                else
-                {
-                    fy = 1.f - (j - (j_max - overlap));
-                }
-            }
-
             int px, py;
             px = (int)cellPos.x;
             py = (int)cellPos.y;
@@ -154,12 +122,20 @@ Ground::Ground(ResourceManager &rm,
             {
                 sf::Color color = floor.getPixel(px, py);
 
-                float alpha = fx * fy;
+                float alpha = 1.f;
                 if (h < 0)
                 {
-                    h += 0.8f;
-                    h = h * h * h;
-                    alpha = std::min(h, alpha * h);
+                    float depth = 1.f - std::abs(h);
+                    depth = depth * depth;
+
+                    if (h < -0.05)
+                    {
+                        depth = depth * depth;
+                    }
+
+                    depth -= 0.2;
+
+                    alpha = std::clamp(depth, 0.f, 1.f); // std::min(h, alpha * h);
                 }
                 else
                 {
@@ -220,17 +196,36 @@ Ground::Ground(ResourceManager &rm,
             spriteOrigin.x,
             spriteOrigin.y));
 
-    // floor_.setSmooth(true);
+    float w = cols_ * 64;
+    float h = rows_ * 32;
+    floorShape_[0].position = Vector2f(0, 0);
+    floorShape_[1].position = Vector2f(w / 2.f, h / 2.f);
+    floorShape_[2].position = Vector2f(0, h);
+    floorShape_[3].position = Vector2f(-w / 2.f, h / 2.f);
+
+    floorShape_[0].color = sf::Color::White;
+    floorShape_[1].color = sf::Color::White;
+    floorShape_[2].color = sf::Color::White;
+    floorShape_[3].color = sf::Color::White;
+
+    floorShape_[0].texCoords = Vector2f(w / 2.f + 32.f, 32);
+    floorShape_[1].texCoords = Vector2f(w + 32.f, h / 2.f + 32);
+    floorShape_[2].texCoords = Vector2f(w / 2.f + 32.f, h + 32);
+    floorShape_[3].texCoords = Vector2f(0 + 32.f, h / 2.f + 32);
+
+    floorRender_.texture = &floor_;
 }
 
 void Ground::transform(Camera &camera)
 {
     Entity::transform(camera);
 
-    floorSprite_.setPosition(getScreenPosition2());
+    floorRender_.transform = sf::Transform(1, 0, getScreenPosition().x,
+                                           0, 1, getScreenPosition().y,
+                                           0, 0, 1);
 }
 
 void Ground::draw(sf::RenderTarget *screen)
 {
-    screen->draw(floorSprite_);
+    screen->draw(floorShape_, floorRender_);
 }

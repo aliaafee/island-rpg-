@@ -25,6 +25,7 @@ public:
 
     void setZoom(const float &z);
     void zoom(const float &z) { setZoom(zoomFactor_ * z); }
+    void setZoomRange(const float &min, const float &max);
 
     void rotate(const float &r) { rotation_ += r; }
     void setRotation(const float &r) { rotation_ = r; }

@@ -41,6 +41,7 @@ World::World(sf::RenderWindow &window,
     TrackingCamera *camera = reinterpret_cast<TrackingCamera *>(camera_);
     camera->setTrackTarget(*player_, 1, 5, 60);
     camera->setZoom(0.75);
+    camera->setZoomRange(0.0001, 100);
 
     Entity *fire = addEntity(new FirePit(*rm_));
 }
