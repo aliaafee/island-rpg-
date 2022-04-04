@@ -73,7 +73,7 @@ void game(std::string resourceDir)
 
             world.transform();
 
-            window.clear(sf::Color::White);
+            window.clear(sf::Color::Black);
             world.draw(&window);
             window.display();
         }

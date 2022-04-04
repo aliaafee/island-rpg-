@@ -168,7 +168,6 @@ std::string Player::getAnimationName(const std::string &action, const std::strin
 
 STATE_ENTER_FUNCTION(Player, PlayerIdleState, World, world)
 {
-    std::cout << "Player to Idle State" << std::endl;
     if (t->inWater)
     {
         t->setAnimationAction("treading");
@@ -216,7 +215,6 @@ STATE_UPDATE_FUNCTION(Player, PlayerIdleState, World, world)
 
 STATE_ENTER_FUNCTION(Player, PlayerRestingState, World, world)
 {
-    std::cout << "Player to Rest State" << std::endl;
     t->setAnimationAction("sitting");
 }
 
@@ -326,8 +324,6 @@ STATE_UPDATE_FUNCTION(Player, PlayerJumpState, World, world)
 
 STATE_ENTER_FUNCTION(Player, PlayerWalkToState, World, world)
 {
-
-    std::cout << "Player to Walk State" << std::endl;
     std::cout << "Finding Path.." << std::flush;
     t->walkPath_.clear();
     bool found = world.findPath(
