@@ -151,13 +151,6 @@ void WorldCell::translateOrigin(const Vector3f &newOrigin)
 
     floor_->translateOrigin(newOrigin);
 
-    // This is needed to reduce placement inaccuracies when
-    // translating from large floats
-    floor_->setLocalPosition(Vector3f(
-        std::round(floor_->getLocalPosition().x),
-        std::round(floor_->getLocalPosition().y),
-        std::round(floor_->getLocalPosition().z)));
-
     for (auto &entity : entities_)
     {
         entity->translateOrigin(newOrigin);

@@ -53,8 +53,8 @@ bool WorldConfig::validCell(const int &i, const int &j)
 Vector3f WorldConfig::getCellPosition(const int &i, const int &j)
 {
     return Vector3f(
-        (float)i / (float)cols_ * width_,
-        (float)j / (float)rows_ * height_,
+        (float)i * width_ / (float)cols_,
+        (float)j * height_ / (float)rows_,
         0);
 }
 
