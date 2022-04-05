@@ -158,6 +158,7 @@ void World::updateCells_()
     }
 
     cursor_.translateOrigin(pathfinder_.getPosition());
+    // ocean_.translateOrigin(pathfinder_.getPosition());
 }
 
 void World::updateVisibileList_()
@@ -168,6 +169,7 @@ void World::updateVisibileList_()
     visibleEntities_ = entities_;
     for (auto &cell : activeCells_)
     {
+        cell->translateOrigin(pathfinder_.getPosition());
         for (auto entity : cell->getEntities())
         {
             visibleEntities_.push_back(entity);
