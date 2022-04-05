@@ -52,9 +52,13 @@ bool WorldConfig::validCell(const int &i, const int &j)
 
 Vector3f WorldConfig::getCellPosition(const int &i, const int &j)
 {
+    /**
+     * Cell Positions are rounded to nearest integer to reduce overlap/gaps
+     * when tiles are placed
+     **/
     return Vector3f(
-        (float)i * width_ / (float)cols_,
-        (float)j * height_ / (float)rows_,
+        std::round((float)i * width_ / (float)cols_),
+        std::round((float)j * height_ / (float)rows_),
         0);
 }
 
